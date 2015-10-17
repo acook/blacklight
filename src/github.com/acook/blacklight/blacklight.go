@@ -17,8 +17,7 @@ func main() {
 		panic("no filename argument")
 	}
 
-	fmt.Printf("reading from: ", fileName)
-	fmt.Println("")
+	warn("reading from: ", fileName, "\n")
 
 	bytes, err := ioutil.ReadFile(fileName)
 	if err != nil {
@@ -28,9 +27,18 @@ func main() {
 	fmt.Printf(string(bytes[:]))
 }
 
+func warn(text ...string) {
+	fmt.Fprint(os.Stderr, "blacklight: ")
+
+	for _, line := range text {
+		fmt.Fprint(os.Stderr, line)
+	}
+}
+
 func cleanup() {
 	if r := recover(); r != nil {
-		fmt.Println("encountered an error and had to quit", r)
+		warn("encountered an error and had to quit:")
+		fmt.Fprintln(os.Stderr, "", r)
 		os.Exit(1)
 	}
 }
