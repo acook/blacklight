@@ -1,12 +1,17 @@
 blacklight
 ==========
 
-In blacklight you can have as many pieces of data as you want up to your memory limit, however, there are no variables in blacklight. Likewise, your functions do not take arguments. Don’t panic.
+> blacklight: the language for people who want to code in it
 
-You don’t need variables or function arguments because you have a stack.
+blacklight is a concatenative stack-based programming language
+with first-class queues and prototype-style objects.
 
-Actually, you have a stack of stacks. A meta-stack of stacks, in fact. And you can put stacks on those stacks if you really want to. But usually I put queues on stacks. And prototypes on stacks. Or stacks in prototypes. Or both.
+blacklight doesn't have "variables",
+instead program state is stored in a simple set of stacks.
 
-blacklight is a concatenative stack-based programming language with first-class queues and prototype-style objects.
+blacklight doesn't have "lambdas" or function "arguments",
+instead you have a vectors of operations on a stack.
 
+blacklight is not an esoteric language,
+instead it is readable and powerful.
 
