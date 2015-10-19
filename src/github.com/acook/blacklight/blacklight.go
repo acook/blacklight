@@ -53,8 +53,7 @@ func tokenize(code string) []string {
 		case isComment(glyph, tokens):
 			comment = true
 			print("comment")
-		//case unicode.IsPunct(b):
-		//	print("punctuation")
+			tokens = append(tokens[:l], tokens[l][:len(tokens[l])-1])
 		default:
 			print(glyph, " : ", b)
 			t := tokens[l]
@@ -81,7 +80,7 @@ func ws(current string, tokens []string) []string {
 }
 
 func isComment(current string, tokens []string) bool {
-	return current == ";"
+	return current == ";" && tokens[len(tokens)-1] == ";"
 }
 
 func prepare(code []byte) string {
@@ -100,7 +99,8 @@ func warn(text ...string) {
 
 func cleanup() {
 	if err := recover(); err != nil {
-		warn("encountered an error and had to quit: ", err.(string))
+		warn("encountered an error and had to quit: ")
+		fmt.Fprintf(os.Stderr, "%v\n", err)
 		os.Exit(1)
 	}
 }
