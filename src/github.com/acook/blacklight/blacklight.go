@@ -26,11 +26,44 @@ func main() {
 
 	tokens := tokenize(prepare(bytes))
 
-	warn(tokens...)
+	fmt.Printf("%#v\n", tokens)
+	//warn(tokens...)
 }
 
 func tokenize(code string) []string {
-	return []string{"foo", "bar"}
+	var tokens []string
+	tokens = append(tokens, "")
+	l := 0
+
+	for _, b := range code {
+		glyph := string(b)
+
+		switch glyph {
+		case "\n":
+			print("newline")
+			tokens = ws(glyph, tokens)
+		case " ":
+			print("space")
+			tokens = ws(glyph, tokens)
+		default:
+			print(glyph, " : ", b)
+			t := tokens[l]
+			h := tokens[:l]
+			tokens = append(h, (t + glyph))
+		}
+		print("\n")
+
+		l = len(tokens) - 1
+	}
+
+	return tokens
+}
+
+func ws(current string, tokens []string) []string {
+	if tokens[len(tokens)-1] != " " {
+		return append(tokens, "")
+	}
+	return tokens
 }
 
 func prepare(code []byte) string {
