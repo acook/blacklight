@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strconv"
 	"unicode"
 )
 
@@ -27,8 +28,60 @@ func main() {
 
 	tokens := tokenize(prepare(bytes))
 
-	fmt.Printf("%#v\n", tokens)
-	//warn(tokens...)
+	//fmt.Printf("%#v\n", tokens)
+
+	ops := lex(tokens)
+
+	fmt.Printf("%+v\n", ops[0].(*Integer).Value)
+}
+
+type operation interface {
+	eval() []operation
+}
+
+type Op struct {
+	Name string
+	Data []operation
+}
+
+func (o Op) eval() []operation {
+	var result []operation
+	return result
+}
+
+func (o Op) to_s() string {
+	return o.Name
+}
+
+type Integer struct {
+	Op
+	Value int
+}
+
+func lex(tokens []string) []operation {
+	var ops []operation
+
+	for _, t := range tokens {
+		switch {
+		case isInteger(t):
+			v := new(Integer)
+			v.Name = t
+			v.Value, _ = strconv.Atoi(t)
+			ops = append(ops, v)
+		}
+	}
+
+	return ops
+}
+
+func isInteger(t string) bool {
+	for _, b := range t {
+		if b < 47 || b > 58 {
+			return false
+		}
+	}
+
+	return true
 }
 
 func tokenize(code string) []string {
