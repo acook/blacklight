@@ -17,14 +17,24 @@ func main() {
 		panic("no filename argument")
 	}
 
-	warn("reading from: ", fileName, "\n")
+	warn("reading from: ", fileName)
 
 	bytes, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf(string(bytes[:]))
+	tokens := tokenize(prepare(bytes))
+
+	warn(tokens...)
+}
+
+func tokenize(code string) []string {
+	return []string{"foo", "bar"}
+}
+
+func prepare(code []byte) string {
+	return string(code[:])
 }
 
 func warn(text ...string) {
@@ -33,12 +43,13 @@ func warn(text ...string) {
 	for _, line := range text {
 		fmt.Fprint(os.Stderr, line)
 	}
+
+	fmt.Fprintln(os.Stderr, "")
 }
 
 func cleanup() {
-	if r := recover(); r != nil {
-		warn("encountered an error and had to quit:")
-		fmt.Fprintln(os.Stderr, "", r)
+	if err := recover(); err != nil {
+		warn("encountered an error and had to quit: ", err.(string))
 		os.Exit(1)
 	}
 }
