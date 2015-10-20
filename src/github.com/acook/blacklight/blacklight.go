@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strconv"
-	"unicode"
 )
 
 func main() {
@@ -26,114 +24,17 @@ func main() {
 		panic(err)
 	}
 
-	tokens := tokenize(prepare(bytes))
+	tokens := parse(prepare(bytes))
 
 	//fmt.Printf("%#v\n", tokens)
 
 	ops := lex(tokens)
 
-	fmt.Printf("%+v\n", ops[0].(*Integer).Value)
-}
-
-type operation interface {
-	eval() []operation
-}
-
-type Op struct {
-	Name string
-	Data []operation
-}
-
-func (o Op) eval() []operation {
-	var result []operation
-	return result
-}
-
-func (o Op) to_s() string {
-	return o.Name
-}
-
-type Integer struct {
-	Op
-	Value int
-}
-
-func lex(tokens []string) []operation {
-	var ops []operation
-
-	for _, t := range tokens {
-		switch {
-		case isInteger(t):
-			v := new(Integer)
-			v.Name = t
-			v.Value, _ = strconv.Atoi(t)
-			ops = append(ops, v)
-		}
+	switch v := ops[0].Value()[0].(type) {
+	case int:
+		fmt.Printf("%+v\n", v)
 	}
 
-	return ops
-}
-
-func isInteger(t string) bool {
-	for _, b := range t {
-		if b < 47 || b > 58 {
-			return false
-		}
-	}
-
-	return true
-}
-
-func tokenize(code string) []string {
-	var tokens []string
-	tokens = append(tokens, "")
-	l := 0
-	comment := false
-
-	for _, b := range code {
-		glyph := string(b)
-
-		switch {
-		case glyph == "\n":
-			comment = false
-			print("newline")
-			tokens = ws(glyph, tokens)
-		case comment:
-			print("commented")
-		case unicode.IsSpace(b):
-			print("whitespace")
-			tokens = ws(glyph, tokens)
-		case isComment(glyph, tokens):
-			comment = true
-			print("comment")
-			tokens = append(tokens[:l], tokens[l][:len(tokens[l])-1])
-		default:
-			print(glyph, " : ", b)
-			t := tokens[l]
-			h := tokens[:l]
-			tokens = append(h, (t + glyph))
-		}
-		print("\n")
-
-		l = len(tokens) - 1
-	}
-
-	if tokens[l] == "" {
-		tokens = tokens[:l]
-	}
-
-	return tokens
-}
-
-func ws(current string, tokens []string) []string {
-	if tokens[len(tokens)-1] != "" {
-		return append(tokens, "")
-	}
-	return tokens
-}
-
-func isComment(current string, tokens []string) bool {
-	return current == ";" && tokens[len(tokens)-1] == ";"
 }
 
 func prepare(code []byte) string {
