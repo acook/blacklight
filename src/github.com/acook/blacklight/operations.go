@@ -2,12 +2,12 @@ package main
 
 type operation interface {
 	Eval(Stack) bool
-	Value() []interface{}
+	Value() []datatypes
 }
 
 type Op struct {
 	Name string
-	Data []interface{}
+	Data []datatypes
 }
 
 func (o Op) Eval(s Stack) bool {
@@ -17,7 +17,7 @@ func (o Op) Eval(s Stack) bool {
 	return true
 }
 
-func (o Op) Value() []interface{} {
+func (o Op) Value() []datatypes {
 	return o.Data
 }
 

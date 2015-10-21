@@ -12,8 +12,8 @@ func lex(tokens []string) []operation {
 		case isInteger(t):
 			v := new(pushInteger)
 			v.Name = t
-			str, _ := strconv.Atoi(t)
-			v.Data = append(v.Data, str)
+			i, _ := strconv.Atoi(t)
+			v.Data = append(v.Data, NewInt(i))
 			ops = append(ops, v)
 		}
 	}
