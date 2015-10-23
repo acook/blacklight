@@ -35,3 +35,9 @@ func (s *Stack) Drop() {
 		s.Items = s.Items[:s.Depth()-1]
 	}
 }
+
+func (s *Stack) Decap() {
+	if s.Depth() > 1 {
+		s.Items = s.Items[1:1]
+	}
+}
