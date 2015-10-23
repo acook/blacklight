@@ -29,3 +29,9 @@ func (s *Stack) Pop() datatypes {
 func (s *Stack) Depth() int {
 	return len(s.Items)
 }
+
+func (s *Stack) Drop() {
+	if s.Depth() > 0 {
+		s.Items = s.Items[:s.Depth()-1]
+	}
+}
