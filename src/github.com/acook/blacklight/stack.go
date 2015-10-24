@@ -16,6 +16,8 @@ func (s *Stack) Push(item datatypes) {
 }
 
 func (s *Stack) Pop() datatypes {
+	s.Mutex.Lock()
+	defer s.Mutex.Unlock()
 	var item datatypes
 	if s.Depth() > 0 {
 		item = s.Items[s.Depth()-1]
@@ -31,13 +33,25 @@ func (s *Stack) Depth() int {
 }
 
 func (s *Stack) Drop() {
+	s.Mutex.Lock()
+	defer s.Mutex.Unlock()
 	if s.Depth() > 0 {
 		s.Items = s.Items[:s.Depth()-1]
 	}
 }
 
 func (s *Stack) Decap() {
+	s.Mutex.Lock()
+	defer s.Mutex.Unlock()
 	if s.Depth() > 1 {
 		s.Items = s.Items[1:1]
+	}
+}
+
+func (s *Stack) Dup() {
+	s.Mutex.Lock()
+	defer s.Mutex.Unlock()
+	if s.Depth() > 0 {
+		s.Items = append(s.Items, s.Items[1])
 	}
 }
