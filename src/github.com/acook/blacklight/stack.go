@@ -67,3 +67,10 @@ func (s *Stack) Over() {
 		s.Items = append(s.Items, s.Items[1])
 	}
 }
+
+func (s *Stack) Purge() {
+	s.Mutex.Lock()
+	defer s.Mutex.Unlock()
+
+	s.Items = nil
+}
