@@ -87,3 +87,13 @@ func (s *Stack) Rot() {
 		s.Items = append(s.Items[:depth-3], s.Items[depth-2], s.Items[depth-1], s.Items[depth-3])
 	}
 }
+
+func (s *Stack) Swap() {
+	s.Mutex.Lock()
+	defer s.Mutex.Unlock()
+
+	depth := s.Depth()
+	if depth > 1 {
+		s.Items = append(s.Items[:depth-2], s.Items[depth-1], s.Items[depth-2])
+	}
+}
