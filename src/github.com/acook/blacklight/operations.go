@@ -1,7 +1,7 @@
 package main
 
 type operation interface {
-	Eval(Stack) bool
+	Eval(*Stack) bool
 	Value() []datatypes
 }
 
@@ -10,7 +10,7 @@ type Op struct {
 	Data []datatypes
 }
 
-func (o Op) Eval(s Stack) bool {
+func (o Op) Eval(s *Stack) bool {
 	for _, d := range o.Data {
 		s.Push(d)
 	}
