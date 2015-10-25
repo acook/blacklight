@@ -30,14 +30,16 @@ type pushInteger struct {
 }
 
 func processQueue(s Stack) Stack {
+	wv := s.Pop().(WordVector)
 	q := s.Pop().(Queue)
 
 	for {
 		select {
 		case item := <-q.Items:
-			print(item)
+			s.Push(item)
+			s.Push(wv)
+			// bl.Eval
 		default:
-			print("lulz")
 			break
 		}
 	}
