@@ -29,6 +29,10 @@ type pushInteger struct {
 	Op
 }
 
+type pushWordVector struct {
+	Op
+}
+
 func processQueue(s Stack) Stack {
 	wv := s.Pop().(WordVector)
 	q := s.Pop().(Queue)

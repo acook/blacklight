@@ -6,15 +6,25 @@ import (
 
 func lex(tokens []string) []operation {
 	var ops []operation
+	var inside_word_vector bool
 
 	for _, t := range tokens {
 		switch {
 		case isInteger(t):
-			v := new(pushInteger)
-			v.Name = t
+			op := new(pushInteger)
+			op.Name = t
 			i, _ := strconv.Atoi(t)
-			v.Data = append(v.Data, NewInt(i))
-			ops = append(ops, v)
+			op.Data = append(op.Data, NewInt(i))
+			ops = append(ops, op)
+		case t == ".":
+			if inside_word_vector {
+				inside_word_vector = false
+			} else {
+				inside_word_vector = true
+
+				op := new(pushWordVector)
+				op.Name = "WordVector"
+			}
 		}
 	}
 
