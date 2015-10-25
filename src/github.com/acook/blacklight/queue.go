@@ -11,3 +11,7 @@ func NewQueue() *Queue {
 func (q *Queue) Enqueue(item datatypes) {
 	q.Items <- item
 }
+
+func (q *Queue) Dequeue() datatypes {
+	return <-q.Items
+}
