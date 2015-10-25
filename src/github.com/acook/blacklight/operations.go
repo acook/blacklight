@@ -28,3 +28,17 @@ func (o Op) to_s() string {
 type pushInteger struct {
 	Op
 }
+
+func processQueue(s Stack) Stack {
+	q := s.Pop().(Queue)
+
+	for {
+		select {
+		case item := <-q.Items:
+			print(item)
+		default:
+			print("lulz")
+			break
+		}
+	}
+}

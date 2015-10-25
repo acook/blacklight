@@ -15,3 +15,7 @@ func (q *Queue) Enqueue(item datatypes) {
 func (q *Queue) Dequeue() datatypes {
 	return <-q.Items
 }
+
+func (q Queue) Value() interface{} {
+	return q.Items
+}
