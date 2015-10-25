@@ -35,6 +35,7 @@ func (s *Stack) Depth() int {
 func (s *Stack) Drop() {
 	s.Mutex.Lock()
 	defer s.Mutex.Unlock()
+
 	if s.Depth() > 0 {
 		s.Items = s.Items[:s.Depth()-1]
 	}
@@ -43,6 +44,7 @@ func (s *Stack) Drop() {
 func (s *Stack) Decap() {
 	s.Mutex.Lock()
 	defer s.Mutex.Unlock()
+
 	if s.Depth() > 1 {
 		s.Items = s.Items[1:1]
 	}
@@ -51,7 +53,17 @@ func (s *Stack) Decap() {
 func (s *Stack) Dup() {
 	s.Mutex.Lock()
 	defer s.Mutex.Unlock()
+
 	if s.Depth() > 0 {
+		s.Items = append(s.Items, s.Items[0])
+	}
+}
+
+func (s *Stack) Over() {
+	s.Mutex.Lock()
+	defer s.Mutex.Unlock()
+
+	if s.Depth() > 1 {
 		s.Items = append(s.Items, s.Items[1])
 	}
 }
