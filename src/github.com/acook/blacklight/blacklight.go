@@ -29,13 +29,7 @@ func main() {
 	//fmt.Printf("%#v\n", tokens)
 
 	ops := lex(tokens)
-
-	switch v := ops[0].Value()[0].Value().(type) {
-	case int:
-		fmt.Printf("%+v\n", v)
-	case string:
-		fmt.Printf("%+v\n", v)
-	}
+	fmt.Printf("%+v\n", ops)
 
 }
 

@@ -31,6 +31,7 @@ type pushInteger struct {
 
 type pushWordVector struct {
 	Op
+	Contents []operation
 }
 
 type pushQueue struct {

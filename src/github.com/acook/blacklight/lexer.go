@@ -32,16 +32,8 @@ func lex(tokens []string) []operation {
 			if inside_word_vector {
 				inside_word_vector = false
 
-				wv := new(WordVector)
-
-				for _, op := range ops {
-					w := *new(Word)
-					w.Name = op.(Op).Name
-					wv.Data = append(wv.Data, w)
-				}
-
 				pwv := new(pushWordVector)
-				pwv.Data = append(pwv.Data, wv)
+				pwv.Contents = append(pwv.Contents, ops...)
 				ops = append(real_ops, pwv)
 			} else {
 				inside_word_vector = true
