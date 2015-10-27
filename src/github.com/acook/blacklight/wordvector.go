@@ -1,9 +1,9 @@
 package main
 
 type WordVector struct {
-	Vector []Word
+	Data []Word
 }
 
 func (wv WordVector) Value() interface{} {
-	return wv.Vector
+	return wv.Data
 }

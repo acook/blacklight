@@ -5,7 +5,7 @@ import (
 )
 
 func lex(tokens []string) []operation {
-	var ops []operation
+	var ops, real_ops []operation
 	var inside_word_vector bool
 
 	for _, t := range tokens {
@@ -19,13 +19,32 @@ func lex(tokens []string) []operation {
 		case t == ".":
 			if inside_word_vector {
 				inside_word_vector = false
+
+				wv := new(WordVector)
+
+				for _, op := range ops {
+					w := *new(Word)
+					w.Name = op.(Op).Name
+					wv.Data = append(wv.Data, w)
+				}
+
+				pwv := new(pushWordVector)
+				pwv.Data = append(pwv.Data, wv)
+				ops = append(real_ops, pwv)
 			} else {
 				inside_word_vector = true
 
 				op := new(pushWordVector)
-				op.Name = "WordVector"
+				op.Name = "."
+
+				real_ops = ops
+				ops = []operation{}
 			}
 		}
+	}
+
+	if inside_word_vector {
+		panic("unclosed WordVector literal")
 	}
 
 	return ops
