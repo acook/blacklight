@@ -3,7 +3,7 @@ blacklight
 
 > blacklight: the language for people who want to code in it
 
-blacklight is a concatenative stack-based programming language
+blacklight is a general-pupose multithreading concatenative stack-based programming language
 with first-class queues and prototype-style objects.
 
 blacklight doesn't need "variables",
@@ -11,6 +11,19 @@ instead program state is stored in a simple set of stacks.
 
 blacklight doesn't need "lambdas" or function "arguments",
 instead you have a vectors of operations on a stack.
+
+Features
+--------
+
+blacklight is ideal for MapReducing, ETLing, and processing.
+
+*Below list refers to features planned for the first release.*
+
+- builtin parallelism through native multithreading
+- stack-oriented programming
+- concatenative programming
+- threadsafe data structures (queues, stacks, objects, vectors)
+- objects with prototypical delgation
 
 
 Documentation
@@ -41,3 +54,6 @@ There is a rich history of languages like blacklight and as a result there is a 
 - [JS-FORTH](https://repl.it/languages/forth) - fun to play around with in your browser
 - [Factor](https://en.wikipedia.org/wiki/Factor_(programming_language)) - a cool modern concatenative language
 - [Postscript](https://en.wikipedia.org/wiki/PostScript) - most printers use Postscript to do their jobs
+
+
+blacklight is influenced by Forth, REBOL, Factor, Self, and Redis.
