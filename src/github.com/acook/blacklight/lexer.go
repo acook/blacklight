@@ -4,12 +4,24 @@ import (
 	"strconv"
 )
 
+var keywords = []string{
+	"decap", "depth", "drop", "dup", "over", "rot", "swap", "purge",
+	"$decap", "$drop", "$new", "$swap",
+	"deq", "enq", "newq", "proq",
+}
+
 func lex(tokens []string) []operation {
 	var ops, real_ops []operation
 	var inside_queue, inside_word_vector bool
 
 	for _, t := range tokens {
 		switch {
+		case isKeyword(t):
+			op := new(Op)
+			w := new(Word)
+			w.Name = t
+			op.Data = append(op.Data, w)
+			ops = append(ops, op)
 		case isInteger(t):
 			op := new(pushInteger)
 			op.Name = t
@@ -55,6 +67,16 @@ func lex(tokens []string) []operation {
 	}
 
 	return ops
+}
+
+func isKeyword(t string) bool {
+	for _, k := range keywords {
+		if t == k {
+			return true
+		}
+	}
+
+	return false
 }
 
 func isInteger(t string) bool {
