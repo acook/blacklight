@@ -6,7 +6,7 @@ import (
 )
 
 type operation interface {
-	Eval(Stack) Stack
+	Eval(stack) stack
 	Value() datatypes
 	String() string
 }
@@ -16,9 +16,9 @@ type Op struct {
 	Data datatypes
 }
 
-func (o Op) Eval(current Stack) Stack {
+func (o Op) Eval(current stack) stack {
 	switch o.Name {
-	// @stack (Stack)
+	// @stack (current Stack)
 	case "decap":
 		current.Decap()
 	case "depth":
@@ -88,10 +88,19 @@ func (o Op) Eval(current Stack) Stack {
 		case *CharVector:
 			v := i.(*CharVector).Value().(string)
 			print(v)
+		case *MetaStack:
+			v := i.(*MetaStack).String()
+			print(v)
+		case *SystemStack:
+			v := i.(*SystemStack).String()
+			print(v)
 		default:
 			fmt.Printf("%#v", i)
 		}
 		print("\n")
+
+	default:
+		warn("unrecognized operation: " + o.String())
 	}
 	return current
 }
@@ -114,16 +123,39 @@ type metaOp struct {
 	Op
 }
 
-func (m metaOp) Eval(meta Stack) Stack {
+func (m metaOp) Eval(meta stack) stack {
 	switch m.Name {
+	case "@":
+		s := *meta.Peek()
+		current := s.(*SystemStack)
+		current.Push(current)
+	case "^":
+		s := *meta.Peek()
+		current := s.(*SystemStack)
+		meta.Swap()
+		s = *meta.Peek()
+		prev := s.(*SystemStack)
+		meta.Swap()
+		current.Push(prev)
 	case "$decap":
 		meta.Decap()
 	case "$drop":
 		meta.Drop()
 	case "$new":
-		meta.Push(NewStack())
+		if meta.Depth() > 0 {
+			s := *meta.Peek()
+			os := s.(*SystemStack)
+			ns := NewSystemStack()
+			ns.Push(os)
+			meta.Push(ns)
+		} else {
+			meta.Push(NewSystemStack())
+			meta = newMetaOp("$new").Eval(meta)
+		}
 	case "$swap":
 		meta.Swap()
+	default:
+		warn("unrecognized operation: " + m.String())
 	}
 
 	return meta
@@ -139,7 +171,7 @@ type pushLiteral struct {
 	Op
 }
 
-func (o pushLiteral) Eval(s Stack) Stack {
+func (o pushLiteral) Eval(s stack) stack {
 	s.Push(o.Value())
 	return s
 }
@@ -205,7 +237,7 @@ type pushQueue struct {
 	Contents []operation
 }
 
-func processQueue(s Stack) Stack {
+func processQueue(s stack) stack {
 	wv := s.Pop().(WordVector)
 	q := s.Pop().(Queue)
 

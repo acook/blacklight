@@ -1,17 +1,64 @@
 package main
 
 import (
-	"fmt"
+	//"fmt"
+	"strconv"
 	"sync"
 )
+
+var Stacks int
+
+type stack interface {
+	Push(datatypes)
+	Pop() datatypes
+	Peek() *datatypes
+	Drop()
+	Swap()
+	Decap()
+	Dup()
+	Over()
+	Rot()
+	Purge()
+	Depth() int
+	Kind() string
+	String() string
+}
 
 type Stack struct {
 	sync.Mutex
 	Items []datatypes
+	Type  string
+	Id    int
 }
 
-func NewStack() *Stack {
-	return &Stack{}
+func NewStack(t string) *Stack {
+	s := &Stack{}
+	s.Type = t
+	return s
+}
+
+type SystemStack struct {
+	Stack
+}
+
+func NewSystemStack() *SystemStack {
+	s := &SystemStack{}
+	s.Type = "system"
+	s.Id = Stacks
+	Stacks++
+	return s
+}
+
+type MetaStack struct {
+	SystemStack
+}
+
+func NewMetaStack() *MetaStack {
+	s := &MetaStack{}
+	s.Type = "$meta"
+	s.Id = Stacks
+	Stacks++
+	return s
 }
 
 func (s Stack) Value() interface{} {
@@ -19,7 +66,36 @@ func (s Stack) Value() interface{} {
 }
 
 func (s Stack) String() string {
-	return fmt.Sprintf("%#v", s)
+	str := s.Type + "-stack#" + strconv.Itoa(s.Id)
+	str += "(" + strconv.Itoa(s.Depth()) + "):<"
+
+	for _, i := range s.Items {
+		switch i.(type) {
+		case MetaStack:
+		case *MetaStack:
+			str += i.String() + ","
+		case *SystemStack:
+			if i.(*SystemStack).Id == s.Id {
+				str += "<...>" + ","
+			} else {
+				str += i.String() + ","
+			}
+		case SystemStack:
+			panic("direct SystemStack reference: " + strconv.Itoa(i.(SystemStack).Id))
+		default:
+			str += i.String() + ","
+		}
+	}
+
+	if str[len(str)-1] == ","[0] {
+		str = str[:len(str)-1]
+	}
+
+	return str + ">"
+}
+
+func (s *Stack) Kind() string {
+	return s.Type
 }
 
 func (s *Stack) Push(item datatypes) {
@@ -36,15 +112,18 @@ func (s *Stack) Pop() datatypes {
 		item = s.Items[s.Depth()-1]
 		s.Items = s.Items[:s.Depth()-1]
 	} else {
-		item = NewErr("stack empty")
+		str := "Stack.Pop: " + s.Type + "-stack is empty"
+		item = NewErr(str)
+		warn(str)
+		panic(item)
 	}
 	return item
 }
 
-func (s *Stack) Peek() datatypes {
+func (s *Stack) Peek() *datatypes {
 	depth := s.Depth()
 	if depth > 0 {
-		return s.Items[depth-1]
+		return &s.Items[depth-1]
 	}
 	return nil
 }
@@ -79,6 +158,8 @@ func (s *Stack) Dup() {
 	depth := s.Depth()
 	if depth > 0 {
 		s.Items = append(s.Items, s.Items[depth-1])
+	} else {
+		warn("Stack.Dup: " + s.Type + "-stack is empty")
 	}
 }
 

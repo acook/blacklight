@@ -2,32 +2,37 @@ package main
 
 func eval(ops []operation) (bool, string) {
 
-	meta := *NewStack()
-	current := *NewStack()
+	meta := NewMetaStack()
+	current := NewSystemStack()
 	meta.Push(current)
 
 	defer rescue(meta)
 
 	for _, op := range ops {
+		s := *meta.Peek()
+		current = s.(*SystemStack)
+
 		switch op.(type) {
-		case metaOp:
-			meta = op.Eval(meta)
+		case *metaOp:
+			meta = op.Eval(meta).(*MetaStack)
 		case operation:
-			current = op.Eval(current)
+			current = op.Eval(current).(*SystemStack)
 		default:
 			warn(op.String())
 			panic("wait what")
 		}
+
 	}
 
 	return true, ""
 }
 
-func rescue(meta Stack) {
+func rescue(meta stack) {
 	if err := recover(); err != nil {
 		warn("evaluation error")
 		warn("$meta:", meta.String())
-		warn("@current:", meta.Peek().String())
+		s := *meta.Peek()
+		warn("@current:", s.String())
 		panic(err)
 	}
 }

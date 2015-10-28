@@ -1,0 +1,9 @@
+1
+$new
+dup print
+2
+$new
+dup print
+3
+@ dup print
+^ print
