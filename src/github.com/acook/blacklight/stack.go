@@ -22,6 +22,7 @@ type stack interface {
 	Depth() int
 	Kind() string
 	String() string
+	Value() interface{}
 }
 
 type Stack struct {
@@ -82,6 +83,8 @@ func (s Stack) String() string {
 			}
 		case SystemStack:
 			panic("direct SystemStack reference: " + strconv.Itoa(i.(SystemStack).Id))
+		case nil:
+			str += "?nil?"
 		default:
 			str += i.String() + ","
 		}
@@ -124,8 +127,10 @@ func (s *Stack) Peek() *datatypes {
 	depth := s.Depth()
 	if depth > 0 {
 		return &s.Items[depth-1]
+	} else {
+		str := "Stack.Peek: " + s.Type + "-stack is empty"
+		panic(str)
 	}
-	return nil
 }
 
 func (s *Stack) Depth() int {
