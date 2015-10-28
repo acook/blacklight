@@ -113,14 +113,14 @@ func (o Op) Eval(current stack) stack {
 		current.Push(q)
 	case "enq":
 		i := current.Pop()
-		q := current.Pop().(*Queue)
+		q := (*current.Peek()).(*Queue)
 		q.Enqueue(i)
-		current.Push(q)
 	case "deq":
-		q := current.Pop().(*Queue)
+		q := (*current.Peek()).(*Queue)
 		i := q.Dequeue()
-		current.Push(q)
 		current.Push(i)
+	case "proq":
+		current = processQueue(current)
 
 	default:
 		warn("UNIMPLEMENTED operation: " + o.String())
@@ -268,16 +268,26 @@ type pushQueue struct {
 
 func processQueue(s stack) stack {
 	wv := s.Pop().(WordVector)
-	q := s.Pop().(Queue)
+	q := s.Pop().(*Queue)
+	var tokens []string
 
+	for _, w := range wv.Data {
+		tokens = append(tokens, w.Name)
+	}
+
+ProcLoop:
 	for {
 		select {
 		case item := <-q.Items:
 			s.Push(item)
-			s.Push(wv)
-			// bl.Eval
+			meta := NewMetaStack() // FIXME: this should be the actual $meta stack
+			meta.Push(s)
+			ops := lex(tokens)
+			doEval(meta, ops)
 		default:
-			break
+			break ProcLoop
 		}
 	}
+
+	return s
 }
