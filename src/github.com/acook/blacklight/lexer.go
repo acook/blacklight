@@ -9,11 +9,12 @@ var keywords = []string{
 	"s-new", "pop", "push", "size", "tail",
 	"o-new", "child", "self", "get", "set", "fetch",
 	"()", "v-new", "app", "eval", "v-to-s", "v-to-q",
-	"add", "sub", "mul", "div", "mod",
+	"add", "sub", "mul", "div", "mod", "n-to-s",
 	"read", "write",
 	"if", "eq", "is", "until",
 	"W", "C",
 	"nil", "true",
+	"refl", "print", "warn",
 }
 
 func lex(tokens []string) []operation {
