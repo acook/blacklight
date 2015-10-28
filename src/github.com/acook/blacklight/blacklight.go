@@ -31,6 +31,12 @@ func main() {
 	for _, o := range ops {
 		fmt.Printf("%#v\n", o)
 	}
+
+	result, msg := eval(ops)
+
+	if !result {
+		panic(msg)
+	}
 }
 
 func prepare(code []byte) string {
