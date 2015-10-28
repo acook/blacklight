@@ -234,6 +234,12 @@ func newPushWordVector(t string) *pushWordVector {
 	return pwv
 }
 
+func (pwv *pushWordVector) Eval(s stack) stack {
+	wv := NewWordVector(pwv.Contents)
+	s.Push(wv)
+	return s
+}
+
 type pushCharVector struct {
 	pushLiteral
 }
