@@ -1,2 +1,19 @@
+'1 + 2 =' print
 1 2 add
+n-to-s print
+
+'2 * 3 =' print
+2 3 mul
+n-to-s print
+
+'5 - 4 =' print
+5 4 sub
+n-to-s print
+
+'6 / 3 =' print
+6 3 div
+n-to-s print
+
+'7 % 4 =' print
+7 4 mod
 n-to-s print

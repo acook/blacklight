@@ -24,8 +24,36 @@ func (o Op) Eval(current Stack) Stack {
 		i2 := current.Pop()
 		n1 := i1.Value().(int)
 		n2 := i2.Value().(int)
-		sum := n1 + n2
+		sum := n2 + n1
 		current.Push(NewInt(sum))
+	case "sub":
+		i1 := current.Pop()
+		i2 := current.Pop()
+		n1 := i1.Value().(int)
+		n2 := i2.Value().(int)
+		result := n2 - n1
+		current.Push(NewInt(result))
+	case "mul":
+		i1 := current.Pop()
+		i2 := current.Pop()
+		n1 := i1.Value().(int)
+		n2 := i2.Value().(int)
+		product := n2 * n1
+		current.Push(NewInt(product))
+	case "div":
+		i1 := current.Pop()
+		i2 := current.Pop()
+		n1 := i1.Value().(int)
+		n2 := i2.Value().(int)
+		result := n2 / n1
+		current.Push(NewInt(result))
+	case "mod":
+		i1 := current.Pop()
+		i2 := current.Pop()
+		n1 := i1.Value().(int)
+		n2 := i2.Value().(int)
+		remainder := n2 % n1
+		current.Push(NewInt(remainder))
 	case "n-to-s":
 		i := current.Pop()
 		n := i.Value().(int)
