@@ -1,0 +1,7 @@
+newq 1 enq
+newq 2 enq
+swap deq print drop
+3 enq 4 enq
+deq print
+deq print
+print

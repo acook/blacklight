@@ -5,11 +5,14 @@ type Queue struct {
 }
 
 func NewQueue() *Queue {
-	return &Queue{}
+	q := &Queue{}
+	q.Items = make(chan datatypes, 16)
+
+	return q
 }
 
 func (q *Queue) Enqueue(item datatypes) {
-	q.Items <- item
+	go func() { q.Items <- item }()
 }
 
 func (q *Queue) Dequeue() datatypes {

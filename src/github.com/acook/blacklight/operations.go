@@ -107,8 +107,23 @@ func (o Op) Eval(current stack) stack {
 		result := i2.Cat(i1)
 		current.Push(result)
 
+	// Queues
+	case "newq":
+		q := NewQueue()
+		current.Push(q)
+	case "enq":
+		i := current.Pop()
+		q := current.Pop().(*Queue)
+		q.Enqueue(i)
+		current.Push(q)
+	case "deq":
+		q := current.Pop().(*Queue)
+		i := q.Dequeue()
+		current.Push(q)
+		current.Push(i)
+
 	default:
-		warn("unrecognized operation: " + o.String())
+		warn("UNIMPLEMENTED operation: " + o.String())
 	}
 	return current
 }
@@ -163,7 +178,7 @@ func (m metaOp) Eval(meta stack) stack {
 	case "$swap":
 		meta.Swap()
 	default:
-		warn("unrecognized $operation: " + m.String())
+		warn("UNIMPLEMENTED $operation: " + m.String())
 	}
 
 	return meta
