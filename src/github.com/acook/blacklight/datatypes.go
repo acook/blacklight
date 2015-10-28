@@ -66,3 +66,7 @@ func NewCharVector(str string) *CharVector {
 	}
 	return cv
 }
+
+func (cv *CharVector) Cat(cv2 *CharVector) *CharVector {
+	return NewCharVector(cv.Value().(string) + cv2.Value().(string))
+}

@@ -99,6 +99,14 @@ func (o Op) Eval(current stack) stack {
 		}
 		print("\n")
 
+	// Vectors
+	case "cat":
+		i1 := current.Pop().(*CharVector)
+		i2 := current.Pop().(*CharVector)
+
+		result := i2.Cat(i1)
+		current.Push(result)
+
 	default:
 		warn("unrecognized operation: " + o.String())
 	}
@@ -155,7 +163,7 @@ func (m metaOp) Eval(meta stack) stack {
 	case "$swap":
 		meta.Swap()
 	default:
-		warn("unrecognized operation: " + m.String())
+		warn("unrecognized $operation: " + m.String())
 	}
 
 	return meta
