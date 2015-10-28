@@ -5,7 +5,7 @@ import (
 )
 
 type operation interface {
-	Eval(*Stack) bool
+	Eval(Stack) Stack
 	Value() []datatypes
 	String() string
 }
@@ -15,11 +15,11 @@ type Op struct {
 	Data []datatypes
 }
 
-func (o Op) Eval(s *Stack) bool {
+func (o Op) Eval(s Stack) Stack {
 	for _, d := range o.Data {
 		s.Push(d)
 	}
-	return true
+	return s
 }
 
 func (o Op) Value() []datatypes {
@@ -38,6 +38,21 @@ func newOp(t string) *Op {
 
 type metaOp struct {
 	Op
+}
+
+func (m metaOp) Eval(meta Stack) Stack {
+	switch m.Name {
+	case "$decap":
+		meta.Decap()
+	case "$drop":
+		meta.Drop()
+	case "$new":
+		meta.Push(NewStack())
+	case "$swap":
+		meta.Swap()
+	}
+
+	return meta
 }
 
 func newMetaOp(t string) *metaOp {
