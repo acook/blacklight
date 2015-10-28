@@ -33,9 +33,16 @@ func (o Op) String() string {
 func newOp(t string) *Op {
 	op := new(Op)
 	op.Name = t
-	w := new(Word)
-	w.Name = t
-	op.Data = append(op.Data, w)
+	return op
+}
+
+type metaOp struct {
+	Op
+}
+
+func newMetaOp(t string) *metaOp {
+	op := new(metaOp)
+	op.Name = t
 	return op
 }
 

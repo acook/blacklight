@@ -4,7 +4,6 @@ import ()
 
 var keywords = []string{
 	"<>", "decap", "depth", "drop", "dup", "over", "rot", "swap", "purge",
-	"@", "$", "^", "$decap", "$drop", "$new", "$swap",
 	"newq", "deq", "enq", "proq", "q-to-v",
 	"s-new", "pop", "push", "size", "tail",
 	"o-new", "child", "self", "get", "set", "fetch",
@@ -17,12 +16,19 @@ var keywords = []string{
 	"refl", "print", "warn",
 }
 
+var metaops = []string{
+	"@", "$", "^", "$decap", "$drop", "$new", "$swap",
+}
+
 func lex(tokens []string) []operation {
 	var ops, real_ops, wv_ops []operation
 	var inside_queue, inside_word_vector bool
 
 	for _, t := range tokens {
 		switch {
+		case isMetaOp(t):
+			op := newMetaOp(t)
+			ops = append(ops, op)
 		case isKeyword(t):
 			op := newOp(t)
 			ops = append(ops, op)
@@ -94,6 +100,16 @@ func lex(tokens []string) []operation {
 	}
 
 	return ops
+}
+
+func isMetaOp(t string) bool {
+	for _, k := range metaops {
+		if t == k {
+			return true
+		}
+	}
+
+	return false
 }
 
 func isKeyword(t string) bool {

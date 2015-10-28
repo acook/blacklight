@@ -13,6 +13,10 @@ func NewStack() *Stack {
 	return &Stack{}
 }
 
+func (s Stack) Value() interface{} {
+	return s
+}
+
 func (s *Stack) Push(item datatypes) {
 	s.Lock()
 	defer s.Unlock()
