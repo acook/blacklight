@@ -1,11 +1,16 @@
 package main
 
-func eval(ops []operation) (bool, string) {
+func eval(ops []operation) {
 
 	meta := NewMetaStack()
 	current := NewSystemStack()
 	meta.Push(current)
 
+	doEval(meta, ops)
+}
+
+func doEval(meta *MetaStack, ops []operation) {
+	var current *SystemStack
 	defer rescue(meta)
 
 	for _, op := range ops {
@@ -18,13 +23,10 @@ func eval(ops []operation) (bool, string) {
 		case operation:
 			current = op.Eval(current).(*SystemStack)
 		default:
-			warn(op.String())
-			panic("wait what")
+			panic("urecognized operation:" + op.String())
 		}
 
 	}
-
-	return true, ""
 }
 
 func rescue(meta stack) {

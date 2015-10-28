@@ -27,11 +27,7 @@ func main() {
 	tokens := parse(prepare(bytes))
 
 	ops := lex(tokens)
-	result, msg := eval(ops)
-
-	if !result {
-		panic(msg)
-	}
+	eval(ops)
 }
 
 func prepare(code []byte) string {
