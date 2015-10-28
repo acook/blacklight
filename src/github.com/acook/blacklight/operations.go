@@ -218,7 +218,7 @@ type pushWord struct {
 func newPushWord(t string) *pushWord {
 	pw := new(pushWord)
 	pw.Name = t
-	w := newWord(t)
+	w := NewWord(t)
 	pw.Data = w
 	return pw
 }

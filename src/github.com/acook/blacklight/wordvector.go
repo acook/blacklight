@@ -2,6 +2,18 @@ package main
 
 type WordVector struct {
 	Data []Word
+	Ops  []operation
+}
+
+func NewWordVector(ops []operation) WordVector {
+	wv := *new(WordVector)
+	wv.Ops = ops
+
+	for _, o := range ops {
+		wv.Data = append(wv.Data, NewWord(o.String()))
+	}
+
+	return wv
 }
 
 func (wv WordVector) Value() interface{} {

@@ -4,7 +4,7 @@ type Word struct {
 	Name string
 }
 
-func newWord(t string) Word {
+func NewWord(t string) Word {
 	w := *new(Word)
 	if t[0] == "~"[0] {
 		w.Name = string(t[1:])
