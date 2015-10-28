@@ -51,6 +51,16 @@ func newPushInteger(t string) *pushInteger {
 	return pi
 }
 
+type pushWord struct {
+	Op
+}
+
+func newPushWord(t string) *pushWord {
+	pw := new(pushWord)
+	pw.Name = t
+	return pw
+}
+
 type pushWordVector struct {
 	Op
 	Contents []operation
@@ -60,6 +70,26 @@ func newPushWordVector(t string) *pushWordVector {
 	pwv := new(pushWordVector)
 	pwv.Name = t
 	return pwv
+}
+
+type pushString struct {
+	Op
+}
+
+func newPushString(t string) *pushString {
+	ps := new(pushString)
+	ps.Name = t
+	return ps
+}
+
+type pushChar struct {
+	Op
+}
+
+func newPushChar(t string) *pushChar {
+	pc := new(pushChar)
+	pc.Name = t
+	return pc
 }
 
 type pushQueue struct {

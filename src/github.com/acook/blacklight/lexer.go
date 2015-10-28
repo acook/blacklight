@@ -67,10 +67,18 @@ func lex(tokens []string) []operation {
 				ops = []operation{}
 			}
 		case isWord(t):
+			op := newPushWord(t)
+			ops = append(ops, op)
 		case isSetWord(t):
+			ops = append(ops, newPushWord(t), newOp("set"))
 		case isGetWord(t):
+			ops = append(ops, newPushWord(t), newOp("get"))
 		case isString(t):
+			op := newPushString(t)
+			ops = append(ops, op)
 		case isChar(t):
+			op := newPushChar(t)
+			ops = append(ops, op)
 		default:
 			warn(t)
 			panic("wtf is this")
