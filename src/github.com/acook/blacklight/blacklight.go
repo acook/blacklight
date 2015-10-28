@@ -17,7 +17,7 @@ func main() {
 		panic("no filename argument")
 	}
 
-	warn("reading from: ", fileName)
+	//warn("reading from: ", fileName)
 
 	bytes, err := ioutil.ReadFile(fileName)
 	if err != nil {
@@ -27,11 +27,6 @@ func main() {
 	tokens := parse(prepare(bytes))
 
 	ops := lex(tokens)
-
-	for _, o := range ops {
-		fmt.Printf("%#v\n", o)
-	}
-
 	result, msg := eval(ops)
 
 	if !result {

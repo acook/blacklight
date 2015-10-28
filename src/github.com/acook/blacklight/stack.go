@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -15,6 +16,10 @@ func NewStack() *Stack {
 
 func (s Stack) Value() interface{} {
 	return s
+}
+
+func (s Stack) String() string {
+	return fmt.Sprintf("%#v", s)
 }
 
 func (s *Stack) Push(item datatypes) {
@@ -34,6 +39,14 @@ func (s *Stack) Pop() datatypes {
 		item = NewErr("stack empty")
 	}
 	return item
+}
+
+func (s *Stack) Peek() datatypes {
+	depth := s.Depth()
+	if depth > 0 {
+		return s.Items[depth-1]
+	}
+	return nil
 }
 
 func (s *Stack) Depth() int {

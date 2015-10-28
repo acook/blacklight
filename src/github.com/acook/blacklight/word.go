@@ -17,3 +17,7 @@ func newWord(t string) Word {
 func (w Word) Value() interface{} {
 	return w.Name
 }
+
+func (w Word) String() string {
+	return w.Name
+}

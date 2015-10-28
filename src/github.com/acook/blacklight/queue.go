@@ -19,3 +19,17 @@ func (q *Queue) Dequeue() datatypes {
 func (q Queue) Value() interface{} {
 	return q.Items
 }
+
+func (q Queue) String() string {
+	str := "Q:"
+	for {
+		select {
+		case i := <-q.Items:
+			str += i.String()
+			str += ","
+		default:
+			break
+		}
+	}
+	return str[:len(str)-1]
+}

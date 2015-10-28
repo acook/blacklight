@@ -1,28 +1,56 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 )
 
 type operation interface {
 	Eval(Stack) Stack
-	Value() []datatypes
+	Value() datatypes
 	String() string
 }
 
 type Op struct {
 	Name string
-	Data []datatypes
+	Data datatypes
 }
 
-func (o Op) Eval(s Stack) Stack {
-	for _, d := range o.Data {
-		s.Push(d)
+func (o Op) Eval(current Stack) Stack {
+	switch o.Name {
+	// NativeIntegers (Int)
+	case "add":
+		i1 := current.Pop()
+		i2 := current.Pop()
+		n1 := i1.Value().(int)
+		n2 := i2.Value().(int)
+		sum := n1 + n2
+		current.Push(NewInt(sum))
+	case "n-to-s":
+		i := current.Pop()
+		n := i.Value().(int)
+		str := strconv.Itoa(n)
+		current.Push(NewCharVector(str))
+
+	// Debug
+	case "print":
+		i := current.Pop()
+		switch i.(type) {
+		case *Int:
+			v := i.(*Int).Value().(int)
+			fmt.Printf("%v", v)
+		case *CharVector:
+			v := i.(*CharVector).Value().(string)
+			fmt.Printf("%v", v)
+		default:
+			fmt.Printf("%#v", i)
+		}
+		print("\n")
 	}
-	return s
+	return current
 }
 
-func (o Op) Value() []datatypes {
+func (o Op) Value() datatypes {
 	return o.Data
 }
 
@@ -66,9 +94,7 @@ type pushLiteral struct {
 }
 
 func (o pushLiteral) Eval(s Stack) Stack {
-	for _, d := range o.Data {
-		s.Push(d)
-	}
+	s.Push(o.Value())
 	return s
 }
 
@@ -80,7 +106,7 @@ func newPushInteger(t string) *pushInteger {
 	pi := new(pushInteger)
 	pi.Name = t
 	i, _ := strconv.Atoi(t)
-	pi.Data = append(pi.Data, NewInt(i))
+	pi.Data = NewInt(i)
 	return pi
 }
 
@@ -92,7 +118,7 @@ func newPushWord(t string) *pushWord {
 	pw := new(pushWord)
 	pw.Name = t
 	w := newWord(t)
-	pw.Data = append(pw.Data, w)
+	pw.Data = w
 	return pw
 }
 

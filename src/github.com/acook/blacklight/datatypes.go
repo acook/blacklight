@@ -6,10 +6,11 @@ import (
 
 type datatypes interface {
 	Value() interface{}
+	String() string
 }
 
 type Datatype struct {
-	Data []interface{}
+	Data interface{}
 }
 
 func (d Datatype) Value() interface{} {
@@ -28,17 +29,13 @@ type Tag struct {
 }
 
 func (t Tag) Value() interface{} {
-	v := t.Kind
-	for _, s := range t.Data {
-		v = v + " " + s.(string)
-	}
-	return v
+	return t.Kind + ":" + t.Data.(string)
 }
 
 func NewErr(msg string) *Tag {
 	t := new(Tag)
 	t.Kind = "err"
-	t.Data = append(t.Data, msg)
+	t.Data = msg
 	return t
 }
 
@@ -48,6 +45,20 @@ type Int struct {
 
 func NewInt(v int) *Int {
 	i := new(Int)
-	i.Data = append(i.Data, v)
+	i.Data = v
 	return i
+}
+
+func (i Int) Value() interface{} {
+	return i.Data
+}
+
+type CharVector struct {
+	Datatype
+}
+
+func NewCharVector(str string) *CharVector {
+	cv := new(CharVector)
+	cv.Data = str
+	return cv
 }
