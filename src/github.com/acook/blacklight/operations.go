@@ -61,8 +61,19 @@ func newMetaOp(t string) *metaOp {
 	return op
 }
 
-type pushInteger struct {
+type pushLiteral struct {
 	Op
+}
+
+func (o pushLiteral) Eval(s Stack) Stack {
+	for _, d := range o.Data {
+		s.Push(d)
+	}
+	return s
+}
+
+type pushInteger struct {
+	pushLiteral
 }
 
 func newPushInteger(t string) *pushInteger {
@@ -74,17 +85,19 @@ func newPushInteger(t string) *pushInteger {
 }
 
 type pushWord struct {
-	Op
+	pushLiteral
 }
 
 func newPushWord(t string) *pushWord {
 	pw := new(pushWord)
 	pw.Name = t
+	w := newWord(t)
+	pw.Data = append(pw.Data, w)
 	return pw
 }
 
 type pushWordVector struct {
-	Op
+	pushLiteral
 	Contents []operation
 }
 
@@ -95,7 +108,7 @@ func newPushWordVector(t string) *pushWordVector {
 }
 
 type pushString struct {
-	Op
+	pushLiteral
 }
 
 func newPushString(t string) *pushString {
@@ -105,7 +118,7 @@ func newPushString(t string) *pushString {
 }
 
 type pushChar struct {
-	Op
+	pushLiteral
 }
 
 func newPushChar(t string) *pushChar {
@@ -115,7 +128,7 @@ func newPushChar(t string) *pushChar {
 }
 
 type pushQueue struct {
-	Op
+	pushLiteral
 	Contents []operation
 }
 
