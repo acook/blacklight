@@ -41,7 +41,7 @@ func (o Op) Eval(current Stack) Stack {
 			fmt.Printf("%v", v)
 		case *CharVector:
 			v := i.(*CharVector).Value().(string)
-			fmt.Printf("%v", v)
+			print(v)
 		default:
 			fmt.Printf("%#v", i)
 		}
@@ -133,13 +133,14 @@ func newPushWordVector(t string) *pushWordVector {
 	return pwv
 }
 
-type pushString struct {
+type pushCharVector struct {
 	pushLiteral
 }
 
-func newPushString(t string) *pushString {
-	ps := new(pushString)
+func newPushCharVector(t string) *pushCharVector {
+	ps := new(pushCharVector)
 	ps.Name = t
+	ps.Data = NewCharVector(t)
 	return ps
 }
 

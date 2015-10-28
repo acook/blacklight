@@ -59,6 +59,6 @@ type CharVector struct {
 
 func NewCharVector(str string) *CharVector {
 	cv := new(CharVector)
-	cv.Data = str
+	cv.Data = str[1 : len(str)-1]
 	return cv
 }

@@ -80,8 +80,8 @@ func lex(tokens []string) []operation {
 			ops = append(ops, newPushWord(t), newOp("set"))
 		case isGetWord(t):
 			ops = append(ops, newPushWord(t), newOp("get"))
-		case isString(t):
-			op := newPushString(t)
+		case isCharVector(t):
+			op := newPushCharVector(t)
 			ops = append(ops, op)
 		case isChar(t):
 			op := newPushChar(t)
@@ -153,7 +153,7 @@ func isGetWord(t string) bool {
 	return false
 }
 
-func isString(t string) bool {
+func isCharVector(t string) bool {
 	if t[0] == "'"[0] && t[len(t)-1] == "'"[0] {
 		return true
 	}
