@@ -12,7 +12,7 @@ func NewQueue() *Queue {
 }
 
 func (q *Queue) Enqueue(item datatypes) {
-	go func() { q.Items <- item }()
+	q.Items <- item
 }
 
 func (q *Queue) Dequeue() datatypes {
@@ -25,13 +25,16 @@ func (q Queue) Value() interface{} {
 
 func (q Queue) String() string {
 	str := "Q:"
+
+StringLoop:
 	for {
 		select {
 		case i := <-q.Items:
 			str += i.String()
 			str += ","
 		default:
-			return str[:len(str)-1]
+			break StringLoop
 		}
 	}
+	return str[:len(str)-1]
 }
