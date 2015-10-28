@@ -1,8 +1,13 @@
 package main
 
+import (
+	"strconv"
+)
+
 type operation interface {
 	Eval(*Stack) bool
 	Value() []datatypes
+	String() string
 }
 
 type Op struct {
@@ -21,17 +26,40 @@ func (o Op) Value() []datatypes {
 	return o.Data
 }
 
-func (o Op) to_s() string {
+func (o Op) String() string {
 	return o.Name
+}
+
+func newOp(t string) *Op {
+	op := new(Op)
+	op.Name = t
+	w := new(Word)
+	w.Name = t
+	op.Data = append(op.Data, w)
+	return op
 }
 
 type pushInteger struct {
 	Op
 }
 
+func newPushInteger(t string) *pushInteger {
+	pi := new(pushInteger)
+	pi.Name = t
+	i, _ := strconv.Atoi(t)
+	pi.Data = append(pi.Data, NewInt(i))
+	return pi
+}
+
 type pushWordVector struct {
 	Op
 	Contents []operation
+}
+
+func newPushWordVector(t string) *pushWordVector {
+	pwv := new(pushWordVector)
+	pwv.Name = t
+	return pwv
 }
 
 type pushQueue struct {

@@ -1,32 +1,32 @@
 package main
 
-import (
-	"strconv"
-)
+import ()
 
 var keywords = []string{
-	"decap", "depth", "drop", "dup", "over", "rot", "swap", "purge",
-	"$decap", "$drop", "$new", "$swap",
-	"deq", "enq", "newq", "proq",
+	"<>", "decap", "depth", "drop", "dup", "over", "rot", "swap", "purge",
+	"@", "$", "^", "$decap", "$drop", "$new", "$swap",
+	"newq", "deq", "enq", "proq", "q-to-v",
+	"s-new", "pop", "push", "size", "tail",
+	"o-new", "child", "self", "get", "set", "fetch",
+	"()", "v-new", "app", "eval", "v-to-s", "v-to-q",
+	"add", "sub", "mul", "div", "mod",
+	"read", "write",
+	"if", "eq", "is", "until",
+	"W", "C",
+	"nil", "true",
 }
 
 func lex(tokens []string) []operation {
-	var ops, real_ops []operation
+	var ops, real_ops, wv_ops []operation
 	var inside_queue, inside_word_vector bool
 
 	for _, t := range tokens {
 		switch {
 		case isKeyword(t):
-			op := new(Op)
-			w := new(Word)
-			w.Name = t
-			op.Data = append(op.Data, w)
+			op := newOp(t)
 			ops = append(ops, op)
 		case isInteger(t):
-			op := new(pushInteger)
-			op.Name = t
-			i, _ := strconv.Atoi(t)
-			op.Data = append(op.Data, NewInt(i))
+			op := newPushInteger(t)
 			ops = append(ops, op)
 		case t == "{": // Queue literal (start)
 			inside_queue = true
@@ -44,18 +44,36 @@ func lex(tokens []string) []operation {
 			if inside_word_vector {
 				inside_word_vector = false
 
-				pwv := new(pushWordVector)
+				pwv := newPushWordVector(t)
 				pwv.Contents = append(pwv.Contents, ops...)
 				ops = append(real_ops, pwv)
 			} else {
 				inside_word_vector = true
 
-				op := new(pushWordVector)
-				op.Name = "."
-
 				real_ops = ops
 				ops = []operation{}
 			}
+		case t == "..": // nested WordVector literal (start/end)
+			if inside_word_vector {
+				inside_word_vector = false
+
+				pwv := newPushWordVector(t)
+				pwv.Contents = append(pwv.Contents, ops...)
+				ops = append(wv_ops, pwv)
+			} else {
+				inside_word_vector = true
+
+				wv_ops = ops
+				ops = []operation{}
+			}
+		case isWord(t):
+		case isSetWord(t):
+		case isGetWord(t):
+		case isString(t):
+		case isChar(t):
+		default:
+			warn(t)
+			panic("wtf is this")
 		}
 	}
 
@@ -87,4 +105,39 @@ func isInteger(t string) bool {
 	}
 
 	return true
+}
+
+func isWord(t string) bool {
+	if t[0] == "~"[0] {
+		return true
+	}
+	return false
+}
+
+func isSetWord(t string) bool {
+	if t[len(t)-1] == ":"[0] {
+		return true
+	}
+	return false
+}
+
+func isGetWord(t string) bool {
+	if t[0] == ":"[0] {
+		return true
+	}
+	return false
+}
+
+func isString(t string) bool {
+	if t[0] == "'"[0] && t[len(t)-1] == "'"[0] {
+		return true
+	}
+	return false
+}
+
+func isChar(t string) bool {
+	if len(t) == 2 && t[0] == "\\"[0] {
+		return true
+	}
+	return false
 }

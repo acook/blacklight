@@ -1,6 +1,8 @@
 package main
 
-import ()
+import (
+	"fmt"
+)
 
 type datatypes interface {
 	Value() interface{}
@@ -12,6 +14,12 @@ type Datatype struct {
 
 func (d Datatype) Value() interface{} {
 	return d.Data
+}
+
+func (d Datatype) String() string {
+	v := d.Value()
+	s := fmt.Sprintf("%#v", v)
+	return s
 }
 
 type Tag struct {

@@ -8,12 +8,28 @@ func parse(code string) []string {
 	var tokens []string
 	tokens = append(tokens, "")
 	l := 0
-	comment := false
+	comment, str := false, false
 
 	for _, b := range code {
 		glyph := string(b)
 
 		switch {
+		case !comment && glyph == "'":
+			if str {
+				str = false
+				print("string: ", tokens[l])
+			} else {
+				str = true
+				print("string")
+			}
+			fallthrough
+		case str:
+			fallthrough
+		default:
+			print(glyph, " : ", b)
+			t := tokens[l]
+			h := tokens[:l]
+			tokens = append(h, (t + glyph))
 		case glyph == "\n":
 			comment = false
 			print("newline")
@@ -27,11 +43,6 @@ func parse(code string) []string {
 			comment = true
 			print("comment")
 			tokens = append(tokens[:l], tokens[l][:len(tokens[l])-1])
-		default:
-			print(glyph, " : ", b)
-			t := tokens[l]
-			h := tokens[:l]
-			tokens = append(h, (t + glyph))
 		}
 		print("\n")
 

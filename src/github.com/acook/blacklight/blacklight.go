@@ -26,11 +26,11 @@ func main() {
 
 	tokens := parse(prepare(bytes))
 
-	//fmt.Printf("%#v\n", tokens)
-
 	ops := lex(tokens)
-	fmt.Printf("%+v\n", ops)
 
+	for _, o := range ops {
+		fmt.Printf("%#v\n", o)
+	}
 }
 
 func prepare(code []byte) string {

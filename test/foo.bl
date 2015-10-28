@@ -4,10 +4,10 @@ $new         ;; creates new stack(2), pushing old stack(1) onto the meta-stack
 o-new        ;; creates a new object(1) and puts it on top of the @stack
 errs:        ;; creates slot ‘errs’ on object(1) and stores reference to stack(1)
                ;; the @stack now only contains object(1)
-‘/home/user/bl/text.txt’
+'/home/user/bl/text.txt'
                ;; ^- put a character-vector on the stack
-q-new        ;; creates a new queue(1) and puts it on top of the @stack
-io-read      ;; opens the ‘text.txt’ file for reading
+newq        ;; creates a new queue(1) and puts it on top of the @stack
+read      ;; opens the 'text.txt' file for reading
                ;; @< [errs:s1] {\H \e \l \l \o \ \w \o \r \l \d \!} >
 q-to-v       ;; converts the queue into a vector giving us “Hello world!"
 greeting:    ;; make the object into [errs:s1 greeting:’Hello world!’]
@@ -15,14 +15,14 @@ greeting:    ;; make the object into [errs:s1 greeting:’Hello world!’]
 ;; Inverting a Stack
 
 <> @
-. s-pop rot swap s-push swap .
-. @ depth swap drop 0 eq rot rot 2 pop .
+. drop rot swap push swap .
+. @ depth swap drop 0 eq rot rot 2 drop .
 until
 
 ;; Smalltalk-style Conditionals
 
 o-new      ;; o1
-o-child    ;; o2 -> o1
+child    ;; o2 -> o1
 . eval .   ;; evaluate the wv
 is-true:   ;; store function in slot
 . drop .   ;; do nothing except get rid of the wv
@@ -34,11 +34,11 @@ is-true:   ;; store function in slot
 . eval .   ;; evaluate the wv
 is-false:  ;; store function in slot
 false:     ;; store object in slot
-@< o1 o2 >
+;; @< o1 o2 >
 :false
-. ‘I am so false.' .
+. 'I am so false.' .
 :is-false
-@< o1 o2 ‘I am so false.’ >
+;; @< o1 o2 'I am so false.' >
 
 ;; A Message Chaining Implementation
 
@@ -54,13 +54,13 @@ o-new     ;; this will be our root object
 .         ;; end of send
 send:
 .         ;; expects: @< … o s >
-  s-pop     ;; get the top w from the s and put onto @stack @< … o1 o2 s w >
+  pop     ;; get the top w from the s and put onto @stack @< … o1 o2 s w >
   dup       ;; replicate the w @< … o1 o2 s w w>
   rot       ;; then bring the s to the top @< … o1 o2 w w s >
   swap      ;; finally bring the w to the top @< … o1 o2 w s w >
-  s-push    ;; put the w back on the s @< … o1 o2 w s >
+  push    ;; put the w back on the s @< … o1 o2 w s >
   swap      ;; bring the w to the top @< … o1 o2 s w >
-  w         ;; identifier meaning “word” @< … o1 o2 s w W >
+  W         ;; identifier meaning “word” @< … o1 o2 s w W >
   is        ;; checks to see if the w is actually a word @< … o1 o2 s w b >
   swap drop ;; @< … o1 o2 s b >
   ..           ;; create a new sub-wv
@@ -72,9 +72,9 @@ send:
 .
 verify:
 .         ;; expects @< … o s >
-  s-pop     ;; get the first w from the user-stack and put onto the @stack
+  pop     ;; get the first w from the user-stack and put onto the @stack
   rot swap  ;; makes our @stack like @< … s o w >
-  o-get     ;; get the value in slot w @< … s o i >
+  get     ;; get the value in slot w @< … s o i >
   rot       ;; bring the user-stack back the top @< … o i s >
   self      ;; @< … o i s o >
   :verify   ;; @< … o i s >
@@ -88,8 +88,8 @@ call:
 .         ;; end block
 send:     ;; save send slot
 .         ;; this begins our “method chain"
-  false     ;; first we’ll access the slot with this name
-  is-false  ;; then, we’ll access the slot from that
+  :false     ;; first we’ll access the slot with this name
+  :is-false  ;; then, we’ll access the slot from that
 .           ;; end method chain
 swap      ;; put the o on top so we can use the get-slot below
 :send     ;; this should send the above series of messages through the objects
@@ -99,11 +99,11 @@ swap      ;; put the o on top so we can use the get-slot below
 nil
 \! \o \l \l \e \H
 v-new
-. swap v-in .
+. swap app .
 . nil is .
 until
 drop
-@< ‘Hello!' >
+;; @< ‘Hello!' >
 
 ;; Converting c’s into a cv Using an Object and Recursion
 
@@ -116,37 +116,37 @@ o-new                        ;; create a new object to store our function
 c-to-v:                      ;; store our entry function
 .                            ;; start a wv block for our loop function
   swap                         ;; get the c beneath our o
-  v-in                         ;; pop the c and put it into the v
+  app                         ;; pop the c and put it into the v
   self                         ;; reference self (self references auto-destruct)
   ~loop-c-to-v                 ;; specify name of own slot
   fetch                        ;; fetch own function (this currently running one)
-  rot                          ;; being 3rd item to top
-  c-if                         ;; check to see if the top item is a c and loop if so
+  rot                          ;; bring 3rd item to top
+  C is if                         ;; check to see if the top item is a c and loop if so
 .                            ;; end block
 loop-c-to-v:                 ;; store our recursive function
 $new                         ;; new @stack
 \! \o \l \l \e \H            ;; dump in our c's
-^ s-pop dup rot s-push drop  ;; retrieve our object
+^ pop dup rot push drop  ;; retrieve our object
 :c-to-v                      ;; call our looping function
 swap drop                    ;; get rid of the o
-@< ‘Hello!’ >                  ;; the contents of @stack is a cv
+;; @< ‘Hello!’ >                  ;; the contents of @stack is a cv
 
 ;; Faking o-fetch
 
 ;; given @< [] >  our @stack at the start just has an empty object
-. dup * .    ;; just an example wv: the basic implementation of sqr
-v_to_q       ;; convert the wv into a q
+. dup mul .    ;; just an example wv: the basic implementation of sqr
+v-to-q       ;; convert the wv into a q
 swap drop    ;; get rid of the wv
 fetch_sqr:   ;; set slot “fetch_sqr” on o to q
 drop         ;; we’re done with the q
-. :fetch_sqr q_to_v eval 2 pop .  ;; function to get and eval sqr_q
+. :fetch_sqr q-to-v eval 2 drop .  ;; function to get and eval sqr_q
 sqr:         ;; store function
 2 swap :sqr  ;;=> 4
 drop         ;; drop the 4
-:fetch_sqr   ;;=> . dup * .
+:fetch_sqr   ;;=> . dup mul .
 
-;; Replicating q-to-v with an unq Loop
+;; Replicating q-to-v with an proq Loop
 
 ;; given @< {} >
-() swap . deq v-in . unq
+() swap . deq app . proq
 
