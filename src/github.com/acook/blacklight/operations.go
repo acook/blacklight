@@ -18,6 +18,24 @@ type Op struct {
 
 func (o Op) Eval(current Stack) Stack {
 	switch o.Name {
+	// @stack (Stack)
+	case "decap":
+		current.Decap()
+	case "depth":
+		current.Push(NewInt(current.Depth()))
+	case "drop":
+		current.Drop()
+	case "dup":
+		current.Dup()
+	case "over":
+		current.Over()
+	case "purge":
+		current.Purge()
+	case "rot":
+		current.Rot()
+	case "swap":
+		current.Swap()
+
 	// NativeIntegers (Int)
 	case "add":
 		i1 := current.Pop()

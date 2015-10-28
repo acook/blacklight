@@ -1,0 +1,11 @@
+1 2 3
+dup
+drop
+rot
+swap
+over
+depth n-to-s print
+decap
+depth n-to-s print
+purge
+depth n-to-s print

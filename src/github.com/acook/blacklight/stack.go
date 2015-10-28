@@ -68,7 +68,7 @@ func (s *Stack) Decap() {
 
 	depth := s.Depth()
 	if depth > 1 {
-		s.Items = s.Items[depth-1 : depth-1]
+		s.Items = s.Items[depth-1:]
 	}
 }
 
