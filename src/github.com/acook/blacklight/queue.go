@@ -31,8 +31,7 @@ func (q Queue) String() string {
 			str += i.String()
 			str += ","
 		default:
-			break
+			return str[:len(str)-1]
 		}
 	}
-	return str[:len(str)-1]
 }
