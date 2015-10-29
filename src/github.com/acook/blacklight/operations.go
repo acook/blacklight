@@ -218,6 +218,10 @@ func (m metaOp) Eval(meta stack) stack {
 		prev := s.(*SystemStack)
 		meta.Swap()
 		current.Push(prev)
+	case "$":
+		s := *meta.Peek()
+		current := s.(*SystemStack)
+		current.Push(meta)
 	case "$decap":
 		meta.Decap()
 	case "$drop":
