@@ -32,11 +32,27 @@ func (t Tag) Value() interface{} {
 	return t.Kind + ":" + t.Data.(string)
 }
 
-func NewErr(msg string) *Tag {
+func NewTag(kind string, msg string) *Tag {
 	t := new(Tag)
-	t.Kind = "err"
+	t.Kind = kind
 	t.Data = msg
 	return t
+}
+
+func NewErr(msg string) *Tag {
+	return NewTag("err", msg)
+}
+
+func NewTrue(msg string) *Tag {
+	return NewTag("true", msg)
+}
+
+func NewNil(msg string) *Tag {
+	return NewTag("nil", msg)
+}
+
+func (t Tag) String() string {
+	return t.Kind + "(" + t.Data.(string) + ")"
 }
 
 type Int struct {
