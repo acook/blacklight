@@ -7,10 +7,10 @@ var keywords = []string{
 	"newq", "deq", "enq", "proq", "q-to-v",
 	"s-new", "pop", "push", "size", "tail",
 	"o-new", "child", "self", "get", "set", "fetch",
-	"()", "v-new", "app", "eval", "cat", "ato", "rmo", "len", "v-to-s", "v-to-q",
+	"()", "v-new", "app", "cat", "ato", "rmo", "len", "v-to-s", "v-to-q",
 	"add", "sub", "mul", "div", "mod", "n-to-s",
 	"read", "write",
-	"if", "eq", "is", "until",
+	"if", "eq", "is",
 	"W", "C",
 	"nil", "true",
 	"refl", "print", "warn",
@@ -18,6 +18,8 @@ var keywords = []string{
 
 var metaops = []string{
 	"@", "$", "^", "$decap", "$drop", "$new", "$swap",
+	"eval",
+	"until",
 }
 
 func lex(tokens []string) []operation {
