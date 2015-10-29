@@ -39,7 +39,6 @@ func lex(tokens []string) []operation {
 			ops = append(ops, op)
 		case t == "(": // Vector literal (start)
 			inside_vector = true
-
 			real_ops = ops
 			ops = []operation{}
 		case t == ")": // Vector literal (end)
