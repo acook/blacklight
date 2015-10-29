@@ -1,3 +1,7 @@
+;; the operations that act directly upon the @stack
+;; we add some number literals to give it something to manipulate
+;; then we print out the depth of the @stack after various changes
+
 1 2 3
 dup
 drop

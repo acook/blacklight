@@ -1,3 +1,8 @@
+;; the basic meth operations
+;; n-to-s converts number to a string (CV)
+;; cat joins two vectors, in this case joins two strings
+;; print sends a string (CV) to stdout
+
 '1 + 2 = ' 1 2 add
 n-to-s cat print
 

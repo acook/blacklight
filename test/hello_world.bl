@@ -1,1 +1,6 @@
+;; the standard first program
+;; note that the print operation appears to be postfix
+;; in reality, the string is pushed onto the @stack
+;; and print just takes the top item
+
 'Hello world!' print

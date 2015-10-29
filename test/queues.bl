@@ -1,3 +1,5 @@
+;; making and storing items on queues
+
 newq 1 enq
 newq 2 enq
 swap deq print drop

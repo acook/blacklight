@@ -1,3 +1,6 @@
+;; showcases some of the essential $stack operations
+;; dup is used because print eats the top item
+
 1
 $new
 dup print
