@@ -82,6 +82,10 @@ A wishlist of features for a major overhaul of blacklight.
 - - a thread dedicated to a reactor loop which schedules fibers and checks for events
 - **metaprogramming**
 - - Lisp-like macros using WVs
+- **better IO**
+- - trunc, readwrite, cursors
+- **generic sequences**
+- - group together sequnce-types
 - **object persistence mechanism**
 - - group datatype
 - - groups contain auto-incremented slots that store objects
