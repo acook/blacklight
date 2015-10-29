@@ -1,0 +1,7 @@
+;; normal stacks can be created and used for stack-based algorithms
+;; s-new and <> are essentially synonyms
+;; this shows that stacks are untyped, you can even put other stacks on them
+
+s-new <> push 99 push size print
+pop print
+tail size print

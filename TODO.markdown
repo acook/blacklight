@@ -19,12 +19,6 @@ Logic & Loops
 - while, until, loop
 
 
-Stacks
-------
-
-- user-stacks
-
-
 IO & System
 -----------
 

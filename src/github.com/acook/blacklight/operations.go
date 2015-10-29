@@ -122,6 +122,28 @@ func (o Op) Eval(current stack) stack {
 	case "proq":
 		current = processQueue(current)
 
+	// Stacks
+	case "news":
+		fallthrough
+	case "<>":
+		fallthrough
+	case "s-new":
+		s := NewStack("user")
+		current.Push(s)
+	case "push":
+		i := current.Pop()
+		s := (*current.Peek()).(stack)
+		s.Push(i)
+	case "pop":
+		s := (*current.Peek()).(stack)
+		current.Push(s.Pop())
+	case "size":
+		s := (*current.Peek()).(stack)
+		current.Push(NewInt(s.Depth()))
+	case "tail":
+		s := (*current.Peek()).(stack)
+		s.Drop()
+
 	default:
 		warn("UNIMPLEMENTED operation: " + o.String())
 	}
