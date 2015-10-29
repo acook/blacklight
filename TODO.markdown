@@ -11,6 +11,12 @@ I imagine 3 major phases of blacklight:
 
 Currently we're in the midst of a headlong rush to **bianca** to prove out the base concepts.
 
+Vectors
+-------
+
+- eval for WVs
+- rmo
+
 
 Logic & Loops
 -------------

@@ -7,7 +7,7 @@ var keywords = []string{
 	"newq", "deq", "enq", "proq", "q-to-v",
 	"s-new", "pop", "push", "size", "tail",
 	"o-new", "child", "self", "get", "set", "fetch",
-	"()", "v-new", "app", "eval", "cat", "v-to-s", "v-to-q",
+	"()", "v-new", "app", "eval", "cat", "ato", "rmo", "v-to-s", "v-to-q",
 	"add", "sub", "mul", "div", "mod", "n-to-s",
 	"read", "write",
 	"if", "eq", "is", "until",
@@ -22,7 +22,7 @@ var metaops = []string{
 
 func lex(tokens []string) []operation {
 	var ops, real_ops, wv_ops []operation
-	var inside_queue, inside_word_vector bool
+	var inside_vector, inside_word_vector bool
 
 	for _, t := range tokens {
 		switch {
@@ -35,18 +35,18 @@ func lex(tokens []string) []operation {
 		case isInteger(t):
 			op := newPushInteger(t)
 			ops = append(ops, op)
-		case t == "{": // Queue literal (start)
-			inside_queue = true
+		case t == "(": // Vector literal (start)
+			inside_vector = true
 
 			real_ops = ops
 			ops = []operation{}
-		case t == "}": // Queue literal (end)
-			inside_queue = false
+		case t == ")": // Vector literal (end)
+			inside_vector = false
 
-			pq := new(pushQueue)
+			pv := newPushVector("()")
 
-			pq.Contents = append(pq.Contents, ops...)
-			ops = append(real_ops, pq)
+			pv.Contents = append(pv.Contents, ops...)
+			ops = append(real_ops, pv)
 		case t == ".": // WordVector literal (start/end)
 			if inside_word_vector {
 				inside_word_vector = false
@@ -95,8 +95,8 @@ func lex(tokens []string) []operation {
 	switch {
 	case inside_word_vector:
 		panic("unclosed WordVector literal")
-	case inside_queue:
-		panic("unclosed queue literal")
+	case inside_vector:
+		panic("unclosed Vector literal")
 	}
 
 	return ops

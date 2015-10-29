@@ -106,6 +106,11 @@ func (o Op) Eval(current stack) stack {
 
 		result := i2.Cat(i1)
 		current.Push(result)
+	case "ato":
+		n := current.Pop().(*Int)
+		v := (*current.Peek()).(Vector)
+		i := v.Ato(n.Value().(int))
+		current.Push(i)
 
 	// Queues
 	case "newq":
@@ -245,9 +250,29 @@ func newPushWord(t string) *pushWord {
 	return pw
 }
 
-type pushWordVector struct {
+type pushVector struct {
 	pushLiteral
 	Contents []operation
+}
+
+func newPushVector(t string) *pushVector {
+	pv := new(pushVector)
+	pv.Name = t
+	return pv
+}
+
+func (pv *pushVector) Eval(s stack) stack {
+	var data []datatypes
+	for _, op := range pv.Contents {
+		data = append(data, op.Value())
+	}
+	v := NewVector(data)
+	s.Push(v)
+	return s
+}
+
+type pushWordVector struct {
+	pushVector
 }
 
 func newPushWordVector(t string) *pushWordVector {
@@ -263,7 +288,7 @@ func (pwv *pushWordVector) Eval(s stack) stack {
 }
 
 type pushCharVector struct {
-	pushLiteral
+	pushVector
 }
 
 func newPushCharVector(t string) *pushCharVector {

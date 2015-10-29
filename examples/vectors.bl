@@ -1,0 +1,6 @@
+;; vectors are typed sequences of items
+;; they allow random-access to items in the middle of the sequence
+;; the ato and rmo operations are 0-based offsets
+
+(1 2 3 4) 2 ato print
+('a' 'b' 'b') 1 ato print

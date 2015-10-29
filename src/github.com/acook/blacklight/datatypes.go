@@ -53,8 +53,22 @@ func (i Int) Value() interface{} {
 	return i.Data
 }
 
-type CharVector struct {
+type Vector struct {
 	Datatype
+}
+
+func NewVector(items []datatypes) Vector {
+	v := *new(Vector)
+	v.Data = items
+	return v
+}
+
+func (v *Vector) Ato(n int) datatypes {
+	return v.Data.([]datatypes)[n]
+}
+
+type CharVector struct {
+	Vector
 }
 
 func NewCharVector(str string) *CharVector {

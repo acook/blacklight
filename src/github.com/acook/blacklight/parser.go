@@ -27,6 +27,12 @@ func parse(code string) []string {
 			t := tokens[l]
 			h := tokens[:l]
 			tokens = append(h, (t + glyph))
+		case glyph == "(":
+			tokens = append(tokens, glyph)
+			tokens = ws(glyph, tokens)
+		case glyph == ")":
+			tokens = append(tokens, glyph)
+			tokens = ws(glyph, tokens)
 		case glyph == "\n":
 			comment = false
 			tokens = ws(glyph, tokens)
