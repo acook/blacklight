@@ -14,7 +14,7 @@ Currently we're in the midst of a headlong rush to **bianca** to prove out the b
 Vectors
 -------
 
-- eval for WVs
+- eval op for WVs
 
 
 Logic & Loops
@@ -63,7 +63,7 @@ A wishlist of features for a major overhaul of blacklight.
 
 - **rework syntax**
 - - no stack, queue, or object literal syntax
-- - WVs are delimited with paired square brackets
+- - blocks are delimited with paired square brackets
 - - call `new` on datatype literals instead of dedicated operations
 - **cleaner stack implementation**
 - - no meta-stack
@@ -86,7 +86,9 @@ A wishlist of features for a major overhaul of blacklight.
 - **fibers and events**
 - - a thread dedicated to a reactor loop which schedules fibers and checks for events
 - **metaprogramming**
-- - Lisp-like macros using WVs
+- - WVs are called blocks, may be a different underlying type
+- - Lisp-like macros using blocks
+- - Lisp-like list manipulations of blocks
 - **better IO**
 - - trunc, readwrite, cursors
 - **generic sequences**
