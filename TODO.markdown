@@ -15,7 +15,6 @@ Vectors
 -------
 
 - eval for WVs
-- rmo
 
 
 Logic & Loops

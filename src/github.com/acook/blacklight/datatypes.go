@@ -67,6 +67,17 @@ func (v *Vector) Ato(n int) datatypes {
 	return v.Data.([]datatypes)[n]
 }
 
+func (v Vector) String() string {
+	str := "("
+	for _, i := range v.Data.([]datatypes) {
+		str += i.String() + " "
+	}
+	if len(str) > 1 {
+		str = str[:len(str)-1]
+	}
+	return str + ")"
+}
+
 type CharVector struct {
 	Vector
 }
@@ -83,4 +94,10 @@ func NewCharVector(str string) *CharVector {
 
 func (cv *CharVector) Cat(cv2 *CharVector) *CharVector {
 	return NewCharVector(cv.Value().(string) + cv2.Value().(string))
+}
+
+func (cv CharVector) String() string {
+	v := cv.Value()
+	s := fmt.Sprintf("%#v", v)
+	return s
 }

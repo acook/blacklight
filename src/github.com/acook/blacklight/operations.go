@@ -94,6 +94,9 @@ func (o Op) Eval(current stack) stack {
 		case *SystemStack:
 			v := i.(*SystemStack).String()
 			print(v)
+		case Vector:
+			v := i.(Vector).String()
+			print(v)
 		default:
 			fmt.Printf("%#v", i)
 		}
@@ -111,6 +114,19 @@ func (o Op) Eval(current stack) stack {
 		v := (*current.Peek()).(Vector)
 		i := v.Ato(n.Value().(int))
 		current.Push(i)
+	case "rmo":
+		n := current.Pop().(*Int).Value().(int)
+		v := current.Pop().(Vector)
+		i := v.Ato(n)
+		d := v.Data.([]datatypes)
+		a := d[:n]
+		b := d[n+1:]
+		v = NewVector(append(a, b...))
+		current.Push(v)
+		current.Push(i)
+	case "len":
+		v := (*current.Peek()).(Vector)
+		current.Push(NewInt(len(v.Data.([]datatypes))))
 
 	// Queues
 	case "newq":
