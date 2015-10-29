@@ -43,12 +43,16 @@ func lex(tokens []string) []operation {
 			real_ops = ops
 			ops = []operation{}
 		case t == ")": // Vector literal (end)
-			inside_vector = false
+			if inside_vector {
+				inside_vector = false
 
-			pv := newPushVector("()")
+				pv := newPushVector("()")
 
-			pv.Contents = append(pv.Contents, ops...)
-			ops = append(real_ops, pv)
+				pv.Contents = append(pv.Contents, ops...)
+				ops = append(real_ops, pv)
+			} else {
+				panic("unmatched closing paren")
+			}
 		case t == ".": // WordVector literal (start/end)
 			if inside_word_vector {
 				inside_word_vector = false
