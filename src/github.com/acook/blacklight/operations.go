@@ -171,6 +171,15 @@ func (o Op) Eval(current stack) stack {
 		s := (*current.Peek()).(stack)
 		s.Drop()
 
+	case "eq":
+		i1 := current.Pop()
+		i2 := *current.Peek()
+		if i1.Value() == i2.Value() {
+			current.Push(NewTrue("eq"))
+		} else {
+			current.Push(NewNil("eq"))
+		}
+
 	default:
 		warn("UNIMPLEMENTED operation: " + o.String())
 	}
@@ -226,6 +235,22 @@ func (m metaOp) Eval(meta stack) stack {
 		}
 	case "$swap":
 		meta.Swap()
+
+	// Loops and Logic
+	case "until":
+		current := (*meta.Peek()).(*SystemStack)
+		comp := current.Pop().(WordVector).Ops
+		actn := current.Pop().(WordVector).Ops
+	Until:
+		for {
+			doEval(meta.(*MetaStack), comp)
+			current = (*meta.Peek()).(*SystemStack)
+			if current.Pop().(*Tag).Kind == "true" {
+				break Until
+			}
+			doEval(meta.(*MetaStack), actn)
+		}
+
 	default:
 		warn("UNIMPLEMENTED $operation: " + m.String())
 	}
