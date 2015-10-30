@@ -144,8 +144,8 @@ func (o Op) Eval(current stack) stack {
 		q := (*current.Peek()).(*Queue)
 		i := q.Dequeue()
 		current.Push(i)
-	case "proq":
-		current = processQueue(current)
+	case "q-to-v":
+		q_to_v(current.(*Stack))
 
 	// Stacks
 	case "news":
@@ -395,4 +395,22 @@ ProcLoop:
 			break ProcLoop
 		}
 	}
+}
+
+func q_to_v(s *Stack) {
+	q := s.Pop().(*Queue)
+	items := []datatypes{}
+
+QVLoop:
+	for {
+		select {
+		case i := <-q.Items:
+			items = append(items, i)
+		default:
+			break QVLoop
+		}
+	}
+
+	v := NewVector(items)
+	s.Push(v)
 }
