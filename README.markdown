@@ -49,12 +49,13 @@ There is a rich history of languages like blacklight and as a result there is a 
 - [Concatenative Programming on Wikipedia](https://en.wikipedia.org/wiki/Concatenative_programming_language)
 - [Stack-Oriented Programming on Wikipedia](https://en.wikipedia.org/wiki/Stack-oriented_programming_language)
 - [Cool Stuff Built in Forth](http://www.forth.org/successes.html) (hint: NASA used it)
+- [Concatenative Programming Wiki](http://concatenative.org)
 
 ### Other concatenative Languages
 
 - [Forth](https://en.wikipedia.org/wiki/Forth_(programming_language)) - this is the big one, the granddaddy of them all
 - [JS-FORTH](https://repl.it/languages/forth) - fun to play around with in your browser
-- [Factor](https://en.wikipedia.org/wiki/Factor_(programming_language)) - a cool modern concatenative language
+- [Factor](http://factorcode.org/) - a cool modern concatenative language
 - [Postscript](https://en.wikipedia.org/wiki/PostScript) - most printers use Postscript to do their jobs
 
 
