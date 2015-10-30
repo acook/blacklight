@@ -259,13 +259,13 @@ func (m metaOp) Eval(meta stack) stack {
 		filename := current.Pop().(*CharVector).Value().(string)
 		threads.Add(1)
 		go func(filename string) {
+			defer threads.Done()
 			code := loadFile(filename)
 			tokens := parse(code)
 			ops := lex(tokens)
 			new_meta := NewMetaStack()
 			new_meta.Push(NewStack("co"))
 			doEval(new_meta, ops)
-			threads.Done()
 		}(filename)
 
 	default:

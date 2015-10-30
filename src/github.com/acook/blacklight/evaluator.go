@@ -27,8 +27,6 @@ func doEval(meta *MetaStack, ops []operation) {
 		}
 
 	}
-
-	threads.Wait()
 }
 
 func rescue(meta stack) {

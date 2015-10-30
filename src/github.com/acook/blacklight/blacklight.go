@@ -25,6 +25,8 @@ func main() {
 
 	ops := lex(tokens)
 	eval(ops)
+
+	threads.Wait()
 }
 
 func loadFile(filename string) string {
