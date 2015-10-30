@@ -267,6 +267,8 @@ func (m metaOp) Eval(meta stack) stack {
 			new_meta.Push(NewStack("co"))
 			doEval(new_meta, ops)
 		}(filename)
+	case "wait":
+		threads.Wait()
 
 	default:
 		warn("UNIMPLEMENTED $operation: " + m.String())

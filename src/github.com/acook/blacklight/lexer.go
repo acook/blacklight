@@ -20,7 +20,7 @@ var metaops = []string{
 	"@", "$", "^", "$decap", "$drop", "$new", "$swap",
 	"eval",
 	"until", "while", "loop", "proq",
-	"do", "co", "work", "bkg",
+	"do", "co", "work", "bkg", "wait",
 }
 
 func lex(tokens []string) []operation {
