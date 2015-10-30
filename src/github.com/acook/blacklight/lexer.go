@@ -25,7 +25,7 @@ var metaops = []string{
 
 func lex(tokens []string) []operation {
 	var ops, real_ops, wv_ops []operation
-	var inside_vector, inside_word_vector bool
+	var inside_vector, inside_word_vector, inside_nested_word_vector bool
 
 	for _, t := range tokens {
 		switch {
@@ -67,14 +67,14 @@ func lex(tokens []string) []operation {
 				ops = []operation{}
 			}
 		case t == "..": // nested WordVector literal (start/end)
-			if inside_word_vector {
-				inside_word_vector = false
+			if inside_nested_word_vector {
+				inside_nested_word_vector = false
 
 				pwv := newPushWordVector(t)
 				pwv.Contents = append(pwv.Contents, ops...)
 				ops = append(wv_ops, pwv)
 			} else {
-				inside_word_vector = true
+				inside_nested_word_vector = true
 
 				wv_ops = ops
 				ops = []operation{}
