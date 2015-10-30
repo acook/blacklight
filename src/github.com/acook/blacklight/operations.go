@@ -94,6 +94,9 @@ func (o Op) Eval(current stack) stack {
 		case *Stack:
 			v := i.(*Stack).String()
 			print(v)
+		case WordVector:
+			v := i.String()
+			print(v)
 		case Vector:
 			v := i.(Vector).String()
 			print(v)
