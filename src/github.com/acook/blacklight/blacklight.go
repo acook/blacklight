@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"sync"
 )
+
+var threads sync.WaitGroup
 
 func main() {
 	defer cleanup()

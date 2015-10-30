@@ -246,7 +246,7 @@ func (m metaOp) Eval(meta stack) stack {
 	case "proq":
 		processQueue(meta.(*MetaStack))
 
-	// Multithreading stuffs
+	// File Loading & Multithreading
 	case "do":
 		current := (*meta.Peek()).(*Stack)
 		filename := current.Pop().(*CharVector).Value().(string)
@@ -254,6 +254,19 @@ func (m metaOp) Eval(meta stack) stack {
 		tokens := parse(code)
 		ops := lex(tokens)
 		doEval(meta.(*MetaStack), ops)
+	case "co":
+		current := (*meta.Peek()).(*Stack)
+		filename := current.Pop().(*CharVector).Value().(string)
+		threads.Add(1)
+		go func(filename string) {
+			code := loadFile(filename)
+			tokens := parse(code)
+			ops := lex(tokens)
+			new_meta := NewMetaStack()
+			new_meta.Push(NewStack("co"))
+			doEval(new_meta, ops)
+			threads.Done()
+		}(filename)
 
 	default:
 		warn("UNIMPLEMENTED $operation: " + m.String())
