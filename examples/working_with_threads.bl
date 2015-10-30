@@ -1,0 +1,10 @@
+'examples/basic_math.bl'  co ;; run file in a new thread with its own $
+
+newq 1 enq 2 enq 3 enq    ;; make a Q of work
+.
+  ..
+    print                 ;; print items in Q
+  ..  proq                ;; interate over items in Q until empty
+. bkg                     ;; run this WV in the background taking the top item with it
+
+wait
