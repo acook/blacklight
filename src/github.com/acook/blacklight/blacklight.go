@@ -17,17 +17,22 @@ func main() {
 		panic("no filename argument")
 	}
 
+	code := loadFile(fileName)
+	tokens := parse(code)
+
+	ops := lex(tokens)
+	eval(ops)
+}
+
+func loadFile(filename string) string {
 	//warn("reading from: ", fileName)
 
-	bytes, err := ioutil.ReadFile(fileName)
+	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {
 		panic(err)
 	}
 
-	tokens := parse(prepare(bytes))
-
-	ops := lex(tokens)
-	eval(ops)
+	return prepare(bytes)
 }
 
 func prepare(code []byte) string {
