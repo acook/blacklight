@@ -293,6 +293,10 @@ func (o pushLiteral) Eval(s stack) stack {
 	return s
 }
 
+func (o pushLiteral) String() string {
+	return fmt.Sprint(o.Value())
+}
+
 type pushInteger struct {
 	pushLiteral
 }
