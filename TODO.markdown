@@ -41,13 +41,6 @@ Text
 - double-backslash chars for control characters and unicode
 
 
-Parallelism
------------
-
-- `co`, `work`, and `bkg` operations
-- test the core data structures for thread-safety
-
-
 Objects
 -------
 
