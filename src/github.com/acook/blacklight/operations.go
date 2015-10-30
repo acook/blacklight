@@ -255,18 +255,7 @@ func (m metaOp) Eval(meta stack) stack {
 		ops := lex(tokens)
 		doEval(meta.(*MetaStack), ops)
 	case "co":
-		current := (*meta.Peek()).(*Stack)
-		filename := current.Pop().(*CharVector).Value().(string)
-		threads.Add(1)
-		go func(filename string) {
-			defer threads.Done()
-			code := loadFile(filename)
-			tokens := parse(code)
-			ops := lex(tokens)
-			new_meta := NewMetaStack()
-			new_meta.Push(NewStack("co"))
-			doEval(new_meta, ops)
-		}(filename)
+		co(meta.(*MetaStack))
 	case "wait":
 		threads.Wait()
 	case "bkg":
@@ -461,6 +450,30 @@ func work(meta *MetaStack) {
 		new_current.Push(out)
 		doEval(new_meta, wv.Ops)
 	}(in, out)
+
+	current.Push(out)
+	current.Push(in)
+}
+
+func co(meta *MetaStack) {
+	current := (*meta.Peek()).(*Stack)
+	filename := current.Pop().(*CharVector).Value().(string)
+	in := NewQueue()
+	out := NewQueue()
+
+	threads.Add(1)
+	go func(filename string, in *Queue, out *Queue) {
+		defer threads.Done()
+		code := loadFile(filename)
+		tokens := parse(code)
+		ops := lex(tokens)
+		new_meta := NewMetaStack()
+		new_current := NewStack("co")
+		new_meta.Push(new_current)
+		new_current.Push(in)
+		new_current.Push(out)
+		doEval(new_meta, ops)
+	}(filename, in, out)
 
 	current.Push(out)
 	current.Push(in)

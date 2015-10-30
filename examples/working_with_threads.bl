@@ -1,4 +1,5 @@
-'examples/basic_math.bl'  co ;; run file in a new thread with its own $
+;; co runs a file in its own thread and $stack and returns two queues
+'examples/_file_to_run_with_co.bl' co
 
 newq 1 enq 2 enq 3 enq    ;; make a Q of work
 .
@@ -7,4 +8,7 @@ newq 1 enq 2 enq 3 enq    ;; make a Q of work
   ..  proq                ;; interate over items in Q until empty
 . bkg                     ;; run this WV in the background taking the top item with it
 
-wait                      ;; let all threads finish before continuing
+;; now lets communicate with the thread run by co
+'bar' enq
+swap
+deq print
