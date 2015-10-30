@@ -271,6 +271,8 @@ func (m metaOp) Eval(meta stack) stack {
 		threads.Wait()
 	case "bkg":
 		bkg(meta.(*MetaStack))
+	case "work":
+		work(meta.(*MetaStack))
 
 	default:
 		warn("UNIMPLEMENTED $operation: " + m.String())
@@ -438,4 +440,22 @@ func bkg(meta *MetaStack) {
 		current.Push(item)
 		doEval(meta, wv.Ops)
 	}(i)
+}
+
+func work(meta *MetaStack) {
+	current := (*meta.Peek()).(*Stack)
+	wv := current.Pop().(WordVector)
+	in := (*current.Peek()).(*Queue)
+	out := (*current.Peek()).(*Queue)
+
+	threads.Add(1)
+	go func(in *Queue, out *Queue) {
+		defer threads.Done()
+		new_meta := NewMetaStack()
+		new_current := NewStack("work")
+		new_meta.Push(new_current)
+		new_current.Push(in)
+		new_current.Push(out)
+		doEval(new_meta, wv.Ops)
+	}(in, out)
 }
