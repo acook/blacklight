@@ -269,6 +269,8 @@ func (m metaOp) Eval(meta stack) stack {
 		}(filename)
 	case "wait":
 		threads.Wait()
+	case "bkg":
+		bkg(meta.(*MetaStack))
 
 	default:
 		warn("UNIMPLEMENTED $operation: " + m.String())
@@ -423,4 +425,17 @@ QVLoop:
 
 	v := NewVector(items)
 	s.Push(v)
+}
+
+func bkg(meta *MetaStack) {
+	current := (*meta.Peek()).(*Stack)
+	wv := current.Pop().(WordVector)
+	i := current.Pop()
+
+	threads.Add(1)
+	go func(item datatypes) {
+		defer threads.Done()
+		current.Push(item)
+		doEval(meta, wv.Ops)
+	}(i)
 }
