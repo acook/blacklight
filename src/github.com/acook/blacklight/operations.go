@@ -262,6 +262,18 @@ func (m metaOp) Eval(meta stack) stack {
 		if current.Pop().(*Tag).Kind == "true" {
 			doEval(meta.(*MetaStack), actn)
 		}
+	case "either":
+		current := (*meta.Peek()).(*Stack)
+		comp := current.Pop().(WordVector).Ops
+		iffalse := current.Pop().(WordVector).Ops
+		iftrue := current.Pop().(WordVector).Ops
+		doEval(meta.(*MetaStack), comp)
+		current = (*meta.Peek()).(*Stack)
+		if current.Pop().(*Tag).Kind == "true" {
+			doEval(meta.(*MetaStack), iftrue)
+		} else {
+			doEval(meta.(*MetaStack), iffalse)
+		}
 
 	// File Loading & Multithreading
 	case "do":

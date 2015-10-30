@@ -2,3 +2,9 @@
 . 'not zero!' print .
 . 0 eq not .
 if
+
+(1 2)
+. 'empty' .
+. 'not empty!' .
+. len 0 eq swap drop .
+either print
