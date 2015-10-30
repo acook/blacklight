@@ -20,7 +20,7 @@ Vectors
 Logic & Loops
 -------------
 
-- if, either, is, eq, not, datatype literals
+- is, datatype literals
 - while
 
 
