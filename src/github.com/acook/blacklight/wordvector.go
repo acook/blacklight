@@ -21,10 +21,13 @@ func (wv WordVector) Value() interface{} {
 }
 
 func (wv WordVector) String() string {
-	str := "WV:"
+	str := "(#WV# "
 	for _, w := range wv.Data {
 		str += w.String()
-		str += ","
+		str += " "
 	}
-	return str[:len(str)-1]
+	if str[len(str)-1] == " "[0] {
+		str = str[:len(str)-1]
+	}
+	return str + ")"
 }

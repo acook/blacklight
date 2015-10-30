@@ -24,17 +24,17 @@ func (q Queue) Value() interface{} {
 }
 
 func (q Queue) String() string {
-	str := "Q:"
+	str := "{"
 
 StringLoop:
 	for {
 		select {
 		case i := <-q.Items:
 			str += i.String()
-			str += ","
+			str += " "
 		default:
 			break StringLoop
 		}
 	}
-	return str[:len(str)-1]
+	return str[:len(str)-1] + "}"
 }

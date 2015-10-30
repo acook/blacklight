@@ -63,8 +63,7 @@ func (s Stack) Value() interface{} {
 }
 
 func (s Stack) String() string {
-	str := s.Type + "-stack#" + strconv.Itoa(s.Id)
-	str += "(" + strconv.Itoa(s.Depth()) + "):<"
+	str := "<#" + s.Type + "#" + strconv.Itoa(s.Id) + "#" + strconv.Itoa(s.Depth()) + "# "
 
 	for _, i := range s.Items {
 		switch i.(type) {
@@ -73,20 +72,20 @@ func (s Stack) String() string {
 			str += "$stack"
 		case *Stack:
 			if i.(*Stack).Id == s.Id {
-				str += "<...>" + ","
+				str += "<...> "
 			} else {
-				str += i.String() + ","
+				str += i.String() + " "
 			}
 		case Stack:
 			panic("direct Stack reference: " + strconv.Itoa(i.(Stack).Id))
 		case nil:
-			str += "?nil?"
+			str += "??? "
 		default:
-			str += i.String() + ","
+			str += i.String() + " "
 		}
 	}
 
-	if str[len(str)-1] == ","[0] {
+	if str[len(str)-1] == " "[0] {
 		str = str[:len(str)-1]
 	}
 

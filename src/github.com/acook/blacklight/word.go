@@ -19,5 +19,5 @@ func (w Word) Value() interface{} {
 }
 
 func (w Word) String() string {
-	return w.Name
+	return "~" + w.Name
 }

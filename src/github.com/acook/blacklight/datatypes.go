@@ -117,7 +117,5 @@ func (cv *CharVector) Cat(cv2 *CharVector) *CharVector {
 }
 
 func (cv CharVector) String() string {
-	v := cv.Value()
-	s := fmt.Sprintf("%#v", v)
-	return s
+	return cv.Value().(string)
 }
