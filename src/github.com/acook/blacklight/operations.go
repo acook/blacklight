@@ -445,8 +445,8 @@ func bkg(meta *MetaStack) {
 func work(meta *MetaStack) {
 	current := (*meta.Peek()).(*Stack)
 	wv := current.Pop().(WordVector)
-	in := (*current.Peek()).(*Queue)
-	out := (*current.Peek()).(*Queue)
+	in := current.Pop().(*Queue)
+	out := current.Pop().(*Queue)
 
 	threads.Add(1)
 	go func(in *Queue, out *Queue) {
@@ -458,4 +458,7 @@ func work(meta *MetaStack) {
 		new_current.Push(out)
 		doEval(new_meta, wv.Ops)
 	}(in, out)
+
+	current.Push(out)
+	current.Push(in)
 }
