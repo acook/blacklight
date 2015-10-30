@@ -15,13 +15,13 @@ Vectors
 -------
 
 - eval op for WVs
-
+- generic vector functions should work on all vector types: `app`, `cat` etc
 
 Logic & Loops
 -------------
 
 - if, either, is, eq, not, datatype literals
-- while, until, loop
+- while
 
 
 IO & System
@@ -37,6 +37,7 @@ Text
 ----
 
 - chars should work with vector's `app` op
+- backslash chars
 - double-backslash chars for control characters and unicode
 
 
@@ -62,7 +63,7 @@ codename: bluelight
 A wishlist of features for a major overhaul of blacklight.
 
 - **rework syntax**
-- - no stack, queue, or object literal syntax
+- - no stack, queue, or object literal syntax (just need to update spec)
 - - blocks are delimited with paired square brackets
 - - call `new` on datatype literals instead of dedicated operations
 - **cleaner stack implementation**
