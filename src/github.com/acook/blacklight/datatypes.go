@@ -79,6 +79,10 @@ func NewVector(items []datatypes) Vector {
 	return v
 }
 
+func (v *Vector) App(i datatypes) Vector {
+	return NewVector(append(v.Data.([]datatypes), i))
+}
+
 func (v *Vector) Ato(n int) datatypes {
 	return v.Data.([]datatypes)[n]
 }

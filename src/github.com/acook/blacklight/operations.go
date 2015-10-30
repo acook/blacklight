@@ -112,9 +112,7 @@ func (o Op) Eval(current stack) stack {
 	case "app":
 		i := current.Pop()
 		v := current.Pop().(Vector)
-		d := v.Data.([]datatypes)
-		v = NewVector(append(d, i))
-		current.Push(v)
+		current.Push(v.App(i))
 	case "ato":
 		n := current.Pop().(*Int)
 		v := (*current.Peek()).(Vector)
