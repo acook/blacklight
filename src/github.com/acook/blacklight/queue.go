@@ -1,12 +1,21 @@
 package main
 
+import (
+	"fmt"
+)
+
+var queues int
+
 type Queue struct {
 	Items chan datatypes
+	Id    int
 }
 
 func NewQueue() *Queue {
 	q := &Queue{}
 	q.Items = make(chan datatypes, 16)
+	queues++
+	q.Id = queues
 
 	return q
 }
@@ -24,17 +33,28 @@ func (q Queue) Value() interface{} {
 }
 
 func (q Queue) String() string {
-	str := "{"
+	var s Stack
+	str := "{#" + fmt.Sprint(q.Id) + "# "
 
 StringLoop:
 	for {
 		select {
 		case i := <-q.Items:
+			s.Push(i)
 			str += i.String()
 			str += " "
 		default:
 			break StringLoop
 		}
 	}
-	return str[:len(str)-1] + "}"
+
+	for _, i := range s.Items {
+		q.Items <- i
+	}
+
+	if str[len(str)-1] == " "[0] {
+		str = str[:len(str)-1]
+	}
+
+	return str + "}"
 }
