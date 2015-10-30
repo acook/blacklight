@@ -255,6 +255,15 @@ func (m metaOp) Eval(meta stack) stack {
 			doEval(meta.(*MetaStack), actn)
 		}
 
+	// Multithreading stuffs
+	case "do":
+		current := (*meta.Peek()).(*Stack)
+		filename := current.Pop().(*CharVector).Value().(string)
+		code := loadFile(filename)
+		tokens := parse(code)
+		ops := lex(tokens)
+		doEval(meta.(*MetaStack), ops)
+
 	default:
 		warn("UNIMPLEMENTED $operation: " + m.String())
 	}
