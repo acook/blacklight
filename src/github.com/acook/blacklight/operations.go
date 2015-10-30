@@ -437,8 +437,11 @@ func bkg(meta *MetaStack) {
 	threads.Add(1)
 	go func(item datatypes) {
 		defer threads.Done()
-		current.Push(item)
-		doEval(meta, wv.Ops)
+		new_meta := NewMetaStack()
+		new_current := NewStack("work")
+		new_meta.Push(new_current)
+		new_current.Push(item)
+		doEval(new_meta, wv.Ops)
 	}(i)
 }
 

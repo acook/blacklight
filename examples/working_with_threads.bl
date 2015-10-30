@@ -7,4 +7,4 @@ newq 1 enq 2 enq 3 enq    ;; make a Q of work
   ..  proq                ;; interate over items in Q until empty
 . bkg                     ;; run this WV in the background taking the top item with it
 
-wait
+wait                      ;; let all threads finish before continuing
