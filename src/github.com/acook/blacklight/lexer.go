@@ -19,7 +19,8 @@ var keywords = []string{
 var metaops = []string{
 	"@", "$", "^", "$decap", "$drop", "$new", "$swap",
 	"eval",
-	"until",
+	"until", "while", "loop",
+	"do", "co", "work", "bkg",
 }
 
 func lex(tokens []string) []operation {
@@ -92,8 +93,7 @@ func lex(tokens []string) []operation {
 			op := newPushChar(t)
 			ops = append(ops, op)
 		default:
-			warn(t)
-			panic("wtf is this")
+			panic("unrecognized operation: " + t)
 		}
 	}
 
