@@ -14,7 +14,12 @@ func parse(code string) []string {
 		glyph := string(b)
 
 		switch {
-		case !comment && glyph == "'":
+		case glyph == "\n":
+			comment = false
+			tokens = ws(glyph, tokens)
+		case comment:
+			// ignore comments
+		case glyph == "'":
 			if str {
 				str = false
 			} else {
@@ -27,17 +32,12 @@ func parse(code string) []string {
 			t := tokens[l]
 			h := tokens[:l]
 			tokens = append(h, (t + glyph))
-		case !comment && glyph == "(":
+		case glyph == "(":
 			tokens = append(tokens, glyph)
 			tokens = ws(glyph, tokens)
-		case !comment && glyph == ")":
+		case glyph == ")":
 			tokens = append(tokens, glyph)
 			tokens = ws(glyph, tokens)
-		case glyph == "\n":
-			comment = false
-			tokens = ws(glyph, tokens)
-		case comment:
-			// ignore comments
 		case unicode.IsSpace(b):
 			tokens = ws(glyph, tokens)
 		case isComment(glyph, tokens):
