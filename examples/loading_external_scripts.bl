@@ -1,0 +1,5 @@
+;; do will run file in this thread with our $
+;; this lets us do setup in another file and then come back
+;; there is some overhead to open and load a new file
+
+'examples/hello_world.bl' do
