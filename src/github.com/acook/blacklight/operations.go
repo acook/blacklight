@@ -245,6 +245,15 @@ func (m metaOp) Eval(meta stack) stack {
 		}
 	case "proq":
 		processQueue(meta.(*MetaStack))
+	case "if":
+		current := (*meta.Peek()).(*Stack)
+		comp := current.Pop().(WordVector).Ops
+		actn := current.Pop().(WordVector).Ops
+		doEval(meta.(*MetaStack), comp)
+		current = (*meta.Peek()).(*Stack)
+		if current.Pop().(*Tag).Kind == "true" {
+			doEval(meta.(*MetaStack), actn)
+		}
 
 	// File Loading & Multithreading
 	case "do":
