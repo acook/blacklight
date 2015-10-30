@@ -10,7 +10,7 @@ var keywords = []string{
 	"()", "v-new", "app", "cat", "ato", "rmo", "len", "v-to-s", "v-to-q",
 	"add", "sub", "mul", "div", "mod", "n-to-s",
 	"read", "write",
-	"if", "eq", "is",
+	"eq", "is", "not",
 	"W", "C",
 	"nil", "true",
 	"refl", "print", "warn",

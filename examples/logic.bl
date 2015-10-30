@@ -1,0 +1,4 @@
+1
+. 'not zero!' print .
+. 0 eq not .
+if
