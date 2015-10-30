@@ -246,7 +246,7 @@ func (m metaOp) Eval(meta stack) stack {
 	case "proq":
 		processQueue(meta.(*MetaStack))
 
-	// Multithreading stuffs
+	// File Loading & Multithreading
 	case "do":
 		current := (*meta.Peek()).(*Stack)
 		filename := current.Pop().(*CharVector).Value().(string)
@@ -254,6 +254,14 @@ func (m metaOp) Eval(meta stack) stack {
 		tokens := parse(code)
 		ops := lex(tokens)
 		doEval(meta.(*MetaStack), ops)
+	case "co":
+		co(meta.(*MetaStack))
+	case "wait":
+		threads.Wait()
+	case "bkg":
+		bkg(meta.(*MetaStack))
+	case "work":
+		work(meta.(*MetaStack))
 
 	default:
 		warn("UNIMPLEMENTED $operation: " + m.String())
@@ -408,4 +416,65 @@ QVLoop:
 
 	v := NewVector(items)
 	s.Push(v)
+}
+
+func bkg(meta *MetaStack) {
+	current := (*meta.Peek()).(*Stack)
+	wv := current.Pop().(WordVector)
+	i := current.Pop()
+
+	threads.Add(1)
+	go func(item datatypes) {
+		defer threads.Done()
+		new_meta := NewMetaStack()
+		new_current := NewStack("work")
+		new_meta.Push(new_current)
+		new_current.Push(item)
+		doEval(new_meta, wv.Ops)
+	}(i)
+}
+
+func work(meta *MetaStack) {
+	current := (*meta.Peek()).(*Stack)
+	wv := current.Pop().(WordVector)
+	in := current.Pop().(*Queue)
+	out := current.Pop().(*Queue)
+
+	threads.Add(1)
+	go func(in *Queue, out *Queue) {
+		defer threads.Done()
+		new_meta := NewMetaStack()
+		new_current := NewStack("work")
+		new_meta.Push(new_current)
+		new_current.Push(in)
+		new_current.Push(out)
+		doEval(new_meta, wv.Ops)
+	}(in, out)
+
+	current.Push(out)
+	current.Push(in)
+}
+
+func co(meta *MetaStack) {
+	current := (*meta.Peek()).(*Stack)
+	filename := current.Pop().(*CharVector).Value().(string)
+	in := NewQueue()
+	out := NewQueue()
+
+	threads.Add(1)
+	go func(filename string, in *Queue, out *Queue) {
+		defer threads.Done()
+		code := loadFile(filename)
+		tokens := parse(code)
+		ops := lex(tokens)
+		new_meta := NewMetaStack()
+		new_current := NewStack("co")
+		new_meta.Push(new_current)
+		new_current.Push(in)
+		new_current.Push(out)
+		doEval(new_meta, ops)
+	}(filename, in, out)
+
+	current.Push(out)
+	current.Push(in)
 }
