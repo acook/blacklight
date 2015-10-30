@@ -339,7 +339,8 @@ func (pwv *pushWordVector) Eval(s stack) stack {
 }
 
 type pushCharVector struct {
-	pushVector
+	pushLiteral
+	Contents []operation
 }
 
 func newPushCharVector(t string) *pushCharVector {
