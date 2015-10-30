@@ -81,29 +81,7 @@ func (o Op) Eval(current stack) stack {
 	// Debug
 	case "print":
 		i := current.Pop()
-		switch i.(type) {
-		case *Int:
-			v := i.(*Int).Value().(int)
-			fmt.Printf("%v", v)
-		case *CharVector:
-			v := i.(*CharVector).Value().(string)
-			print(v)
-		case *MetaStack:
-			v := i.(*MetaStack).String()
-			print(v)
-		case *Stack:
-			v := i.(*Stack).String()
-			print(v)
-		case WordVector:
-			v := i.String()
-			print(v)
-		case Vector:
-			v := i.(Vector).String()
-			print(v)
-		default:
-			fmt.Printf("%#v", i)
-		}
-		print("\n")
+		fmt.Println(i.String())
 
 	// Vectors
 	case "cat":
