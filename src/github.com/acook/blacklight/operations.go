@@ -91,8 +91,8 @@ func (o Op) Eval(current stack) stack {
 		case *MetaStack:
 			v := i.(*MetaStack).String()
 			print(v)
-		case *SystemStack:
-			v := i.(*SystemStack).String()
+		case *Stack:
+			v := i.(*Stack).String()
 			print(v)
 		case Vector:
 			v := i.(Vector).String()
@@ -208,19 +208,19 @@ func (m metaOp) Eval(meta stack) stack {
 	switch m.Name {
 	case "@":
 		s := *meta.Peek()
-		current := s.(*SystemStack)
+		current := s.(*Stack)
 		current.Push(current)
 	case "^":
 		s := *meta.Peek()
-		current := s.(*SystemStack)
+		current := s.(*Stack)
 		meta.Swap()
 		s = *meta.Peek()
-		prev := s.(*SystemStack)
+		prev := s.(*Stack)
 		meta.Swap()
 		current.Push(prev)
 	case "$":
 		s := *meta.Peek()
-		current := s.(*SystemStack)
+		current := s.(*Stack)
 		current.Push(meta)
 	case "$decap":
 		meta.Decap()
@@ -229,7 +229,7 @@ func (m metaOp) Eval(meta stack) stack {
 	case "$new":
 		if meta.Depth() > 0 {
 			s := *meta.Peek()
-			os := s.(*SystemStack)
+			os := s.(*Stack)
 			ns := NewSystemStack()
 			ns.Push(os)
 			meta.Push(ns)
@@ -242,13 +242,13 @@ func (m metaOp) Eval(meta stack) stack {
 
 	// Loops and Logic
 	case "until":
-		current := (*meta.Peek()).(*SystemStack)
+		current := (*meta.Peek()).(*Stack)
 		comp := current.Pop().(WordVector).Ops
 		actn := current.Pop().(WordVector).Ops
 	Until:
 		for {
 			doEval(meta.(*MetaStack), comp)
-			current = (*meta.Peek()).(*SystemStack)
+			current = (*meta.Peek()).(*Stack)
 			if current.Pop().(*Tag).Kind == "true" {
 				break Until
 			}

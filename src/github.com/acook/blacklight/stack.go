@@ -38,12 +38,8 @@ func NewStack(t string) *Stack {
 	return s
 }
 
-type SystemStack struct {
-	Stack
-}
-
-func NewSystemStack() *SystemStack {
-	s := &SystemStack{}
+func NewSystemStack() *Stack {
+	s := &Stack{}
 	s.Type = "system"
 	s.Id = Stacks
 	Stacks++
@@ -51,7 +47,7 @@ func NewSystemStack() *SystemStack {
 }
 
 type MetaStack struct {
-	SystemStack
+	Stack
 }
 
 func NewMetaStack() *MetaStack {
@@ -74,15 +70,15 @@ func (s Stack) String() string {
 		switch i.(type) {
 		case MetaStack:
 		case *MetaStack:
-			str += i.String() + ","
-		case *SystemStack:
-			if i.(*SystemStack).Id == s.Id {
+			str += "$stack"
+		case *Stack:
+			if i.(*Stack).Id == s.Id {
 				str += "<...>" + ","
 			} else {
 				str += i.String() + ","
 			}
-		case SystemStack:
-			panic("direct SystemStack reference: " + strconv.Itoa(i.(SystemStack).Id))
+		case Stack:
+			panic("direct Stack reference: " + strconv.Itoa(i.(Stack).Id))
 		case nil:
 			str += "?nil?"
 		default:

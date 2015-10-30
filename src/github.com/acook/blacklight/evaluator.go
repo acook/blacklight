@@ -10,18 +10,18 @@ func eval(ops []operation) {
 }
 
 func doEval(meta *MetaStack, ops []operation) {
-	var current *SystemStack
+	var current *Stack
 	defer rescue(meta)
 
 	for _, op := range ops {
 		s := *meta.Peek()
-		current = s.(*SystemStack)
+		current = s.(*Stack)
 
 		switch op.(type) {
 		case *metaOp:
 			meta = op.Eval(meta).(*MetaStack)
 		case operation:
-			current = op.Eval(current).(*SystemStack)
+			current = op.Eval(current).(*Stack)
 		default:
 			panic("urecognized operation:" + op.String())
 		}
