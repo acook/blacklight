@@ -1,0 +1,10 @@
+newq newq                 ;; create recieve and send queues (swapped for work thread)
+.
+  ..
+    deq                   ;; will block if the queue is empty
+    n-to-s rot swap enq   ;; convert number into a cv (string) and send back
+    swap                  ;; reorder queues so we can loop without confusion
+  ..  loop                ;; using loop since it goes forever
+. work
+1 enq 2 enq 3 enq 4 enq   ;; send some numbers to be converted
+swap q-to-v print         ;; get contents of receive q and print them
