@@ -180,6 +180,10 @@ func (o Op) Eval(current stack) stack {
 		} else {
 			current.Push(NewNil("eq"))
 		}
+	case "nil":
+		current.Push(NewNil("nil"))
+	case "true":
+		current.Push(NewTrue("true"))
 
 	default:
 		warn("UNIMPLEMENTED operation: " + o.String())
