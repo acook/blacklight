@@ -237,6 +237,12 @@ func (m metaOp) Eval(meta stack) stack {
 			}
 			doEval(meta.(*MetaStack), actn)
 		}
+	case "loop":
+		current := (*meta.Peek()).(*Stack)
+		actn := current.Pop().(WordVector).Ops
+		for {
+			doEval(meta.(*MetaStack), actn)
+		}
 	case "proq":
 		processQueue(meta.(*MetaStack))
 
