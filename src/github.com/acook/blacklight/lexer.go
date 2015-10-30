@@ -4,7 +4,7 @@ import ()
 
 var keywords = []string{
 	"<>", "decap", "depth", "drop", "dup", "over", "rot", "swap", "purge",
-	"newq", "deq", "enq", "proq", "q-to-v",
+	"newq", "deq", "enq", "q-to-v",
 	"s-new", "pop", "push", "size", "tail",
 	"o-new", "child", "self", "get", "set", "fetch",
 	"()", "v-new", "app", "cat", "ato", "rmo", "len", "v-to-s", "v-to-q",
@@ -19,7 +19,7 @@ var keywords = []string{
 var metaops = []string{
 	"@", "$", "^", "$decap", "$drop", "$new", "$swap",
 	"eval",
-	"until", "while", "loop",
+	"until", "while", "loop", "proq",
 	"do", "co", "work", "bkg",
 }
 

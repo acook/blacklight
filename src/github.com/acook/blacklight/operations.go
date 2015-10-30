@@ -252,6 +252,8 @@ func (m metaOp) Eval(meta stack) stack {
 			}
 			doEval(meta.(*MetaStack), actn)
 		}
+	case "proq":
+		processQueue(meta.(*MetaStack))
 
 	// Multithreading stuffs
 	case "do":
@@ -372,9 +374,10 @@ type pushQueue struct {
 	Contents []operation
 }
 
-func processQueue(s stack) stack {
-	wv := s.Pop().(WordVector)
-	q := s.Pop().(*Queue)
+func processQueue(meta *MetaStack) {
+	current := (*meta.Peek()).(*Stack)
+	wv := current.Pop().(WordVector)
+	q := current.Pop().(*Queue)
 	var tokens []string
 
 	for _, w := range wv.Data {
@@ -385,15 +388,11 @@ ProcLoop:
 	for {
 		select {
 		case item := <-q.Items:
-			s.Push(item)
-			meta := NewMetaStack() // FIXME: this should be the actual $meta stack
-			meta.Push(s)
+			current.Push(item)
 			ops := lex(tokens)
 			doEval(meta, ops)
 		default:
 			break ProcLoop
 		}
 	}
-
-	return s
 }
