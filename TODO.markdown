@@ -39,6 +39,9 @@ Text
 - chars should work with vector's `app` op
 - backslash chars
 - double-backslash chars for control characters and unicode
+- t-to-v to display Tag information
+- n-to-s should be n-to-v
+- datatypes.Print() vs datatypes.String()
 
 
 Objects
