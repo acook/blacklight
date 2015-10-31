@@ -7,7 +7,7 @@ var keywords = []string{
 	"newq", "deq", "enq", "q-to-v",
 	"s-new", "pop", "push", "size", "tail",
 	"o-new", "child", "self", "get", "set", "fetch",
-	"()", "v-new", "app", "cat", "ato", "rmo", "len", "v-to-s", "v-to-q",
+	"''", "()", "v-new", "app", "cat", "ato", "rmo", "len", "v-to-s", "v-to-q",
 	"add", "sub", "mul", "div", "mod", "n-to-s",
 	"read", "write",
 	"eq", "is", "not",
@@ -25,19 +25,22 @@ var metaops = []string{
 }
 
 func lex(tokens []string) []operation {
+	var op operation
 	var ops, real_ops, wv_ops []operation
 	var inside_vector, inside_word_vector, inside_nested_word_vector bool
 
 	for _, t := range tokens {
 		switch {
+		case t == "":
+			// nope
 		case isMetaOp(t):
-			op := newMetaOp(t)
+			op = newMetaOp(t)
 			ops = append(ops, op)
 		case isKeyword(t):
-			op := newOp(t)
+			op = newOp(t)
 			ops = append(ops, op)
 		case isInteger(t):
-			op := newPushInteger(t)
+			op = newPushInteger(t)
 			ops = append(ops, op)
 		case t == "(": // Vector literal (start)
 			inside_vector = true
@@ -81,17 +84,17 @@ func lex(tokens []string) []operation {
 				ops = []operation{}
 			}
 		case isWord(t):
-			op := newPushWord(t)
+			op = newPushWord(t)
 			ops = append(ops, op)
 		case isSetWord(t):
 			ops = append(ops, newPushWord(t), newOp("set"))
 		case isGetWord(t):
 			ops = append(ops, newPushWord(t), newOp("get"))
 		case isCharVector(t):
-			op := newPushCharVector(t)
+			op = newPushCharVector(t)
 			ops = append(ops, op)
 		case isChar(t):
-			op := newPushChar(t)
+			op = newPushChar(t)
 			ops = append(ops, op)
 		default:
 			panic("unrecognized operation: " + t)

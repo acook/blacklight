@@ -69,6 +69,16 @@ func (i Int) Value() interface{} {
 	return i.Data
 }
 
+type vector interface {
+	App(datatypes) Vector
+	Ato(int) datatypes
+	Rmo(int) (vector, datatypes)
+	Cat(vector) vector
+	Len() int
+	Value() interface{}
+	String() string
+}
+
 type Vector struct {
 	Datatype
 }
@@ -79,12 +89,29 @@ func NewVector(items []datatypes) Vector {
 	return v
 }
 
-func (v *Vector) App(i datatypes) Vector {
+func (v Vector) App(i datatypes) Vector {
 	return NewVector(append(v.Data.([]datatypes), i))
 }
 
-func (v *Vector) Ato(n int) datatypes {
+func (v Vector) Ato(n int) datatypes {
 	return v.Data.([]datatypes)[n]
+}
+
+func (v Vector) Rmo(n int) (vector, datatypes) {
+	i := v.Ato(n)
+	d := v.Value().([]datatypes)
+	a := d[:n]
+	b := d[n+1:]
+	v = NewVector(append(a, b...))
+	return v, i
+}
+
+func (v Vector) Cat(v2 vector) vector {
+	return NewVector(append(v.Value().([]datatypes), v2.Value().([]datatypes)...))
+}
+
+func (v Vector) Len() int {
+	return len(v.Data.([]datatypes))
 }
 
 func (v Vector) String() string {
@@ -112,8 +139,25 @@ func NewCharVector(str string) *CharVector {
 	return cv
 }
 
-func (cv *CharVector) Cat(cv2 *CharVector) *CharVector {
+func (v CharVector) Ato(n int) datatypes {
+	return NewCharVector(fmt.Sprint(v.Data.(string)[n]))
+}
+
+func (v CharVector) Rmo(n int) (vector, datatypes) {
+	i := v.Ato(n)
+	d := v.Value().(string)
+	a := d[:n]
+	b := d[n+1:]
+	v = *NewCharVector(a + b)
+	return v, i
+}
+
+func (cv CharVector) Cat(cv2 vector) vector {
 	return NewCharVector(cv.Value().(string) + cv2.Value().(string))
+}
+
+func (v CharVector) Len() int {
+	return len(v.Data.(string))
 }
 
 func (cv CharVector) String() string {

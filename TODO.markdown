@@ -15,7 +15,7 @@ Vectors
 -------
 
 - eval op for WVs
-- generic vector functions should work on all vector types: `app`, `cat` etc
+
 
 Logic & Loops
 -------------

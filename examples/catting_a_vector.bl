@@ -1,0 +1,12 @@
+
+''
+('a' 'b' 'c' 'd')
+
+@ print
+
+. 0 rmo rot swap cat swap .
+. len 0 eq swap drop .
+until
+
+drop
+print

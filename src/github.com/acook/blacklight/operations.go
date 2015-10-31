@@ -84,10 +84,15 @@ func (o Op) Eval(current stack) stack {
 		fmt.Println(i.String())
 
 	// Vectors
+	case "()":
+		fallthrough
+	case "v-new":
+		current.Push(NewVector([]datatypes{}))
+	case "''":
+		current.Push(NewCharVector("''"))
 	case "cat":
-		i1 := current.Pop().(*CharVector)
-		i2 := current.Pop().(*CharVector)
-
+		i1 := current.Pop().(vector)
+		i2 := current.Pop().(vector)
 		result := i2.Cat(i1)
 		current.Push(result)
 	case "app":
@@ -101,18 +106,13 @@ func (o Op) Eval(current stack) stack {
 		current.Push(i)
 	case "rmo":
 		n := current.Pop().(*Int).Value().(int)
-		v := current.Pop().(Vector)
-		i := v.Ato(n)
-		d := v.Data.([]datatypes)
-		a := d[:n]
-		b := d[n+1:]
-		v = NewVector(append(a, b...))
-		current.Push(v)
+		v := current.Pop().(vector)
+		nv, i := v.Rmo(n)
+		current.Push(nv)
 		current.Push(i)
 	case "len":
-		v := (*current.Peek()).(Vector)
-		current.Push(NewInt(len(v.Data.([]datatypes))))
-
+		v := (*current.Peek()).(vector)
+		current.Push(NewInt(v.Len()))
 	// Queues
 	case "newq":
 		q := NewQueue()
