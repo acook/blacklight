@@ -30,6 +30,8 @@ func lex(tokens []string) []operation {
 
 	for _, t := range tokens {
 		switch {
+		case t == "":
+			// nope
 		case isMetaOp(t):
 			op := newMetaOp(t)
 			ops = append(ops, op)
