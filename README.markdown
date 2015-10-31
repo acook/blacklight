@@ -15,15 +15,15 @@ instead you have a vectors of operations on a stack.
 Features
 --------
 
-blacklight is ideal for MapReducing, ETLing, and processing.
+blacklight is awesome, here's a few reasons why:
 
-*Below list refers to features planned for the first release.*
-
+- easy to use builtin parallelism through native multithreading
 - data structures are threadsafe by default
+- native queue type for inter-thread communication
 - stack-oriented programming
 - concatenative programming
-- builtin parallelism through native multithreading (in-progress)
-- objects with prototypical delgation (planned)
+- objects with prototypical delgation *(planned)*
+- great for MapReducing, ETLing, and general data processing
 
 
 Documentation
