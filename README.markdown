@@ -33,6 +33,8 @@ blacklight uses a set of builtin operations for creating and maipulating data.
 
 These operations are documented [in this document on Google Sheets](https://docs.google.com/spreadsheets/d/1Kz5zFMtGjBrdEHrHySFmB5UttQ6lXcKM6C-2iz5VDiM/edit?usp=sharing).
 
+The [examples directory](https://github.com/acook/blacklight/tree/master/examples) contains several basic scripts to get you started.
+
 Also check out the `INTRODUCTION.markdown` to find out more about the underlying concepts.
 
 
