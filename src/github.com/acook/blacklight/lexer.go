@@ -7,7 +7,7 @@ var keywords = []string{
 	"newq", "deq", "enq", "q-to-v",
 	"s-new", "pop", "push", "size", "tail",
 	"o-new", "child", "self", "get", "set", "fetch",
-	"()", "v-new", "app", "cat", "ato", "rmo", "len", "v-to-s", "v-to-q",
+	"''", "()", "v-new", "app", "cat", "ato", "rmo", "len", "v-to-s", "v-to-q",
 	"add", "sub", "mul", "div", "mod", "n-to-s",
 	"read", "write",
 	"eq", "is", "not",
