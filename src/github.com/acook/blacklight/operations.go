@@ -86,7 +86,7 @@ func (o Op) Eval(current stack) stack {
 	// Vectors
 	case "()":
 		fallthrough
-	case "new-v":
+	case "v-new":
 		current.Push(NewVector([]datatypes{}))
 	case "''":
 		current.Push(NewCharVector("''"))
