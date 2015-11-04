@@ -170,7 +170,7 @@ func isCharVector(t string) bool {
 }
 
 func isChar(t string) bool {
-	if len(t) == 2 && t[0] == "\\"[0] {
+	if t[0] == "\\"[0] {
 		return true
 	}
 	return false

@@ -398,6 +398,7 @@ type pushChar struct {
 func newPushChar(t string) *pushChar {
 	pc := new(pushChar)
 	pc.Name = t
+	pc.Data = NewChar(t)
 	return pc
 }
 

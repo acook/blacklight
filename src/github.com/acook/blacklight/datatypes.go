@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 )
 
 type datatypes interface {
@@ -162,4 +163,25 @@ func (v CharVector) Len() int {
 
 func (cv CharVector) String() string {
 	return cv.Value().(string)
+}
+
+type Char struct {
+	Datatype
+}
+
+func NewChar(str string) Char {
+	c := *new(Char)
+
+	c.Data = str
+	return c
+}
+
+func (c Char) Value() interface{} {
+	code, _ := strconv.Atoi(c.Data.(string)[1:])
+	return code
+}
+
+func (c Char) String() string {
+	//return "\\" + c.Value().(string)
+	return c.Data.(string)
 }
