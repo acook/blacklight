@@ -11,10 +11,27 @@ I imagine 3 major phases of blacklight:
 
 Currently we're in the midst of a headlong rush to **bianca** to prove out the base concepts.
 
+Commandline
+-----------
+
+- --version : displays version and build date
+- --help    : displays commandline usage and url
+- --check   : parses and lexes, but doesn't eval
+
+
 Vectors
 -------
 
 - eval op for WVs
+
+
+Numbers
+-------
+
+- floats
+- cell-like operations on Ns
+- byte operations on Ns
+- conversions between N and C
 
 
 Logic & Loops
@@ -31,6 +48,7 @@ IO & System
 - files
 - sockets
 - system commands
+- test Windows/Linux support
 
 
 Text
