@@ -3,3 +3,4 @@ pkg
 tags
 TAGS
 src/github.com/acook/blacklight/blacklight
+.DS_Store
