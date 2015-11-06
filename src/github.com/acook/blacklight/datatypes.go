@@ -71,7 +71,7 @@ func (i Int) Value() interface{} {
 }
 
 type vector interface {
-	App(datatypes) Vector
+	App(datatypes) vector
 	Ato(int) datatypes
 	Rmo(int) (vector, datatypes)
 	Cat(vector) vector
@@ -90,7 +90,7 @@ func NewVector(items []datatypes) Vector {
 	return v
 }
 
-func (v Vector) App(i datatypes) Vector {
+func (v Vector) App(i datatypes) vector {
 	return NewVector(append(v.Data.([]datatypes), i))
 }
 
@@ -130,6 +130,10 @@ type CharVector struct {
 	Vector
 }
 
+type cvstringer interface {
+	CVString() string
+}
+
 func NewCharVector(str string) *CharVector {
 	cv := new(CharVector)
 	if len(str) > 1 && str[0] == "'"[0] && str[len(str)-1] == "'"[0] {
@@ -153,8 +157,12 @@ func (v CharVector) Rmo(n int) (vector, datatypes) {
 	return v, i
 }
 
+func (v CharVector) App(i datatypes) vector {
+	return NewCharVector(v.Data.(string) + i.(cvstringer).CVString())
+}
+
 func (cv CharVector) Cat(cv2 vector) vector {
-	return NewCharVector(cv.Value().(string) + cv2.Value().(string))
+	return NewCharVector(cv.Data.(string) + cv2.Value().(string))
 }
 
 func (v CharVector) Len() int {
@@ -162,7 +170,11 @@ func (v CharVector) Len() int {
 }
 
 func (cv CharVector) String() string {
-	return cv.Value().(string)
+	return cv.Data.(string)
+}
+
+func (cv CharVector) CVString() string {
+	return cv.Data.(string)
 }
 
 type Char struct {
@@ -185,6 +197,11 @@ func (c Char) String() string {
 }
 
 func (c Char) C_to_CV() string {
+	i, _ := strconv.Atoi(c.Data.(string)[1:])
+	return string(i)
+}
+
+func (c Char) CVString() string {
 	i, _ := strconv.Atoi(c.Data.(string)[1:])
 	return string(i)
 }

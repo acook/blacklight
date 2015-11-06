@@ -111,7 +111,7 @@ func (o Op) Eval(current stack) stack {
 		current.Push(result)
 	case "app":
 		i := current.Pop()
-		v := current.Pop().(Vector)
+		v := current.Pop().(vector)
 		current.Push(v.App(i))
 	case "ato":
 		n := current.Pop().(*Int)
