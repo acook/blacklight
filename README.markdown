@@ -1,10 +1,8 @@
 blacklight
 ==========
 
-> blacklight: the language for people who want to code in it
-
-blacklight is a general-pupose multithreading concatenative stack-based programming language
-with first-class queues and prototype-style objects.
+> `blacklight` is a general-pupose **multithreading** concatenative stack-based programming language
+with first-class **queues** and **objects** with delegation.
 
 blacklight doesn't need "variables",
 instead program state is stored in a simple set of stacks.
@@ -22,20 +20,19 @@ blacklight is awesome, here's a few reasons why:
 - native queue type for inter-thread communication
 - stack-oriented programming
 - concatenative programming
-- objects with prototypical delgation *(planned)*
+- objects with delgation *(planned)*
 - great for MapReducing, ETLing, and general data processing
 
 
 Documentation
 -------------
 
-blacklight uses a set of builtin operations for creating and maipulating data.
-
+- blacklight uses a set of builtin operations for creating and maipulating data.
 These operations are documented [in this document on Google Sheets](https://docs.google.com/spreadsheets/d/1Kz5zFMtGjBrdEHrHySFmB5UttQ6lXcKM6C-2iz5VDiM/edit?usp=sharing).
 
-The [examples directory](https://github.com/acook/blacklight/tree/master/examples) contains several basic scripts to get you started.
+- The [examples directory](https://github.com/acook/blacklight/tree/master/examples) contains several basic scripts to get you started.
 
-Also check out the `INTRODUCTION.markdown` to find out more about the underlying concepts.
+- Also check out the blacklight [Wiki](https://github.com/acook/blacklight/wiki/Meet-the-Stacks) to find out more about the underlying concepts.
 
 
 Futher Reading
