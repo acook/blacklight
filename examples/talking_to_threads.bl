@@ -2,7 +2,7 @@ newq newq                ;; create send and receive queues
 .
   ..
     deq                  ;; will block if the queue is empty
-    n-to-s rot swap enq  ;; convert number into a cv (string) and send back
+    n-to-cv rot swap enq  ;; convert number into a cv (string) and send back
     swap                 ;; reorder queues so we can loop without confusion
   .. loop                ;; using loop since it goes forever
 . work                   ;; start new thread and swap the queues

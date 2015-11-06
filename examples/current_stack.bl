@@ -8,8 +8,8 @@ drop
 rot
 swap
 over
-depth n-to-s print
+depth n-to-cv print
 decap
-depth n-to-s print
+depth n-to-cv print
 purge
-depth n-to-s print
+depth n-to-cv print

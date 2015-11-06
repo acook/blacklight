@@ -1,19 +1,19 @@
-;; the basic meth operations
-;; n-to-s converts number to a string (CV)
+;; the basic math operations
+;; n-to-cv converts number to a string (CV)
 ;; cat joins two vectors, in this case joins two strings
 ;; print sends a string (CV) to stdout
 
 '1 + 2 = ' 1 2 add
-n-to-s cat print
+n-to-cv cat print
 
 '2 * 3 = ' 2 3 mul
-n-to-s cat print
+n-to-cv cat print
 
 '5 - 4 = ' 5 4 sub
-n-to-s cat print
+n-to-cv cat print
 
 '6 / 3 = ' 6 3 div
-n-to-s cat print
+n-to-cv cat print
 
 '7 % 4 = ' 7 4 mod
-n-to-s cat print
+n-to-cv cat print

@@ -177,11 +177,19 @@ func NewChar(str string) Char {
 }
 
 func (c Char) Value() interface{} {
-	code, _ := strconv.Atoi(c.Data.(string)[1:])
-	return code
+	return c.C_to_N()
 }
 
 func (c Char) String() string {
-	//return "\\" + c.Value().(string)
 	return c.Data.(string)
+}
+
+func (c Char) C_to_CV() string {
+	i, _ := strconv.Atoi(c.Data.(string)[1:])
+	return string(i)
+}
+
+func (c Char) C_to_N() int {
+	i, _ := strconv.Atoi(c.Data.(string)[1:])
+	return i
 }

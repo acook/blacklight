@@ -18,6 +18,7 @@ type Op struct {
 
 func (o Op) Eval(current stack) stack {
 	switch o.Name {
+
 	// @stack (current Stack)
 	case "decap":
 		current.Decap()
@@ -72,11 +73,24 @@ func (o Op) Eval(current stack) stack {
 		n2 := i2.Value().(int)
 		remainder := n2 % n1
 		current.Push(NewInt(remainder))
-	case "n-to-s":
+	case "n-to-c":
+		i := current.Pop()
+		n := i.Value().(int)
+		str := strconv.Itoa(n)
+		current.Push(NewChar("\\" + str))
+	case "n-to-cv":
 		i := current.Pop()
 		n := i.Value().(int)
 		str := strconv.Itoa(n)
 		current.Push(NewCharVector(str))
+
+	// Chars
+	case "c-to-cv":
+		c := current.Pop()
+		current.Push(NewCharVector(c.(Char).C_to_CV()))
+	case "c-to-n":
+		c := current.Pop().(Char)
+		current.Push(NewInt(c.C_to_N()))
 
 	// Debug
 	case "print":
@@ -113,6 +127,7 @@ func (o Op) Eval(current stack) stack {
 	case "len":
 		v := (*current.Peek()).(vector)
 		current.Push(NewInt(v.Len()))
+
 	// Queues
 	case "newq":
 		q := NewQueue()
@@ -150,6 +165,7 @@ func (o Op) Eval(current stack) stack {
 		s := (*current.Peek()).(stack)
 		s.Drop()
 
+	// Logic
 	case "eq":
 		i1 := current.Pop()
 		i2 := *current.Peek()
