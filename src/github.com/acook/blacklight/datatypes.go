@@ -132,7 +132,7 @@ type CharVector struct {
 
 func NewCharVector(str string) *CharVector {
 	cv := new(CharVector)
-	if str[0] == "'"[0] && str[len(str)-1] == "'"[0] {
+	if len(str) > 1 && str[0] == "'"[0] && str[len(str)-1] == "'"[0] {
 		cv.Data = str[1 : len(str)-1]
 	} else {
 		cv.Data = str
