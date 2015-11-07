@@ -385,10 +385,12 @@ func newPushWord(t string) *pushWord {
 	var w Word
 	pw := new(pushWord)
 
-	if t[0] == ":"[0] {
+	if t[0] == ":"[0] || t[0] == "~"[0] {
 		w = NewWord(t[1:])
 	} else if t[len(t)-1] == ":"[0] {
 		w = NewWord(t[:len(t)-1])
+	} else {
+		w = NewWord(t)
 	}
 
 	pw.Name = t
