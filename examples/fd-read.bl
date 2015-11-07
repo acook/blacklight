@@ -1,5 +1,6 @@
 ;; Use file descriptors (N) with threads (work)
-;; to read from a file and convert Cs to a CV
+;; to read from stdin and convert Cs to a CV
+;; NOTE -> this will block and wait on input!
 
 newq 0 read swap newq      ;; Q for read-queue, hide FD, Q for work-queue
 .
