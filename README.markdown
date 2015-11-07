@@ -28,9 +28,5 @@ blacklight is awesome, here's a few reasons why:
 Documentation
 -------------
 
-- blacklight uses a set of builtin operations for creating and maipulating data.
-These operations are documented [in this document on Google Sheets](https://docs.google.com/spreadsheets/d/1Kz5zFMtGjBrdEHrHySFmB5UttQ6lXcKM6C-2iz5VDiM/edit?usp=sharing).
-
-- The [examples directory](https://github.com/acook/blacklight/tree/master/examples) contains several basic scripts to get you started.
-
-- Also check out the blacklight [Wiki](https://github.com/acook/blacklight/wiki/Meet-the-Stacks) to find out more about the underlying concepts.
+- The [blacklight Wiki](https://github.com/acook/blacklight/wiki) has documentation and links.
+- The [examples directory](https://github.com/acook/blacklight/tree/master/examples) contains several demonstration scripts to get you started.
