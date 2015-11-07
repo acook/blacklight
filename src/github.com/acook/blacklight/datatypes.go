@@ -10,6 +10,21 @@ type datatypes interface {
 	String() string
 }
 
+func blEq(i1 datatypes, i2 datatypes) Tag {
+	var b bool
+
+	switch i1.(type) {
+	default:
+		b = i1.Value() == i2.Value()
+	}
+
+	if b {
+		return *NewTrue("eq")
+	} else {
+		return *NewNil("eq")
+	}
+}
+
 type Datatype struct {
 	Data interface{}
 }

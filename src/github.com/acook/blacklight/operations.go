@@ -169,11 +169,7 @@ func (o Op) Eval(current stack) stack {
 	case "eq":
 		i1 := current.Pop()
 		i2 := *current.Peek()
-		if i1.Value() == i2.Value() {
-			current.Push(NewTrue("eq"))
-		} else {
-			current.Push(NewNil("eq"))
-		}
+		current.Push(blEq(i1, i2))
 	case "not":
 		t := current.Pop()
 		switch t.(type) {
