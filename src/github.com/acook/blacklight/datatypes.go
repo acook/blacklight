@@ -195,6 +195,13 @@ func NewChar(str string) Char {
 	return c
 }
 
+func NewCharFromString(str string) Char {
+	c := *new(Char)
+
+	c.Data = "\\" + strconv.Itoa(int(str[len(str)-1]))
+	return c
+}
+
 func (c Char) Value() interface{} {
 	return c.C_to_N()
 }
