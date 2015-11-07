@@ -23,7 +23,7 @@ func (o Op) Eval(current stack) stack {
 	case "decap":
 		current.Decap()
 	case "depth":
-		current.Push(NewInt(current.Depth()))
+		current.Push(NewNumber(current.Depth()))
 	case "drop":
 		current.Drop()
 	case "dup":
@@ -37,42 +37,42 @@ func (o Op) Eval(current stack) stack {
 	case "swap":
 		current.Swap()
 
-	// NativeIntegers (Int)
+	// NativeIntegers (Number)
 	case "add":
 		i1 := current.Pop()
 		i2 := current.Pop()
 		n1 := i1.Value().(int)
 		n2 := i2.Value().(int)
 		sum := n2 + n1
-		current.Push(NewInt(sum))
+		current.Push(NewNumber(sum))
 	case "sub":
 		i1 := current.Pop()
 		i2 := current.Pop()
 		n1 := i1.Value().(int)
 		n2 := i2.Value().(int)
 		result := n2 - n1
-		current.Push(NewInt(result))
+		current.Push(NewNumber(result))
 	case "mul":
 		i1 := current.Pop()
 		i2 := current.Pop()
 		n1 := i1.Value().(int)
 		n2 := i2.Value().(int)
 		product := n2 * n1
-		current.Push(NewInt(product))
+		current.Push(NewNumber(product))
 	case "div":
 		i1 := current.Pop()
 		i2 := current.Pop()
 		n1 := i1.Value().(int)
 		n2 := i2.Value().(int)
 		result := n2 / n1
-		current.Push(NewInt(result))
+		current.Push(NewNumber(result))
 	case "mod":
 		i1 := current.Pop()
 		i2 := current.Pop()
 		n1 := i1.Value().(int)
 		n2 := i2.Value().(int)
 		remainder := n2 % n1
-		current.Push(NewInt(remainder))
+		current.Push(NewNumber(remainder))
 	case "n-to-c":
 		i := current.Pop()
 		n := i.Value().(int)
@@ -90,7 +90,7 @@ func (o Op) Eval(current stack) stack {
 		current.Push(NewCharVector(c.(Char).C_to_CV()))
 	case "c-to-n":
 		c := current.Pop().(Char)
-		current.Push(NewInt(c.C_to_N()))
+		current.Push(NewNumber(c.C_to_N()))
 
 	// Debug
 	case "print":
@@ -114,19 +114,19 @@ func (o Op) Eval(current stack) stack {
 		v := current.Pop().(vector)
 		current.Push(v.App(i))
 	case "ato":
-		n := current.Pop().(*Int)
+		n := current.Pop().(*Number)
 		v := (*current.Peek()).(Vector)
 		i := v.Ato(n.Value().(int))
 		current.Push(i)
 	case "rmo":
-		n := current.Pop().(*Int).Value().(int)
+		n := current.Pop().(*Number).Value().(int)
 		v := current.Pop().(vector)
 		nv, i := v.Rmo(n)
 		current.Push(nv)
 		current.Push(i)
 	case "len":
 		v := (*current.Peek()).(vector)
-		current.Push(NewInt(v.Len()))
+		current.Push(NewNumber(v.Len()))
 
 	// Queues
 	case "newq":
@@ -160,7 +160,7 @@ func (o Op) Eval(current stack) stack {
 		current.Push(s.Pop())
 	case "size":
 		s := (*current.Peek()).(stack)
-		current.Push(NewInt(s.Depth()))
+		current.Push(NewNumber(s.Depth()))
 	case "tail":
 		s := (*current.Peek()).(stack)
 		s.Drop()
@@ -334,15 +334,15 @@ func (o pushLiteral) String() string {
 	return fmt.Sprint(o.Value())
 }
 
-type pushInteger struct {
+type pushNumber struct {
 	pushLiteral
 }
 
-func newPushInteger(t string) *pushInteger {
-	pi := new(pushInteger)
+func newPushNumber(t string) *pushNumber {
+	pi := new(pushNumber)
 	pi.Name = t
 	i, _ := strconv.Atoi(t)
-	pi.Data = NewInt(i)
+	pi.Data = NewNumber(i)
 	return pi
 }
 

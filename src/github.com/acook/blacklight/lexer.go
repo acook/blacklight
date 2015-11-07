@@ -40,8 +40,8 @@ func lex(tokens []string) []operation {
 		case isKeyword(t):
 			op = newOp(t)
 			ops = append(ops, op)
-		case isInteger(t):
-			op = newPushInteger(t)
+		case isNumber(t):
+			op = newPushNumber(t)
 			ops = append(ops, op)
 		case t == "(": // Vector literal (start)
 			inside_vector = true
@@ -132,7 +132,7 @@ func isKeyword(t string) bool {
 	return false
 }
 
-func isInteger(t string) bool {
+func isNumber(t string) bool {
 	for _, b := range t {
 		if b < 47 || b > 58 {
 			return false

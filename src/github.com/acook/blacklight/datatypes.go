@@ -56,18 +56,18 @@ func (t Tag) String() string {
 	return t.Kind + "(" + t.Data.(string) + ")"
 }
 
-type Int struct {
+type Number struct {
 	Datatype
 }
 
-func NewInt(v int) *Int {
-	i := new(Int)
-	i.Data = v
-	return i
+func NewNumber(i int) *Number {
+	n := new(Number)
+	n.Data = i
+	return n
 }
 
-func (i Int) Value() interface{} {
-	return i.Data
+func (n Number) Value() interface{} {
+	return n.Data
 }
 
 type vector interface {
