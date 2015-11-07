@@ -214,6 +214,10 @@ func (o Op) Eval(current stack) stack {
 		slot := current.Pop().(Word)
 		o := (*current.Peek()).(*Object)
 		current.Push(o.Fetch(slot))
+	case "child":
+		o := (*current.Peek()).(*Object)
+		child := NewChildObject(o)
+		current.Push(child)
 
 	default:
 		warn("UNIMPLEMENTED operation: " + o.String())
