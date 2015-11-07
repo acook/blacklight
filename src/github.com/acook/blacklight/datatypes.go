@@ -33,7 +33,14 @@ func (t Tag) Value() interface{} {
 	return t.Kind + ":" + t.Data.(string)
 }
 
-func NewTag(kind string, msg string) *Tag {
+func NewTag(kind string, data interface{}) *Tag {
+	t := new(Tag)
+	t.Kind = kind
+	t.Data = data
+	return t
+}
+
+func NewMsgTag(kind string, msg string) *Tag {
 	t := new(Tag)
 	t.Kind = kind
 	t.Data = msg
@@ -41,11 +48,11 @@ func NewTag(kind string, msg string) *Tag {
 }
 
 func NewErr(msg string) *Tag {
-	return NewTag("err", msg)
+	return NewMsgTag("err", msg)
 }
 
 func NewTrue(msg string) *Tag {
-	return NewTag("true", msg)
+	return NewMsgTag("true", msg)
 }
 
 func NewNil(msg string) *Tag {
