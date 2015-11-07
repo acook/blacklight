@@ -27,7 +27,7 @@ func NewIO(i datatypes, q *Queue) *Tag {
 	return nil
 }
 
-var FDtable map[int]*os.File = make(map[int]*os.File)
+var FDtable map[uint]*os.File = make(map[uint]*os.File)
 var FDtableinit bool
 
 func initFDtable() {
@@ -50,7 +50,7 @@ func NewFD(i int, q *Queue) *FD {
 	fd := new(FD)
 	fd.Queue = q
 	fd.FD = uint(i)
-	fd.File = FDtable[i]
+	fd.File = FDtable[uint(i)]
 
 	threads.Add(1)
 	go func(fd *FD, q *Queue) {
@@ -76,6 +76,8 @@ func NewFile(filename string, q *Queue) *FD {
 	fd.Queue = q
 	fd.File, _ = os.Open(filename)
 	fd.FD = uint(fd.File.Fd())
+
+	FDtable[fd.FD] = fd.File
 
 	threads.Add(1)
 	go func(fd *FD, q *Queue) {
