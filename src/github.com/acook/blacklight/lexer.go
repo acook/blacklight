@@ -4,7 +4,7 @@ import ()
 
 var keywords = []string{
 	"<>", "decap", "depth", "drop", "dup", "over", "rot", "swap", "purge",
-	"newq", "deq", "enq", "q-to-v",
+	"newq", "deq", "enq", "q-to-v", "q-to-cv",
 	"s-new", "pop", "push", "size", "tail",
 	"o-new", "child", "self", "get", "set", "fetch",
 	"''", "()", "v-new", "app", "cat", "ato", "rmo", "len", "v-to-s", "v-to-q",
