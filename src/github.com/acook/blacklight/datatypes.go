@@ -45,7 +45,11 @@ type Tag struct {
 }
 
 func (t Tag) Value() interface{} {
-	return t.Kind + ":" + t.Data.(string)
+	return t.Kind
+}
+
+func (t Tag) String() string {
+	return t.Kind + "#" + t.Data.(string)
 }
 
 func NewTag(kind string, data interface{}) *Tag {
@@ -74,8 +78,12 @@ func NewNil(msg string) *Tag {
 	return NewTag("nil", msg)
 }
 
-func (t Tag) String() string {
-	return t.Kind + "(" + t.Data.(string) + ")"
+func (t Tag) Bool() bool {
+	if t.Kind == "true" {
+		return true
+	} else {
+		return false
+	}
 }
 
 type Number struct {
