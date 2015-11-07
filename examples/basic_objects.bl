@@ -1,0 +1,18 @@
+;; Object system basics
+;; Here we create, set, get, and fetch
+
+;; Create a new object
+o-new
+
+;; set a slot to a value
+5 num:
+;; recall and display value
+:num print
+
+;; create a WV slot
+. 'omg hai' print . greet:
+;; call a WV slot
+:greet
+
+;; view contents of a VW slot
+~greet fetch print
