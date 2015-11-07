@@ -194,7 +194,12 @@ func (o Op) Eval(current stack) stack {
 	case "read":
 		source := current.Pop()
 		q := (*current.Peek()).(*Queue)
-		io := NewIO(source, q)
+		io := ReadIO(source, q)
+		current.Push(io)
+	case "write":
+		dest := current.Pop()
+		q := (*current.Peek()).(*Queue)
+		io := WriteIO(dest, q)
 		current.Push(io)
 
 	default:

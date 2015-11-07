@@ -13,7 +13,7 @@ type IO struct {
 	Queue *Queue
 }
 
-func NewIO(i datatypes, q *Queue) *Tag {
+func ReadIO(i datatypes, q *Queue) *Tag {
 	switch i.(type) {
 	case *Number:
 		fd := NewFD(i.Value().(int), q)
@@ -22,7 +22,21 @@ func NewIO(i datatypes, q *Queue) *Tag {
 		file := NewFile(i.String(), q)
 		return NewTag("File#"+i.String(), file)
 	default:
-		panic("NewIO: unrecognized type for IO - " + i.String())
+		panic("ReadIO: unrecognized type for IO - " + i.String())
+	}
+	return nil
+}
+
+func WriteIO(i datatypes, q *Queue) *Tag {
+	switch i.(type) {
+	//case *Number:
+	//	fd := WriteFD(i.Value().(int), q)
+	//	return NewTag("FD#"+i.String(), fd)
+	case *CharVector:
+		file := WriteFile(i.String(), q)
+		return NewTag("File#"+i.String(), file)
+	default:
+		panic("WriteIO: unrecognized type for IO - " + i.String())
 	}
 	return nil
 }
@@ -83,6 +97,7 @@ func NewFile(filename string, q *Queue) *FD {
 	go func(fd *FD, q *Queue) {
 		defer threads.Done()
 		b := make([]byte, 1)
+
 		for {
 			l, _ := fd.File.Read(b)
 			if l > 0 {
@@ -91,6 +106,38 @@ func NewFile(filename string, q *Queue) *FD {
 				fd.File.Close()
 				q.Enqueue(NewNil("EOF"))
 				return
+			}
+		}
+	}(fd, q)
+
+	return fd
+}
+
+func WriteFile(filename string, q *Queue) *FD {
+	fd := new(FD)
+	fd.Queue = q
+	fd.File, _ = os.Create(filename)
+	fd.FD = uint(fd.File.Fd())
+
+	FDtable[fd.FD] = fd.File
+
+	threads.Add(1)
+	go func(fd *FD, q *Queue) {
+		defer threads.Done()
+		var b []byte
+
+		for {
+			print(" -- WriteFile for\n")
+			b = q.Dequeue().(byter).Bytes()
+
+			if b == nil {
+				fd.File.Close()
+				return
+			} else {
+				l, _ := fd.File.Write(b)
+				if l < len(b) {
+					panic("WriteFile: Write Error!")
+				}
 			}
 		}
 	}(fd, q)
