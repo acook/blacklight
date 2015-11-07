@@ -202,6 +202,15 @@ func (o Op) Eval(current stack) stack {
 		io := WriteIO(dest, q)
 		current.Push(io)
 
+	// Objects
+	case "o-new":
+		current.Push(NewObject())
+	case "set":
+		slot := current.Pop().(Word)
+		i := current.Pop()
+		o := (*current.Peek()).(*Object)
+		o.Set(slot, i)
+
 	default:
 		warn("UNIMPLEMENTED operation: " + o.String())
 	}
@@ -322,6 +331,13 @@ func (m metaOp) Eval(meta stack) stack {
 		bkg(meta.(*MetaStack))
 	case "work":
 		work(meta.(*MetaStack))
+
+	// Objects & Eval
+	case "get":
+		current := (*meta.Peek()).(*Stack)
+		slot := current.Pop().(Word)
+		o := (*current.Peek()).(*Object)
+		o.Get(meta.(*MetaStack), slot)
 
 	default:
 		warn("UNIMPLEMENTED $operation: " + m.String())
