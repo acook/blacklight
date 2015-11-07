@@ -29,9 +29,9 @@ func ReadIO(i datatypes, q *Queue) *Tag {
 
 func WriteIO(i datatypes, q *Queue) *Tag {
 	switch i.(type) {
-	//case *Number:
-	//	fd := WriteFD(i.Value().(int), q)
-	//	return NewTag("FD#"+i.String(), fd)
+	case *Number:
+		fd := WriteFD(i.Value().(int), q)
+		return NewTag("FD#"+i.String(), fd)
 	case *CharVector:
 		file := WriteFile(i.String(), q)
 		return NewTag("File#"+i.String(), file)
@@ -69,8 +69,8 @@ func NewFD(i int, q *Queue) *FD {
 	threads.Add(1)
 	go func(fd *FD, q *Queue) {
 		defer threads.Done()
-		b := make([]byte, 1)
-		for {
+
+		for b := make([]byte, 1); ; {
 			l, _ := fd.File.Read(b)
 			if l > 0 {
 				q.Enqueue(NewCharFromString(string(b)))
@@ -78,6 +78,36 @@ func NewFD(i int, q *Queue) *FD {
 				fd.File.Close()
 				q.Enqueue(NewNil("EOF"))
 				return
+			}
+		}
+	}(fd, q)
+
+	return fd
+}
+
+func WriteFD(i int, q *Queue) *FD {
+	initFDtable()
+	fd := new(FD)
+	fd.Queue = q
+	fd.FD = uint(i)
+	fd.File = FDtable[uint(i)]
+
+	threads.Add(1)
+	go func(fd *FD, q *Queue) {
+		defer threads.Done()
+		var b []byte
+
+		for {
+			b = q.Dequeue().(byter).Bytes()
+
+			if b == nil {
+				fd.File.Close()
+				return
+			} else {
+				l, _ := fd.File.Write(b)
+				if l < len(b) {
+					panic("WriteFile: Write Error!")
+				}
 			}
 		}
 	}(fd, q)
@@ -127,7 +157,6 @@ func WriteFile(filename string, q *Queue) *FD {
 		var b []byte
 
 		for {
-			print(" -- WriteFile for\n")
 			b = q.Dequeue().(byter).Bytes()
 
 			if b == nil {
