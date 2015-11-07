@@ -52,6 +52,15 @@ func (t Tag) String() string {
 	return t.Kind + "#" + t.Data.(string)
 }
 
+func (t Tag) Bytes() []byte {
+	if t.Kind == "nil" {
+		return nil
+	} else {
+		panic("Tag.Bytes: Attempt to serialize non-nil Tag!")
+		return nil
+	}
+}
+
 func NewTag(kind string, data interface{}) *Tag {
 	t := new(Tag)
 	t.Kind = kind
@@ -207,6 +216,10 @@ func (cv CharVector) CVString() string {
 	return cv.Data.(string)
 }
 
+func (cv CharVector) Bytes() []byte {
+	return []byte(cv.String())
+}
+
 type Char struct {
 	Datatype
 }
@@ -246,4 +259,12 @@ func (c Char) CVString() string {
 func (c Char) C_to_N() int {
 	i, _ := strconv.Atoi(c.Data.(string)[1:])
 	return i
+}
+
+func (c Char) Bytes() []byte {
+	return []byte(c.C_to_CV())
+}
+
+type byter interface {
+	Bytes() []byte
 }
