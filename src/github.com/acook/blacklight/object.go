@@ -33,6 +33,8 @@ func (o *Object) Get(meta *MetaStack, w Word) {
 
 	switch i.(type) {
 	case WordVector:
+		meta.ObjectStack.Push(o)
+		defer meta.ObjectStack.Pop()
 		doEval(meta, i.(WordVector).Ops)
 	default:
 		current.Push(i)

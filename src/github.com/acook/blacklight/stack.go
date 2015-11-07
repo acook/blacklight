@@ -58,12 +58,14 @@ func NewObjectStack() *Stack {
 
 type MetaStack struct {
 	Stack
+	ObjectStack *Stack
 }
 
 func NewMetaStack() *MetaStack {
 	s := &MetaStack{}
 	s.Type = "$meta"
 	s.Id = getStackId()
+	s.ObjectStack = NewObjectStack()
 	return s
 }
 

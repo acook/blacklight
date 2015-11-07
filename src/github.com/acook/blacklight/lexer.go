@@ -6,7 +6,7 @@ var keywords = []string{
 	"<>", "decap", "depth", "drop", "dup", "over", "rot", "swap", "purge",
 	"newq", "deq", "enq", "q-to-v", "q-to-cv",
 	"s-new", "pop", "push", "size", "tail",
-	"o-new", "child", "self", "set", "fetch",
+	"o-new", "child", "set", "fetch",
 	"''", "()", "v-new", "app", "cat", "ato", "rmo", "len", "v-to-s", "v-to-q",
 	"add", "sub", "mul", "div", "mod", "n-to-c", "n-to-cv",
 	"c-to-n", "c-to-cv",
@@ -19,7 +19,7 @@ var keywords = []string{
 
 var metaops = []string{
 	"@", "$", "^", "$decap", "$drop", "$new", "$swap",
-	"eval", "get",
+	"eval", "get", "self",
 	"if", "either",
 	"until", "while", "loop", "proq",
 	"do", "co", "work", "bkg", "wait",
