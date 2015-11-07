@@ -52,6 +52,10 @@ func NewSystemStack() *Stack {
 	return NewStack("system")
 }
 
+func NewObjectStack() *Stack {
+	return NewStack("object")
+}
+
 type MetaStack struct {
 	Stack
 }
