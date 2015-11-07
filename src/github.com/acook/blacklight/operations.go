@@ -366,9 +366,16 @@ type pushWord struct {
 }
 
 func newPushWord(t string) *pushWord {
+	var w Word
 	pw := new(pushWord)
+
+	if t[0] == ":"[0] {
+		w = NewWord(t[1:])
+	} else if t[len(t)-1] == ":"[0] {
+		w = NewWord(t[:len(t)-1])
+	}
+
 	pw.Name = t
-	w := NewWord(t)
 	pw.Data = w
 	return pw
 }
