@@ -176,9 +176,14 @@ func (o Op) Eval(current stack) stack {
 		}
 	case "not":
 		t := current.Pop()
-		if t.(*Tag).Kind == "nil" {
-			current.Push(NewTrue("not"))
-		} else {
+		switch t.(type) {
+		case *Tag:
+			if t.(*Tag).Kind == "nil" {
+				current.Push(NewTrue("not"))
+			} else {
+				current.Push(NewNil("not"))
+			}
+		default:
 			current.Push(NewNil("not"))
 		}
 
