@@ -187,6 +187,13 @@ func (o Op) Eval(current stack) stack {
 	case "true":
 		current.Push(NewTrue("true"))
 
+	// IO
+	case "read":
+		source := current.Pop()
+		q := (*current.Peek()).(*Queue)
+		io := NewIO(source, q)
+		current.Push(io)
+
 	default:
 		warn("UNIMPLEMENTED operation: " + o.String())
 	}
