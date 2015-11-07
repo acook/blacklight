@@ -44,14 +44,12 @@ type Stack struct {
 func NewStack(t string) *Stack {
 	s := &Stack{}
 	s.Type = t
+	s.Id = getStackId()
 	return s
 }
 
 func NewSystemStack() *Stack {
-	s := &Stack{}
-	s.Type = "system"
-	s.Id = getStackId()
-	return s
+	return NewStack("system")
 }
 
 type MetaStack struct {
