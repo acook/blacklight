@@ -142,6 +142,8 @@ func (o Op) Eval(current stack) stack {
 		current.Push(i)
 	case "q-to-v":
 		q_to_v(current.(*Stack))
+	case "q-to-cv":
+		q_to_cv(current.(*Stack))
 
 	// Stacks
 	case "news":
@@ -469,6 +471,24 @@ QVLoop:
 	}
 
 	v := NewVector(items)
+	s.Push(v)
+}
+
+func q_to_cv(s *Stack) {
+	q := s.Pop().(*Queue)
+	str := ""
+
+QVLoop:
+	for {
+		i := <-q.Items
+		if blEq(i, NewNil("q_to_cv")).Bool() {
+			break QVLoop
+		} else {
+			str = str + i.(Char).CVString()
+		}
+	}
+
+	v := NewCharVector(str)
 	s.Push(v)
 }
 
