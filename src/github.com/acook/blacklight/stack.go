@@ -7,6 +7,15 @@ import (
 )
 
 var Stacks int
+var StacksSync sync.Mutex
+
+func getStackId() int {
+	StacksSync.Lock()
+	defer StacksSync.Unlock()
+	id := Stacks
+	Stacks++
+	return id
+}
 
 type stack interface {
 	Push(datatypes)
@@ -41,8 +50,7 @@ func NewStack(t string) *Stack {
 func NewSystemStack() *Stack {
 	s := &Stack{}
 	s.Type = "system"
-	s.Id = Stacks
-	Stacks++
+	s.Id = getStackId()
 	return s
 }
 
@@ -53,8 +61,7 @@ type MetaStack struct {
 func NewMetaStack() *MetaStack {
 	s := &MetaStack{}
 	s.Type = "$meta"
-	s.Id = Stacks
-	Stacks++
+	s.Id = getStackId()
 	return s
 }
 
