@@ -88,9 +88,9 @@ func lex(tokens []string) []operation {
 			op = newPushWord(t)
 			ops = append(ops, op)
 		case isSetWord(t):
-			ops = append(ops, newPushWord(t), newOp("set"))
+			ops = append(ops, newPushWord(t[:len(t)-2]), newOp("set"))
 		case isGetWord(t):
-			ops = append(ops, newPushWord(t), newOp("get"))
+			ops = append(ops, newPushWord(t[1:]), newOp("get"))
 		case isCharVector(t):
 			op = newPushCharVector(t)
 			ops = append(ops, op)
