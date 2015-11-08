@@ -4,11 +4,9 @@ blacklight
 > `blacklight` is a general-pupose **multithreading** concatenative stack-based programming language
 with first-class **queues** and **objects** with delegation.
 
-blacklight doesn't need "variables",
-instead program state is stored in a simple set of stacks.
+Program state is stored in a simple set of stacks.
 
-blacklight doesn't need "lambdas" or function "arguments",
-instead you have a vectors of operations on a stack.
+Code reuse through vectors of operations and object slots.
 
 
 Features
