@@ -46,45 +46,42 @@ o-new        ;; this will be our root object
 .            ;; start of send, expects: @< … wv o1 >
   swap       ;; the o will be on top, there should be a WV below it
   v-to-s     ;; convert the wv to a series of word items on a user-stack
+  :_chain    ;; store user-stack in object
              ;; end of init
   :verify    ;; begin verify/call recursion
              ;; start of deinit
-  drop       ;; remove the user-stack we created above
-.            ;; end of send
-send:
-.            ;; expects: @< … o s > which we set up in send:
-  pop        ;; get the top w from the s and put onto @stack @< … o1 o2 s w >
+  nil
+  :_chain    ;; remove the user-stack we created above
+. send:
 
-  ;; make copy and put copy on stack
-  dup        ;; replicate the w @< … o1 o2 s w w>
-  rot        ;; then bring the s to the top @< … o1 o2 w w s >
-  swap       ;; finally bring a w to the top @< … o1 o2 w s w >
-  push       ;; put the w back on the s @< … o1 o2 w s >
-  swap       ;; bring the w to the top @< … o1 o2 s w >
+.            ;; expects @< ... o >
+  ..         ;; create a new sub-wv for if success
+    :call    ;; continue execution
+  ..
+  ..
+    :_chain       ;; summon chain stack
+    size 0 eq     ;; compare size of user-stack to 0
+    not           ;; not equal to 0
+    swap drop     ;; eq only drops one item
+  .. if           ;; @< … o >
+. verify:
 
-  ;; validate word
-  W          ;; identifier meaning “word” @< … o1 o2 s w W >
-  is         ;; checks to see if the w is actually a word @< … o1 o2 s w b >
-  swap drop  ;; @< … o1 o2 s b >
-
-  ;; determine whether to call
-  ..         ;; create a new sub-wv
-    self     ;; it will call self @< … o >
-    :call    ;; get slot from self @< … >
-  ..         ;; end sub-wv
-  swap       ;; @< … o1 o2 s wv b >
-  if         ;; @< … o1 o2 s >
-.
-verify:
-.            ;; expects @< … o s >
-  pop        ;; get the first w from the user-stack and put onto the @stack
+.            ;; expects @< … o >
+  :_chain    ;; @< ... o s >
+  pop        ;; get a w from the user-stack and put onto the @stack
   rot swap   ;; makes our @stack like @< … s o w >
   get        ;; get the value in slot w @< … s o i >
-  rot        ;; bring the user-stack back the top @< … o i s >
-  self       ;; @< … o i s o >
-  :verify    ;; @< … o i s >
-.
-call:
+
+  ;; this assumes we only ever put exactly 1 item on the @stack
+  swap
+
+  ;; remove above swap and put this instead
+  ;; once the auto-destructing self is in place
+  ;; this will allow for non-1 stack changes
+  ;;self
+
+  :verify   ;; continue processing the chain
+. call:
 
 ;; Below is a WIP for send that calls “send” on any returned object
 ;; instead of re-using the starting send, ignore for now
