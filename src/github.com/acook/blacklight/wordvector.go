@@ -31,3 +31,7 @@ func (wv WordVector) String() string {
 	}
 	return str + ")"
 }
+
+func (wv WordVector) Call(meta *MetaStack) {
+	doEval(meta, wv.Ops)
+}

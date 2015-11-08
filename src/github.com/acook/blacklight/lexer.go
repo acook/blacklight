@@ -19,7 +19,7 @@ var keywords = []string{
 
 var metaops = []string{
 	"@", "$", "^", "$decap", "$drop", "$new", "$swap",
-	"eval", "get", "self",
+	"call", "get", "self",
 	"if", "either",
 	"until", "while", "loop", "proq",
 	"do", "co", "work", "bkg", "wait",

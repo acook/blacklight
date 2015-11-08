@@ -351,10 +351,14 @@ func (m metaOp) Eval(meta stack) stack {
 		o := *meta.(*MetaStack).ObjectStack.Peek()
 		switch o.(type) {
 		case nil:
-			panic("self: called self outside of object")
+			panic("self: called self outside of object (empty object-stack)")
 		default:
 			current.Push(o)
 		}
+	case "call":
+		current := (*meta.Peek()).(*Stack)
+		wv := current.Pop().(WordVector)
+		wv.Call(meta.(*MetaStack))
 
 	default:
 		warn("UNIMPLEMENTED $operation: " + m.String())
