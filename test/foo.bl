@@ -20,26 +20,27 @@ until
 
 ;; Smalltalk-style Conditionals
 
-o-new      ;; o1
-child      ;; o2 -> o1
-. call .   ;; evaluate the wv
-is-true:   ;; store function in slot
-. drop .   ;; do nothing except get rid of the wv
-is-false:  ;; store function in slot
-true:      ;; store object in slot
-o-new      ;; o3
-. drop .   ;; do nothing except get rid of the wv
-is-true:   ;; store function in slot
-. call .   ;; evaluate the wv
-is-false:  ;; store function in slot
-false:     ;; store object in slot
-           ;; @< o1 o2 >
-:false
-. 'I am so false.' .
-:is-false
-           ;; @< o1 o2 'I am so false.' >
+o-new      ;; o1 will house our truthy and falsey objects
 
-;; A Message Chaining Implementation
+o-new      ;; o2 (truthy object)
+. call .   ;; evaluate the wv
+is-true:   ;; store function in slot
+. drop .   ;; do nothing except get rid of the wv
+is-false:  ;; store function in slot
+true:      ;; store o2 in slot in o1
+
+o-new      ;; o3 (falsy object)
+. drop .   ;; do nothing except get rid of the wv
+is-true:   ;; store function in slot
+. call .   ;; evaluate the wv
+is-false:  ;; store function in slot
+false:     ;; store o3 in slot in o1
+
+:false     ;; summon reference to falsey o3
+. 'I am so false.' print .  ;; a WV to demonstrate the condition
+:is-false  ;; call is-false on o3, will display "I am so false."
+
+;; A Slot Chaining Implementation
 
 o-new     ;; this will be our root object
 .         ;; start of send, expects: @< … wv o1 >
