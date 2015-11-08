@@ -3,13 +3,12 @@
 $new         ;; creates new stack(2), pushing old stack(1) onto the meta-stack
 o-new        ;; creates a new object(1) and puts it on top of the @stack
 errs:        ;; creates slot ‘errs’ on object(1) and stores reference to stack(1)
-               ;; the @stack now only contains object(1)
-'/home/user/bl/text.txt'
-               ;; ^- put a character-vector on the stack
-newq        ;; creates a new queue(1) and puts it on top of the @stack
-read      ;; opens the 'text.txt' file for reading
-               ;; @< [errs:s1] {\H \e \l \l \o \ \w \o \r \l \d \!} >
-q-to-v       ;; converts the queue into a vector giving us “Hello world!"
+             ;; the @stack now only contains object(1)
+'examples/hello_world.bl'
+             ;; ^- put a character-vector on the stack
+newq         ;; creates a new queue(1) and puts it on top of the @stack
+read         ;; opens the 'text.txt' file for reading
+q-to-cv      ;; converts the queue into a vector giving us “Hello world!"
 greeting:    ;; make the object into [errs:s1 greeting:’Hello world!’]
 
 ;; Inverting a Stack
@@ -22,8 +21,8 @@ until
 ;; Smalltalk-style Conditionals
 
 o-new      ;; o1
-child    ;; o2 -> o1
-. eval .   ;; evaluate the wv
+child      ;; o2 -> o1
+. call .   ;; evaluate the wv
 is-true:   ;; store function in slot
 . drop .   ;; do nothing except get rid of the wv
 is-false:  ;; store function in slot
@@ -31,14 +30,14 @@ true:      ;; store object in slot
 o-new      ;; o3
 . drop .   ;; do nothing except get rid of the wv
 is-true:   ;; store function in slot
-. eval .   ;; evaluate the wv
+. call .   ;; evaluate the wv
 is-false:  ;; store function in slot
 false:     ;; store object in slot
-;; @< o1 o2 >
+           ;; @< o1 o2 >
 :false
 . 'I am so false.' .
 :is-false
-;; @< o1 o2 'I am so false.' >
+           ;; @< o1 o2 'I am so false.' >
 
 ;; A Message Chaining Implementation
 
@@ -133,13 +132,13 @@ swap drop                    ;; get rid of the o
 
 ;; Faking o-fetch
 
-;; given @< [] >  our @stack at the start just has an empty object
+o-new
 . dup mul .    ;; just an example wv: the basic implementation of sqr
 v-to-q       ;; convert the wv into a q
 swap drop    ;; get rid of the wv
 fetch_sqr:   ;; set slot “fetch_sqr” on o to q
 drop         ;; we’re done with the q
-. :fetch_sqr q-to-v eval 2 drop .  ;; function to get and eval sqr_q
+. :fetch_sqr q-to-v call 2 drop .  ;; function to get and call sqr_q
 sqr:         ;; store function
 2 swap :sqr  ;;=> 4
 drop         ;; drop the 4
