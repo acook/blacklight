@@ -27,8 +27,9 @@ var metaops = []string{
 
 func lex(tokens []string) []operation {
 	var op operation
-	var ops, real_ops, wv_ops []operation
-	var inside_vector, inside_word_vector, inside_nested_word_vector bool
+	var ops, real_ops []operation
+	var inside_vector bool
+	var wv_stack [][]operation
 
 	for _, t := range tokens {
 		switch {
@@ -58,31 +59,16 @@ func lex(tokens []string) []operation {
 			} else {
 				panic("unmatched closing paren")
 			}
-		case t == ".": // WordVector literal (start/end)
-			if inside_word_vector {
-				inside_word_vector = false
-
-				pwv := newPushWordVector(t)
-				pwv.Contents = append(pwv.Contents, ops...)
-				ops = append(real_ops, pwv)
-			} else {
-				inside_word_vector = true
-
-				real_ops = ops
-				ops = []operation{}
-			}
-		case t == "..": // nested WordVector literal (start/end)
-			if inside_nested_word_vector {
-				inside_nested_word_vector = false
-
+		case t == "[": // WordVector literal (start)
+			wv_stack = append(wv_stack, ops)
+			ops = []operation{}
+		case t == "]": // WordVector literal (end)
+			if len(wv_stack) > 0 {
+				wv_ops := wv_stack[len(wv_stack)-1]
+				wv_stack = wv_stack[:len(wv_stack)-1]
 				pwv := newPushWordVector(t)
 				pwv.Contents = append(pwv.Contents, ops...)
 				ops = append(wv_ops, pwv)
-			} else {
-				inside_nested_word_vector = true
-
-				wv_ops = ops
-				ops = []operation{}
 			}
 		case isWord(t):
 			op = newPushWord(t)
@@ -103,7 +89,7 @@ func lex(tokens []string) []operation {
 	}
 
 	switch {
-	case inside_word_vector:
+	case len(wv_stack) > 0:
 		panic("unclosed WordVector literal")
 	case inside_vector:
 		panic("unclosed Vector literal")
