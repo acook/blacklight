@@ -229,7 +229,7 @@ func (cv CharVector) Bytes() []byte {
 }
 
 type Char struct {
-	Datatype
+	Data string
 }
 
 func NewChar(str string) Char {
@@ -251,21 +251,21 @@ func (c Char) Value() interface{} {
 }
 
 func (c Char) String() string {
-	return c.Data.(string)
+	return c.Data
 }
 
 func (c Char) C_to_CV() string {
-	i, _ := strconv.Atoi(c.Data.(string)[1:])
+	i, _ := strconv.Atoi(c.Data[1:])
 	return string(i)
 }
 
 func (c Char) CVString() string {
-	i, _ := strconv.Atoi(c.Data.(string)[1:])
+	i, _ := strconv.Atoi(c.Data[1:])
 	return string(i)
 }
 
 func (c Char) C_to_N() int {
-	i, _ := strconv.Atoi(c.Data.(string)[1:])
+	i, _ := strconv.Atoi(c.Data[1:])
 	return i
 }
 
