@@ -24,7 +24,8 @@ package main
 // 0xFB-0xFE : FUTURE DATATYPES
 // 0xFF : RESERVED EXTENDED FLAG
 
-var bytecode_map []string
+var op_array []string
+var fn_array []func(m *MetaStack)
 
 func prepare_op_table() {
 
