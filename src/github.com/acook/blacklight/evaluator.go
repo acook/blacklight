@@ -29,7 +29,7 @@ func doEval(meta *MetaStack, ops []operation) {
 	}
 }
 
-func rescue(meta stack) {
+func rescue(meta *MetaStack) {
 	if err := recover(); err != nil {
 		warn("evaluation error")
 		warn("$meta:", meta.String())
