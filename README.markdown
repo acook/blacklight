@@ -19,7 +19,7 @@ blacklight is awesome, here's a few reasons why:
 - native queue type for inter-thread communication
 - stack-oriented programming
 - concatenative programming
-- objects with delgation *(planned)*
+- objects with delgation
 - great for MapReducing, ETLing, and general data processing
 
 
