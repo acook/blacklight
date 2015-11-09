@@ -348,12 +348,7 @@ func (m metaOp) Eval(meta stack) stack {
 	case "self":
 		current := (*meta.Peek()).(*Stack)
 		o := *meta.(*MetaStack).ObjectStack.Peek()
-		switch o.(type) {
-		case nil:
-			panic("self: called self outside of object (empty object-stack)")
-		default:
-			current.Push(o)
-		}
+		current.Push(o)
 	case "call":
 		current := (*meta.Peek()).(*Stack)
 		wv := current.Pop().(WordVector)
