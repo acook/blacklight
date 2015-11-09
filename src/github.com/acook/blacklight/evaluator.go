@@ -38,3 +38,15 @@ func rescue(meta *MetaStack) {
 		panic(err)
 	}
 }
+
+func conEval(name string, stack *Stack, ops []operation) {
+	threads.Add(1)
+	go func(name string, ops []operation, stack *Stack) {
+		defer threads.Done()
+
+		new_meta := NewMetaStack()
+		new_meta.Push(stack)
+
+		doEval(new_meta, ops)
+	}(name, ops, stack)
+}
