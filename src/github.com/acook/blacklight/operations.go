@@ -115,7 +115,7 @@ func (o Op) Eval(current stack) stack {
 		current.Push(v.App(i))
 	case "ato":
 		n := current.Pop().(*Number)
-		v := (*current.Peek()).(vector)
+		v := current.Peek().(vector)
 		i := v.Ato(n.Value().(int))
 		current.Push(i)
 	case "rmo":
@@ -124,7 +124,7 @@ func (o Op) Eval(current stack) stack {
 		nv := v.Rmo(n)
 		current.Push(nv)
 	case "len":
-		v := (*current.Peek()).(vector)
+		v := current.Peek().(vector)
 		current.Push(NewNumber(v.Len()))
 
 	// Queues
@@ -133,10 +133,10 @@ func (o Op) Eval(current stack) stack {
 		current.Push(q)
 	case "enq":
 		i := current.Pop()
-		q := (*current.Peek()).(*Queue)
+		q := current.Peek().(*Queue)
 		q.Enqueue(i)
 	case "deq":
-		q := (*current.Peek()).(*Queue)
+		q := current.Peek().(*Queue)
 		i := q.Dequeue()
 		current.Push(i)
 	case "q-to-v":
@@ -154,22 +154,22 @@ func (o Op) Eval(current stack) stack {
 		current.Push(s)
 	case "push":
 		i := current.Pop()
-		s := (*current.Peek()).(stack)
+		s := current.Peek().(stack)
 		s.Push(i)
 	case "pop":
-		s := (*current.Peek()).(stack)
+		s := current.Peek().(stack)
 		current.Push(s.Pop())
 	case "size":
-		s := (*current.Peek()).(stack)
+		s := current.Peek().(stack)
 		current.Push(NewNumber(s.Depth()))
 	case "tail":
-		s := (*current.Peek()).(stack)
+		s := current.Peek().(stack)
 		s.Drop()
 
 	// Logic
 	case "eq":
 		i1 := current.Pop()
-		i2 := *current.Peek()
+		i2 := current.Peek()
 		current.Push(blEq(i1, i2))
 	case "not":
 		t := current.Pop()
@@ -192,12 +192,12 @@ func (o Op) Eval(current stack) stack {
 	// IO
 	case "read":
 		source := current.Pop()
-		q := (*current.Peek()).(*Queue)
+		q := current.Peek().(*Queue)
 		io := ReadIO(source, q)
 		current.Push(io)
 	case "write":
 		dest := current.Pop()
-		q := (*current.Peek()).(*Queue)
+		q := current.Peek().(*Queue)
 		io := WriteIO(dest, q)
 		current.Push(io)
 
@@ -207,14 +207,14 @@ func (o Op) Eval(current stack) stack {
 	case "set":
 		slot := current.Pop().(Word)
 		i := current.Pop()
-		o := (*current.Peek()).(*Object)
+		o := current.Peek().(*Object)
 		o.Set(slot, i)
 	case "fetch":
 		slot := current.Pop().(Word)
-		o := (*current.Peek()).(*Object)
+		o := current.Peek().(*Object)
 		current.Push(o.Fetch(slot))
 	case "child":
-		o := (*current.Peek()).(*Object)
+		o := current.Peek().(*Object)
 		child := NewChildObject(o)
 		current.Push(child)
 
@@ -245,19 +245,19 @@ type metaOp struct {
 func (m metaOp) Eval(meta stack) stack {
 	switch m.Name {
 	case "@":
-		s := *meta.Peek()
+		s := meta.Peek()
 		current := s.(*Stack)
 		current.Push(current)
 	case "^":
-		s := *meta.Peek()
+		s := meta.Peek()
 		current := s.(*Stack)
 		meta.Swap()
-		s = *meta.Peek()
+		s = meta.Peek()
 		prev := s.(*Stack)
 		meta.Swap()
 		current.Push(prev)
 	case "$":
-		s := *meta.Peek()
+		s := meta.Peek()
 		current := s.(*Stack)
 		current.Push(meta)
 	case "$decap":
@@ -266,7 +266,7 @@ func (m metaOp) Eval(meta stack) stack {
 		meta.Drop()
 	case "$new":
 		if meta.Depth() > 0 {
-			s := *meta.Peek()
+			s := meta.Peek()
 			os := s.(*Stack)
 			ns := NewSystemStack()
 			ns.Push(os)
@@ -280,20 +280,20 @@ func (m metaOp) Eval(meta stack) stack {
 
 	// Loops and Logic
 	case "until":
-		current := (*meta.Peek()).(*Stack)
+		current := meta.Peek().(*Stack)
 		comp := current.Pop().(WordVector).Ops
 		actn := current.Pop().(WordVector).Ops
 	Until:
 		for {
 			doEval(meta.(*MetaStack), comp)
-			current = (*meta.Peek()).(*Stack)
+			current = meta.Peek().(*Stack)
 			if current.Pop().(*Tag).Kind == "true" {
 				break Until
 			}
 			doEval(meta.(*MetaStack), actn)
 		}
 	case "loop":
-		current := (*meta.Peek()).(*Stack)
+		current := meta.Peek().(*Stack)
 		actn := current.Pop().(WordVector).Ops
 		for {
 			doEval(meta.(*MetaStack), actn)
@@ -301,21 +301,21 @@ func (m metaOp) Eval(meta stack) stack {
 	case "proq":
 		processQueue(meta.(*MetaStack))
 	case "if":
-		current := (*meta.Peek()).(*Stack)
+		current := meta.Peek().(*Stack)
 		comp := current.Pop().(WordVector).Ops
 		actn := current.Pop().(WordVector).Ops
 		doEval(meta.(*MetaStack), comp)
-		current = (*meta.Peek()).(*Stack)
+		current = meta.Peek().(*Stack)
 		if current.Pop().(*Tag).Kind == "true" {
 			doEval(meta.(*MetaStack), actn)
 		}
 	case "either":
-		current := (*meta.Peek()).(*Stack)
+		current := meta.Peek().(*Stack)
 		comp := current.Pop().(WordVector).Ops
 		iffalse := current.Pop().(WordVector).Ops
 		iftrue := current.Pop().(WordVector).Ops
 		doEval(meta.(*MetaStack), comp)
-		current = (*meta.Peek()).(*Stack)
+		current = meta.Peek().(*Stack)
 		if current.Pop().(*Tag).Kind == "true" {
 			doEval(meta.(*MetaStack), iftrue)
 		} else {
@@ -324,7 +324,7 @@ func (m metaOp) Eval(meta stack) stack {
 
 	// File Loading & Multithreading
 	case "do":
-		current := (*meta.Peek()).(*Stack)
+		current := meta.Peek().(*Stack)
 		filename := current.Pop().(*CharVector).Value().(string)
 		code := loadFile(filename)
 		tokens := parse(code)
@@ -341,16 +341,16 @@ func (m metaOp) Eval(meta stack) stack {
 
 	// Objects & Eval
 	case "get":
-		current := (*meta.Peek()).(*Stack)
+		current := meta.Peek().(*Stack)
 		slot := current.Pop().(Word)
-		o := (*current.Peek()).(*Object)
+		o := current.Peek().(*Object)
 		o.Get(meta.(*MetaStack), slot)
 	case "self":
-		current := (*meta.Peek()).(*Stack)
+		current := meta.Peek().(*Stack)
 		o := *meta.(*MetaStack).ObjectStack.Peek()
 		current.Push(o)
 	case "call":
-		current := (*meta.Peek()).(*Stack)
+		current := meta.Peek().(*Stack)
 		wv := current.Pop().(WordVector)
 		wv.Call(meta.(*MetaStack))
 
@@ -479,7 +479,7 @@ type pushQueue struct {
 }
 
 func processQueue(meta *MetaStack) {
-	current := (*meta.Peek()).(*Stack)
+	current := meta.Peek().(*Stack)
 	wv := current.Pop().(WordVector)
 	q := current.Pop().(*Queue)
 	var tokens []string
@@ -538,7 +538,7 @@ QVLoop:
 }
 
 func bkg(meta *MetaStack) {
-	current := (*meta.Peek()).(*Stack)
+	current := meta.Peek().(*Stack)
 	wv := current.Pop().(WordVector)
 	i := current.Pop()
 
@@ -554,7 +554,7 @@ func bkg(meta *MetaStack) {
 }
 
 func work(meta *MetaStack) {
-	current := (*meta.Peek()).(*Stack)
+	current := meta.Peek().(*Stack)
 	wv := current.Pop().(WordVector)
 	in := current.Pop().(*Queue)
 	out := current.Pop().(*Queue)
@@ -575,7 +575,7 @@ func work(meta *MetaStack) {
 }
 
 func co(meta *MetaStack) {
-	current := (*meta.Peek()).(*Stack)
+	current := meta.Peek().(*Stack)
 	filename := current.Pop().(*CharVector).Value().(string)
 	in := NewQueue()
 	out := NewQueue()

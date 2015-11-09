@@ -45,7 +45,7 @@ func (o *Object) Get(meta *MetaStack, w Word) {
 }
 
 func (o *Object) DeleGet(meta *MetaStack, w Word) bool {
-	current := (*meta.Peek()).(*Stack)
+	current := meta.Peek().(*Stack)
 	i, found := o.Slots[w]
 
 	if found {
