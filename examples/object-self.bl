@@ -3,9 +3,9 @@
 o-new
 
 ;; we can use self much like @ inside of slots to refer to the current object
-. self print . inspect:
+[ self print ] inspect:
 :inspect
 
 ;; self also allows you to easily use other slots on the same object
-. 1 2 3 4 5 'I am an object: ' print self :inspect . pp:
+[ 1 2 3 4 5 'I am an object: ' print self :inspect ] pp:
 :pp

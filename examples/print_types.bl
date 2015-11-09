@@ -11,7 +11,7 @@ s-new 1 push 2 push 3 push 4 push print '' print
 ~1 print
 
 'word vectors' print
-. 1 2 3 4 . print '' print
+[ 1 2 3 4 ] print '' print
 
 'char vectors' print
 '1 2 3 4' print '' print

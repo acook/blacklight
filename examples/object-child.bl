@@ -5,7 +5,7 @@ o-new  ;; This will be the parent object
 child  ;; And this creates a child object that checks the parent
 
 swap                     ;; let's add some slots to the parent
-. self print . inspect:  ;; this lets us check out what object we have
+[ self print ] inspect:  ;; this lets us check out what object we have
 
 swap                     ;; bring the child back to the top
 :inspect                 ;; call the inspect slot on the child

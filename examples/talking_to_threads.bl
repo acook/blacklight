@@ -1,18 +1,18 @@
 newq newq                ;; create send and receive queues
-.
-  ..
+[
+  [
     deq                  ;; will block if the queue is empty
-    n-to-cv rot swap enq  ;; convert number into a cv (string) and send back
+    n-to-cv rot swap enq ;; convert number into a cv (string) and send back
     swap                 ;; reorder queues so we can loop without confusion
-  .. loop                ;; using loop since it goes forever
-. work                   ;; start new thread and swap the queues
+  ] loop                 ;; using loop since it goes forever
+] work                   ;; start new thread and swap the queues
 
 swap                     ;; bring send queue to top
 1 enq 2 enq 3 enq 4 enq  ;; send some numbers to be converted
 
 0
-. 1 add .
-. 1000 eq .
+[ 1 add ]
+[ 1000 eq ]
 until drop               ;; give the main thread busywork
 
 swap q-to-v              ;; get contents of receive Q as V

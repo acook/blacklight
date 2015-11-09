@@ -10,7 +10,7 @@ o-new
 :num print
 
 ;; create a WV slot
-. 'omg hai' print . greet:
+[ 'omg hai' print ] greet:
 ;; call a WV slot
 :greet
 
