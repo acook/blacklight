@@ -1,10 +1,10 @@
+;; starting with an empty CV and a V full of CVs
+;; we use an until loop to cat them all together
 
 ''
 ('a' 'b' 'c' 'd')
 
-@ print
-
-. 0 rmo rot swap cat swap .
+. 0 ato swap 0 rmo rot rot cat swap .
 . len 0 eq swap drop .
 until
 

@@ -115,15 +115,14 @@ func (o Op) Eval(current stack) stack {
 		current.Push(v.App(i))
 	case "ato":
 		n := current.Pop().(*Number)
-		v := (*current.Peek()).(Vector)
+		v := (*current.Peek()).(vector)
 		i := v.Ato(n.Value().(int))
 		current.Push(i)
 	case "rmo":
 		n := current.Pop().(*Number).Value().(int)
 		v := current.Pop().(vector)
-		nv, i := v.Rmo(n)
+		nv := v.Rmo(n)
 		current.Push(nv)
-		current.Push(i)
 	case "len":
 		v := (*current.Peek()).(vector)
 		current.Push(NewNumber(v.Len()))

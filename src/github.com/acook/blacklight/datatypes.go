@@ -112,7 +112,7 @@ func (n Number) Value() interface{} {
 type vector interface {
 	App(datatypes) vector
 	Ato(int) datatypes
-	Rmo(int) (vector, datatypes)
+	Rmo(int) vector
 	Cat(vector) vector
 	Len() int
 	Value() interface{}
@@ -137,13 +137,12 @@ func (v Vector) Ato(n int) datatypes {
 	return v.Data[n]
 }
 
-func (v Vector) Rmo(n int) (vector, datatypes) {
-	i := v.Ato(n)
+func (v Vector) Rmo(n int) vector {
 	d := v.Value().([]datatypes)
 	a := d[:n]
 	b := d[n+1:]
 	v = NewVector(append(a, b...))
-	return v, i
+	return v
 }
 
 func (v Vector) Cat(v2 vector) vector {
@@ -188,16 +187,15 @@ func NewCharVector(str string) *CharVector {
 }
 
 func (v CharVector) Ato(n int) datatypes {
-	return NewCharVector(fmt.Sprint(v.Data[n]))
+	return NewCharFromString(string(v.Data[n]))
 }
 
-func (v CharVector) Rmo(n int) (vector, datatypes) {
-	i := v.Ato(n)
-	d := v.Value().(string)
+func (v CharVector) Rmo(n int) vector {
+	d := v.Data
 	a := d[:n]
 	b := d[n+1:]
 	v = *NewCharVector(a + b)
-	return v, i
+	return v
 }
 
 func (v CharVector) App(i datatypes) vector {

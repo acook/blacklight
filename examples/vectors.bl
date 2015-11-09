@@ -2,9 +2,11 @@
 ;; they allow random-access to items in the middle of the sequence
 ;; the ato and rmo operations are 0-based offsets
 
-(1 2 3 4) 2 ato print
-('a' 'b' 'c' 'd')
+(1 2 3 4 5)
+;; ato retuns an element at offset
 1 ato print
-2 rmo print
+;; rmo removes an element at offset
+2 rmo
+;; len returns the length of the V
 len print
 print
