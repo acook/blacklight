@@ -1,6 +1,8 @@
 package main
 
-import ()
+import (
+	"fmt"
+)
 
 var keywords = []string{
 	"<>", "decap", "depth", "drop", "dup", "over", "rot", "swap", "purge",
@@ -27,8 +29,9 @@ var metaops = []string{
 
 func lex(tokens []string) []operation {
 	var op operation
-	var ops, real_ops, wv_ops []operation
-	var inside_vector, inside_word_vector, inside_nested_word_vector bool
+	var ops, real_ops []operation
+	var inside_vector bool
+	var wv_stack ops_fifo
 
 	for _, t := range tokens {
 		switch {
@@ -58,31 +61,17 @@ func lex(tokens []string) []operation {
 			} else {
 				panic("unmatched closing paren")
 			}
-		case t == ".": // WordVector literal (start/end)
-			if inside_word_vector {
-				inside_word_vector = false
-
-				pwv := newPushWordVector(t)
-				pwv.Contents = append(pwv.Contents, ops...)
-				ops = append(real_ops, pwv)
-			} else {
-				inside_word_vector = true
-
-				real_ops = ops
-				ops = []operation{}
-			}
-		case t == "..": // nested WordVector literal (start/end)
-			if inside_nested_word_vector {
-				inside_nested_word_vector = false
-
-				pwv := newPushWordVector(t)
+		case t == "[": // WordVector literal (start)
+			wv_stack.push(ops)
+			ops = []operation{}
+		case t == "]": // WordVector literal (end)
+			if wv_stack.depth() > 0 {
+				pwv := newPushWordVector("[" + fmt.Sprint(wv_stack.depth()+1) + "]")
+				wv_ops := wv_stack.pop()
 				pwv.Contents = append(pwv.Contents, ops...)
 				ops = append(wv_ops, pwv)
 			} else {
-				inside_nested_word_vector = true
-
-				wv_ops = ops
-				ops = []operation{}
+				panic("lexer: closing bracket without opening bracket")
 			}
 		case isWord(t):
 			op = newPushWord(t)
@@ -103,7 +92,7 @@ func lex(tokens []string) []operation {
 	}
 
 	switch {
-	case inside_word_vector:
+	case wv_stack.depth() > 0:
 		panic("unclosed WordVector literal")
 	case inside_vector:
 		panic("unclosed Vector literal")

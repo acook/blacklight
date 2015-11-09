@@ -38,6 +38,12 @@ func parse(code string) []string {
 		case glyph == ")":
 			tokens = append(tokens, glyph)
 			tokens = ws(glyph, tokens)
+		case glyph == "[":
+			tokens = append(tokens, glyph)
+			tokens = ws(glyph, tokens)
+		case glyph == "]":
+			tokens = append(tokens, glyph)
+			tokens = ws(glyph, tokens)
 		case unicode.IsSpace(b):
 			tokens = ws(glyph, tokens)
 		case isComment(glyph, tokens):
