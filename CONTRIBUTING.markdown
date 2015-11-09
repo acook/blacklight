@@ -2,7 +2,7 @@ How to Contribute to blacklight
 ===============================
 
 Hi, and thanks for your interest in blacklight! 
-We (royal wee at this time) look forward to your contributions!
+We (royal we at this time) look forward to your contributions!
 
 Getting Started
 ---------------
