@@ -62,10 +62,10 @@ func (o *Object) DeleGet(meta *MetaStack, w Word) bool {
 	return found
 }
 
-func (o *Object) String() string {
+func (o Object) String() string {
 	return "|OBJ# " + fmt.Sprintf("%v", o.Slots) + "|"
 }
 
-func (o *Object) Value() interface{} {
+func (o Object) Value() interface{} {
 	return o.Slots
 }
