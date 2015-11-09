@@ -120,7 +120,7 @@ type vector interface {
 }
 
 type Vector struct {
-	Datatype
+	Data []datatypes
 }
 
 func NewVector(items []datatypes) Vector {
@@ -130,11 +130,11 @@ func NewVector(items []datatypes) Vector {
 }
 
 func (v Vector) App(i datatypes) vector {
-	return NewVector(append(v.Data.([]datatypes), i))
+	return NewVector(append(v.Data, i))
 }
 
 func (v Vector) Ato(n int) datatypes {
-	return v.Data.([]datatypes)[n]
+	return v.Data[n]
 }
 
 func (v Vector) Rmo(n int) (vector, datatypes) {
@@ -151,12 +151,16 @@ func (v Vector) Cat(v2 vector) vector {
 }
 
 func (v Vector) Len() int {
-	return len(v.Data.([]datatypes))
+	return len(v.Data)
+}
+
+func (v Vector) Value() interface{} {
+	return v.Data
 }
 
 func (v Vector) String() string {
 	str := "("
-	for _, i := range v.Data.([]datatypes) {
+	for _, i := range v.Data {
 		str += i.String() + " "
 	}
 	if len(str) > 1 {
@@ -166,7 +170,7 @@ func (v Vector) String() string {
 }
 
 type CharVector struct {
-	Vector
+	Data string
 }
 
 type cvstringer interface {
@@ -184,7 +188,7 @@ func NewCharVector(str string) *CharVector {
 }
 
 func (v CharVector) Ato(n int) datatypes {
-	return NewCharVector(fmt.Sprint(v.Data.(string)[n]))
+	return NewCharVector(fmt.Sprint(v.Data[n]))
 }
 
 func (v CharVector) Rmo(n int) (vector, datatypes) {
@@ -197,23 +201,27 @@ func (v CharVector) Rmo(n int) (vector, datatypes) {
 }
 
 func (v CharVector) App(i datatypes) vector {
-	return NewCharVector(v.Data.(string) + i.(cvstringer).CVString())
+	return NewCharVector(v.Data + i.(cvstringer).CVString())
 }
 
 func (cv CharVector) Cat(cv2 vector) vector {
-	return NewCharVector(cv.Data.(string) + cv2.Value().(string))
+	return NewCharVector(cv.Data + cv2.String())
 }
 
 func (v CharVector) Len() int {
-	return len(v.Data.(string))
+	return len(v.Data)
+}
+
+func (cv CharVector) Value() interface{} {
+	return cv.Data
 }
 
 func (cv CharVector) String() string {
-	return cv.Data.(string)
+	return cv.Data
 }
 
 func (cv CharVector) CVString() string {
-	return cv.Data.(string)
+	return cv.Data
 }
 
 func (cv CharVector) Bytes() []byte {
