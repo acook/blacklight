@@ -10,7 +10,7 @@ type datatypes interface {
 	String() string
 }
 
-func blEq(i1 datatypes, i2 datatypes) Tag {
+func blEq(i1 datatypes, i2 datatypes) *Tag {
 	var b bool
 
 	switch i1.(type) {
@@ -19,9 +19,9 @@ func blEq(i1 datatypes, i2 datatypes) Tag {
 	}
 
 	if b {
-		return *NewTrue("eq")
+		return NewTrue("eq")
 	} else {
-		return *NewNil("eq")
+		return NewNil("eq")
 	}
 }
 
