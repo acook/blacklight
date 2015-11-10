@@ -67,29 +67,6 @@ func NewMetaStack() *MetaStack {
 	return s
 }
 
-func (m *MetaStack) Current() *Stack {
-	return m.Items[len(m.Items)-1]
-}
-
-func (m *MetaStack) Self() {
-	o := m.ObjectStack.Peek()
-	m.Current().Push(o)
-	m.SelfFlag = true
-}
-
-func (m *MetaStack) Object() *Object {
-	var o *Object
-
-	if m.SelfFlag {
-		o = m.Current().Pop().(*Object)
-		m.SelfFlag = false
-	} else {
-		o = m.Current().Peek().(*Object)
-	}
-
-	return o
-}
-
 func (s Stack) Value() interface{} {
 	return s
 }

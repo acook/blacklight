@@ -35,7 +35,7 @@ func (o *Object) Fetch(w Word) datatypes {
 	}
 }
 
-func (o *Object) Get(meta *MetaStack, w Word) {
+func (o *Object) Get(meta *Meta, w Word) {
 	meta.ObjectStack.Push(o)
 	defer meta.ObjectStack.Pop()
 	result := o.DeleGet(meta, w)
@@ -44,14 +44,14 @@ func (o *Object) Get(meta *MetaStack, w Word) {
 	}
 }
 
-func (o *Object) DeleGet(meta *MetaStack, w Word) bool {
-	current := meta.Peek().(*Stack)
+func (o *Object) DeleGet(meta *Meta, w Word) bool {
+	current := meta.Peek()
 	i, found := o.Slots[w]
 
 	if found {
 		switch i.(type) {
 		case WordVector:
-			doEval(meta, i.(WordVector).Ops)
+			doBC(meta, i.(WordVector).Ops)
 		default:
 			current.Push(i)
 		}

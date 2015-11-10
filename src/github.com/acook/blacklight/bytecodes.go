@@ -35,76 +35,76 @@ var cv_map = map[string]byte{
 }
 
 var op_map map[string]byte
-var fn_map map[byte]func(m *MetaStack)
+var fn_map map[byte]func(m *Meta)
 
 func prepare_op_table() {
 
-	var op_fn_map = map[string]func(*MetaStack){
+	var op_fn_map = map[string]func(*Meta){
 
 		// meta
-		"@": func(m *MetaStack) {
+		"@": func(m *Meta) {
 			m.Current().Push(m.Current())
 		},
-		"^": func(m *MetaStack) {
+		"^": func(m *Meta) {
 			c := m.Current()
 			n := m.Items[len(m.Items)-2]
 			c.Push(n)
 		},
-		"$": func(m *MetaStack) {
+		"$": func(m *Meta) {
 			m.Current().Push(m)
 		},
-		"$decap": func(m *MetaStack) {
+		"$decap": func(m *Meta) {
 			m.Decap()
 		},
-		"$drop": func(m *MetaStack) {
+		"$drop": func(m *Meta) {
 			m.Drop()
 			if m.Depth() < 1 {
 				m.Push(NewSystemStack())
 			}
 		},
-		"$new": func(m *MetaStack) {
+		"$new": func(m *Meta) {
 			s := NewSystemStack()
 			s.Push(m.Current())
 			m.Push(s)
 		},
-		"$swap": func(m *MetaStack) {
+		"$swap": func(m *Meta) {
 			m.Swap()
 		},
 
 		// stack
-		//"pop": func(m *MetaStack) {
+		//"pop": func(m *Meta) {
 		//	m.Current().Pop()
 		//},
-		//"drop": func(m *MetaStack) {
+		//"drop": func(m *Meta) {
 		//	m.Current().Drop()
 		//},
-		"decap": func(m *MetaStack) {
+		"decap": func(m *Meta) {
 			m.Current().Decap()
 		},
-		"depth": func(m *MetaStack) {
+		"depth": func(m *Meta) {
 			m.Current().Push(NewNumber(m.Current().Depth()))
 		},
-		"drop": func(m *MetaStack) {
+		"drop": func(m *Meta) {
 			m.Current().Drop()
 		},
-		"dup": func(m *MetaStack) {
+		"dup": func(m *Meta) {
 			m.Current().Dup()
 		},
-		"over": func(m *MetaStack) {
+		"over": func(m *Meta) {
 			m.Current().Over()
 		},
-		"purge": func(m *MetaStack) {
+		"purge": func(m *Meta) {
 			m.Current().Purge()
 		},
-		"rot": func(m *MetaStack) {
+		"rot": func(m *Meta) {
 			m.Current().Rot()
 		},
-		"swap": func(m *MetaStack) {
+		"swap": func(m *Meta) {
 			m.Current().Swap()
 		},
 
 		// concurrency
-		"bkg": func(m *MetaStack) {
+		"bkg": func(m *Meta) {
 			ops := m.Current().Pop().(WordVector).Ops
 
 			items := NewStack("bkg")
@@ -112,7 +112,7 @@ func prepare_op_table() {
 
 			conEval("bkg", items, ops)
 		},
-		"co": func(m *MetaStack) {
+		"co": func(m *Meta) {
 			filename := m.Current().Pop().String()
 
 			in := NewQueue()
@@ -131,7 +131,7 @@ func prepare_op_table() {
 
 			conEval("co", stack, ops)
 		},
-		"work": func(m *MetaStack) {
+		"work": func(m *Meta) {
 			ops := m.Current().Pop().(WordVector).Ops
 			in := m.Current().Items[len(m.Current().Items)-1].(*Queue)
 			out := m.Current().Items[len(m.Current().Items)-2].(*Queue)
@@ -145,81 +145,81 @@ func prepare_op_table() {
 
 			conEval("work", stack, ops)
 		},
-		"wait": func(m *MetaStack) {
+		"wait": func(m *Meta) {
 			threads.Wait()
 		},
 
 		// debug
-		"print": func(m *MetaStack) {
+		"print": func(m *Meta) {
 			print(m.Current().Pop().String())
 		},
-		"refl": func(m *MetaStack) {
+		"refl": func(m *Meta) {
 			NOPE("refl")
 		},
-		"warn": func(m *MetaStack) {
+		"warn": func(m *Meta) {
 			NOPE("warn")
 		},
 
 		// loading
-		"do": func(m *MetaStack) {
+		"do": func(m *Meta) {
 			filename := m.Current().Pop().String()
 
 			code := loadFile(filename)
 			tokens := parse(code)
 			ops := lex(tokens)
 
-			doEval(m, ops)
+			doBC(m, ops)
 		},
-		"imp": func(m *MetaStack) {
+		"imp": func(m *Meta) {
 			NOPE("imp")
 		},
 
 		// math
-		"add": func(m *MetaStack) {
+		"add": func(m *Meta) {
 			n1 := m.Current().Pop().Value().(int)
 			n2 := m.Current().Pop().Value().(int)
 
 			m.Current().Push(NewNumber(n2 + n1))
 		},
-		"sub": func(m *MetaStack) {
+		"sub": func(m *Meta) {
 			n1 := m.Current().Pop().Value().(int)
 			n2 := m.Current().Pop().Value().(int)
 
 			m.Current().Push(NewNumber(n2 - n1))
 		},
-		"div": func(m *MetaStack) {
+		"div": func(m *Meta) {
 			n1 := m.Current().Pop().Value().(int)
 			n2 := m.Current().Pop().Value().(int)
 
 			m.Current().Push(NewNumber(n2 / n1))
 		},
-		"mod": func(m *MetaStack) {
+		"mod": func(m *Meta) {
 			n1 := m.Current().Pop().Value().(int)
 			n2 := m.Current().Pop().Value().(int)
 
 			m.Current().Push(NewNumber(n2 % n1))
 		},
-		"mul": func(m *MetaStack) {
+		"mul": func(m *Meta) {
 			n1 := m.Current().Pop().Value().(int)
 			n2 := m.Current().Pop().Value().(int)
 
 			m.Current().Push(NewNumber(n2 * n1))
 		},
-		"n-to-c": func(m *MetaStack) {
+		"n-to-c": func(m *Meta) {
 			m.Current().Push(NewCharFromString(m.Current().Pop().String()))
 		},
-		"n-to-cv": func(m *MetaStack) {
+		"n-to-cv": func(m *Meta) {
 			m.Current().Push(NewCharVector(m.Current().Pop().String()))
 		},
 
 		// file io
-		"read": func(m *MetaStack) {
+		"read": func(m *Meta) {
 			source := m.Current().Pop()
 			q := m.Current().Peek().(*Queue)
 			io := ReadIO(source, q)
 			m.Current().Push(io)
 		},
-		"write": func(m *MetaStack) {
+		"write": func(m *Meta) {
 			dest := m.Current().Pop()
 			q := m.Current().Peek().(*Queue)
 			io := WriteIO(dest, q)
@@ -227,34 +227,34 @@ func prepare_op_table() {
 		},
 
 		// logic & loops
-		"either": func(m *MetaStack) {
+		"either": func(m *Meta) {
 			comp := m.Current().Pop().(WordVector).Ops
 			iffalse := m.Current().Pop().(WordVector).Ops
 			iftrue := m.Current().Pop().(WordVector).Ops
-			doEval(m, comp)
+			doBC(m, comp)
 			if m.Current().Pop().(*Tag).Kind == "true" {
-				doEval(m, iftrue)
+				doBC(m, iftrue)
 			} else {
-				doEval(m, iffalse)
+				doBC(m, iffalse)
 			}
 		},
-		"eq": func(m *MetaStack) {
+		"eq": func(m *Meta) {
 			i1 := m.Current().Pop()
 			i2 := m.Current().Peek()
 			m.Current().Push(blEq(i1, i2))
 		},
-		"if": func(m *MetaStack) {
+		"if": func(m *Meta) {
 			comp := m.Current().Pop().(WordVector).Ops
 			actn := m.Current().Pop().(WordVector).Ops
-			doEval(m, comp)
+			doBC(m, comp)
 			if m.Current().Pop().(*Tag).Kind == "true" {
-				doEval(m, actn)
+				doBC(m, actn)
 			}
 		},
-		"is": func(m *MetaStack) {
+		"is": func(m *Meta) {
 			NOPE("is")
 		},
-		"not": func(m *MetaStack) {
+		"not": func(m *Meta) {
 			var t *Tag
 			i := m.Current().Pop()
 
@@ -271,77 +271,77 @@ func prepare_op_table() {
 
 			m.Current().Push(t)
 		},
-		"until": func(m *MetaStack) {
+		"until": func(m *Meta) {
 			comp := m.Current().Pop().(WordVector).Ops
 			actn := m.Current().Pop().(WordVector).Ops
 		Until:
 			for {
-				doEval(m, comp)
+				doBC(m, comp)
 				if m.Current().Pop().(*Tag).Kind == "true" {
 					break Until
 				}
-				doEval(m, actn)
+				doBC(m, actn)
 			}
 		},
-		"while": func(m *MetaStack) {
+		"while": func(m *Meta) {
 			comp := m.Current().Pop().(WordVector).Ops
 			actn := m.Current().Pop().(WordVector).Ops
 		While:
 			for {
-				doEval(m, comp)
+				doBC(m, comp)
 				if m.Current().Pop().(*Tag).Kind != "true" {
 					break While
 				}
-				doEval(m, actn)
+				doBC(m, actn)
 			}
 		},
-		"loop": func(m *MetaStack) {
+		"loop": func(m *Meta) {
 			actn := m.Current().Pop().(WordVector).Ops
 			for {
-				doEval(m, actn)
+				doBC(m, actn)
 			}
 		},
 
 		// objects
-		"o-new": func(m *MetaStack) {
+		"o-new": func(m *Meta) {
 			m.Current().Push(NewObject())
 		},
-		"self": func(m *MetaStack) {
+		"self": func(m *Meta) {
 			m.Self()
 		},
-		"child": func(m *MetaStack) {
+		"child": func(m *Meta) {
 			o := m.Object()
 			child := NewChildObject(o)
 			m.Current().Push(child)
 		},
-		"fetch": func(m *MetaStack) {
+		"fetch": func(m *Meta) {
 			slot := m.Current().Pop().(Word)
 			o := m.Object()
 			m.Current().Push(o.Fetch(slot))
 		},
-		"get": func(m *MetaStack) {
+		"get": func(m *Meta) {
 			slot := m.Current().Pop().(Word)
 			m.Object().Get(m, slot)
 		},
-		"set": func(m *MetaStack) {
+		"set": func(m *Meta) {
 			slot := m.Current().Pop().(Word)
 			i := m.Current().Pop()
 			m.Object().Set(slot, i)
 		},
 
 		// queues
-		"q-new": func(m *MetaStack) {
+		"q-new": func(m *Meta) {
 			m.Current().Push(NewQueue())
 		},
-		"deq": func(m *MetaStack) {
+		"deq": func(m *Meta) {
 			i := m.Current().Peek().(*Queue).Dequeue()
 			m.Current().Push(i)
 		},
-		"enq": func(m *MetaStack) {
+		"enq": func(m *Meta) {
 			i := m.Current().Pop()
 			m.Current().Peek().(*Queue).Enqueue(i)
 		},
-		"proq": func(m *MetaStack) {
+		"proq": func(m *Meta) {
 			wv := m.Current().Pop().(WordVector)
 			q := m.Current().Pop().(*Queue)
 
@@ -350,16 +350,16 @@ func prepare_op_table() {
 				select {
 				case item := <-q.Items:
 					m.Current().Push(item)
-					doEval(m, wv.Ops)
+					doBC(m, wv.Ops)
 				default:
 					break ProcQLoop
 				}
 			}
 		},
-		"q-to-s": func(m *MetaStack) {
+		"q-to-s": func(m *Meta) {
 			NOPE("q-to-s")
 		},
-		"q-to-v": func(m *MetaStack) {
+		"q-to-v": func(m *Meta) {
 			q := m.Current().Pop().(*Queue)
 			items := []datatypes{}
 
@@ -375,7 +375,7 @@ func prepare_op_table() {
 
 			m.Current().Push(NewVector(items))
 		},
-		"q-to-cv": func(m *MetaStack) {
+		"q-to-cv": func(m *Meta) {
 			q := m.Current().Pop().(*Queue)
 			str := ""
 
@@ -392,97 +392,98 @@ func prepare_op_table() {
 			v := NewCharVector(str)
 			m.Current().Push(v)
 		},
-		"unq": func(m *MetaStack) {
+		"unq": func(m *Meta) {
 			NOPE("unq")
 		},
 
 		// stacks
-		"s-new": func(m *MetaStack) {
+		"s-new": func(m *Meta) {
 			m.Current().Push(NewStack("user"))
 		},
-		"pop": func(m *MetaStack) {
+		"pop": func(m *Meta) {
 			m.Current().Push(m.Current().Peek().(stack).Pop())
 		},
-		"push": func(m *MetaStack) {
+		"push": func(m *Meta) {
 			m.Current().Peek().(stack).Push(m.Current().Pop())
 		},
-		"size": func(m *MetaStack) {
+		"size": func(m *Meta) {
 			m.Current().Push(NewNumber(m.Current().Peek().(stack).Depth()))
 		},
-		"tail": func(m *MetaStack) {
+		"tail": func(m *Meta) {
 			m.Current().Peek().(stack).Drop()
 		},
 
 		// vectors
-		"v-new": func(m *MetaStack) {
+		"v-new": func(m *Meta) {
 			m.Current().Push(NewVector([]datatypes{}))
 		},
-		"app": func(m *MetaStack) {
+		"app": func(m *Meta) {
 			i := m.Current().Pop()
 			v := m.Current().Pop().(vector)
 			m.Current().Push(v.App(i))
 		},
-		"ato": func(m *MetaStack) {
-			n := m.Current().Pop().(*Number)
+		"ato": func(m *Meta) {
+			c := m.Current()
+			n := c.Pop().(N)
 			v := m.Current().Peek().(vector)
 			i := v.Ato(n.Value().(int))
 			m.Current().Push(i)
 		},
-		"cat": func(m *MetaStack) {
+		"cat": func(m *Meta) {
 			i1 := m.Current().Pop().(vector)
 			i2 := m.Current().Pop().(vector)
 			result := i2.Cat(i1)
 			m.Current().Push(result)
 		},
-		"del": func(m *MetaStack) {
+		"del": func(m *Meta) {
 			NOPE("del")
 		},
-		"emt": func(m *MetaStack) {
+		"emt": func(m *Meta) {
 			NOPE("emt")
 		},
-		"eval": func(m *MetaStack) {},
-		"len": func(m *MetaStack) {
+		"eval": func(m *Meta) {},
+		"len": func(m *Meta) {
 			v := m.Current().Peek().(vector)
 			m.Current().Push(NewNumber(v.Len()))
 		},
-		"pick": func(m *MetaStack) {
+		"pick": func(m *Meta) {
 			NOPE("pick")
 		},
-		"rmo": func(m *MetaStack) {
+		"rmo": func(m *Meta) {
 			n := m.Current().Pop().(*Number).Value().(int)
 			v := m.Current().Pop().(vector)
 			nv := v.Rmo(n)
 			m.Current().Push(nv)
 		},
-		"v-to-s": func(m *MetaStack) {
+		"v-to-s": func(m *Meta) {
 			NOPE("v-to-s")
 		},
-		"v-to-q": func(m *MetaStack) {
+		"v-to-q": func(m *Meta) {
 			NOPE("v-to-q")
 		},
 
 		// tags
-		"t-to-cv": func(m *MetaStack) {
+		"t-to-cv": func(m *Meta) {
 			NOPE("t-to-cv")
 		},
-		"true": func(m *MetaStack) {
+		"true": func(m *Meta) {
 			m.Current().Push(NewTrue("true"))
 		},
-		"nil": func(m *MetaStack) {
+		"nil": func(m *Meta) {
 			m.Current().Push(NewNil("nil"))
 		},
 
 		// chars
-		"c-to-cv": func(m *MetaStack) {
+		"c-to-cv": func(m *Meta) {
 			m.Current().Push(NewCharVector(m.Current().Pop().(Char).C_to_CV()))
 		},
-		"c-to-n": func(m *MetaStack) {
+		"c-to-n": func(m *Meta) {
 			m.Current().Push(NewNumber(m.Current().Pop().(Char).C_to_N()))
 		},
 	}
 
 	op_map = make(map[string]byte)
-	fn_map = make(map[byte]func(*MetaStack))
+	fn_map = make(map[byte]func(*Meta))
 
 	var i byte = 0
 	for k, v := range op_fn_map {
@@ -495,4 +496,8 @@ func prepare_op_table() {
 
 func NOPE(str string) {
 	print(" -- UNIMPLEMENTED op: " + str)
+}
+
+func doBC(meta *Meta, ops []operation) {
+	NOPE("can't call or eval shit yet")
 }

@@ -341,10 +341,11 @@ func (m metaOp) Eval(meta stack) stack {
 
 	// Objects & Eval
 	case "get":
-		current := meta.Peek().(*Stack)
-		slot := current.Pop().(Word)
-		o := current.Peek().(*Object)
-		o.Get(meta.(*MetaStack), slot)
+		// Disabled due to Meta/MetaStack confusion
+		//current := meta.Peek().(*Stack)
+		//slot := current.Pop().(Word)
+		//o := current.Peek().(*Object)
+		//o.Get(meta.(*MetaStack), slot)
 	case "self":
 		current := meta.Peek().(*Stack)
 		o := *meta.(*MetaStack).ObjectStack.Peek()
