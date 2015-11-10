@@ -25,8 +25,10 @@ func main() {
 	code := loadFile(fileName)
 	tokens := parse(code)
 
-	ops := lex(tokens)
-	eval(ops)
+	//ops := lex(tokens)
+	ops := compile(tokens)
+
+	vm(ops)
 }
 
 func loadFile(filename string) string {
@@ -55,8 +57,8 @@ func warn(text ...string) {
 }
 
 func cleanup() {
-	if err := recover(); err != nil {
-		warn("encountered an error and had to quit: ")
-		panic(err)
-	}
+	//if err := recover(); err != nil {
+	//	warn("encountered an error and had to quit: ")
+	//	panic(err)
+	//}
 }

@@ -2,7 +2,7 @@ package main
 
 // bytes spec
 
-// (chain)    : max value (or sign) means additional byte continues value.
+// (chain)    : max value (or sign) means additional byte continues value, following byte may be 0x00 if value is actually 0xFF
 // (length)   : length specified by attribute
 // (bytetype) : uint8 in range 0xF1-0xFA to specify type
 // (type)     : expects full type signature
@@ -10,7 +10,7 @@ package main
 
 // first byte (uint8)
 
-// 0x00-0xF0 : opword
+// 0x00-0xF0 : opword (currently auto-generated)
 // 0xF1 : word - uint32
 // 0xF2 : byte - uint8 (byte)
 // 0xF3 : char - uint32 (rune)
@@ -24,12 +24,22 @@ package main
 // 0xFB-0xFE : FUTURE DATATYPES
 // 0xFF : RESERVED EXTENDED FLAG
 
-var op_array []string
-var fn_array []func(m *MetaStack)
+var cv_map = map[string]byte{
+	"opword": 0xF0,
+	"word":   0xF1,
+	"byte":   0xF2,
+	"char":   0xF3,
+	"number": 0xF4,
+	"float":  0xF5,
+	"stack":  0xf6,
+}
+
+var op_map map[string]byte
+var fn_map map[byte]func(m *MetaStack)
 
 func prepare_op_table() {
 
-	var op_map = map[string]func(*MetaStack){
+	var op_fn_map = map[string]func(*MetaStack){
 
 		// meta
 		"@": func(m *MetaStack) {
@@ -461,15 +471,23 @@ func prepare_op_table() {
 		"nil": func(m *MetaStack) {
 			m.Current().Push(NewNil("nil"))
 		},
+
+		// chars
+		"c-to-cv": func(m *MetaStack) {
+			m.Current().Push(NewCharVector(m.Current().Pop().(Char).C_to_CV()))
+		},
+		"c-to-n": func(m *MetaStack) {
+			m.Current().Push(NewNumber(m.Current().Pop().(Char).C_to_N()))
+		},
 	}
 
-	op_array := make([]string, len(op_map))
-	fn_array := make([]func(m *MetaStack), len(op_map))
+	op_map = make(map[string]byte)
+	fn_map = make(map[byte]func(*MetaStack))
 
-	i := 0
-	for k, v := range op_map {
-		op_array[i] = k
-		fn_array[i] = v
+	var i byte = 0
+	for k, v := range op_fn_map {
+		op_map[k] = i
+		fn_map[i] = v
 		i++
 	}
 
