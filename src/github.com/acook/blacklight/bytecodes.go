@@ -476,7 +476,7 @@ func prepare_op_table() {
 
 		// chars
 		"c-to-cv": func(m *Meta) {
-			m.Current().Push(NewCharVector(m.Current().Pop().(Char).C_to_CV()))
+			m.Current().Push(m.Current().Pop().(C).C_to_CV())
 		},
 		"c-to-n": func(m *Meta) {
 			m.Current().Push(NewNumber(m.Current().Pop().(Char).C_to_N()))

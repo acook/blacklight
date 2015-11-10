@@ -25,6 +25,10 @@ func (c C) Value() interface{} {
 	return rune(c)
 }
 
+func (c C) C_to_CV() CV {
+	return CV(c)
+}
+
 type CV string
 
 func (cv CV) String() string {
