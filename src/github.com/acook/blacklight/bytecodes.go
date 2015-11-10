@@ -427,7 +427,7 @@ func prepare_op_table() {
 			c := m.Current()
 			n := c.Pop().(N)
 			v := m.Current().Peek().(vector)
-			i := v.Ato(n.Value().(int))
+			i := v.Ato(int(n.Value().(int64)))
 			m.Current().Push(i)
 		},
 		"cat": func(m *Meta) {
