@@ -12,5 +12,15 @@ func (n N) String() string {
 }
 
 func (n N) Value() interface{} {
-	return n
+	return int64(n)
+}
+
+type CV string
+
+func (cv CV) String() string {
+	return string(cv)
+}
+
+func (cv CV) Value() interface{} {
+	return string(cv)
 }

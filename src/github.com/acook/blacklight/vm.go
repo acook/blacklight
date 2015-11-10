@@ -59,6 +59,7 @@ func vm(bc []byte) {
 				str_buf := bc[offset : offset+length]
 				print(string(str_buf))
 				print("\n")
+				m.Current().Push(CV(str_buf))
 			} else {
 				print(" -- unrecognized V kind at offset #" + fmt.Sprint(offset) + ": ")
 				fmt.Printf("x%x ", b)
