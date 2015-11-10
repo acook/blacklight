@@ -9,6 +9,7 @@ func parse(code string) []string {
 	tokens = append(tokens, "")
 	l := 0
 	comment, str := false, false
+	var last_glyph string
 
 	for _, b := range code {
 		glyph := string(b)
@@ -19,12 +20,12 @@ func parse(code string) []string {
 			tokens = ws(glyph, tokens)
 		case comment:
 			// ignore comments
+		case glyph == "'" && last_glyph == "\\":
+			t := tokens[l]
+			h := tokens[:l]
+			tokens = append(h, (t[:len(t)-1] + glyph))
 		case glyph == "'":
-			if str {
-				str = false
-			} else {
-				str = true
-			}
+			str = !str
 			fallthrough
 		case str:
 			fallthrough
@@ -52,6 +53,7 @@ func parse(code string) []string {
 		}
 
 		l = len(tokens) - 1
+		last_glyph = glyph
 	}
 
 	if tokens[l] == "" {
