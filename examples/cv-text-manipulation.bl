@@ -5,7 +5,7 @@
 1 rmo print
 
 ;; Except that Cs become part of the CV
-'foo' \32 app 'bar' cat print
+'foo' \a32 app 'bar' cat print
 
 ;; You can also escape single quotes
 'What\'s up, Doc?' print
