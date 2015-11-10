@@ -10,7 +10,7 @@ import (
 
 func compile(tokens []string) []byte {
 	//var b byte
-	var ops []byte
+	var bc []byte
 	//var inside_vector, is_op bool
 	var wv_stack ops_fifo
 
@@ -21,7 +21,7 @@ func compile(tokens []string) []byte {
 		b, is_op := op_map[t]
 
 		if is_op {
-			ops = append(ops, b)
+			bc = append(bc, b)
 			continue
 		}
 
@@ -29,31 +29,33 @@ func compile(tokens []string) []byte {
 		case t == "":
 			// nope
 		case isInteger(t):
-			ops = append(ops, 0xF4)
+			bc = append(bc, 0xF4)
 			n, _ := strconv.Atoi(t)
 			PutVarint64(int_buf, int64(n))
-			ops = append(ops, int_buf...)
+			bc = append(bc, int_buf...)
 
 		case isChar(t):
-			ops = append(ops, 0xF3)
+			bc = append(bc, 0xF3)
 
 			// FIXME: the whole incoming stream should already be runes
 			runes := []rune(t)
 
 			if len(runes) == 2 {
 				// if it's 2 runes long then it's just a /x char
+
 				PutVarint32(cha_buf, runes[1])
-				ops = append(ops, cha_buf...)
+				bc = append(bc, cha_buf...)
 			} else if runes[1] == 'u' {
 				// if the second rune is u then it's a unicode char in hex
 				h, _ := hex.DecodeString(string(runes[2:]))
-				ops = append(ops, h...)
+				bc = append(bc, h...)
 			} else if runes[1] == 'a' {
 				// if the second rune is a then it's a ascii char in decimal
 				a, _ := strconv.Atoi(string(runes[2:]))
-				ops = append(ops, byte(a))
+				bc = append(bc, byte(a))
 			} else {
-				panic("compiler: invalid char " + t)
+				fmt.Println("compiler: invalid char: " + t[1:])
+				panic("compiler: invalid char: " + t)
 			}
 
 		case isWord(t):
@@ -106,7 +108,7 @@ func compile(tokens []string) []byte {
 		//panic("unclosed Vector literal")
 	}
 
-	return ops
+	return bc
 }
 
 func isInteger(t string) bool {
