@@ -36,6 +36,7 @@ var cv_map = map[string]byte{
 
 var op_map map[string]byte
 var fn_map map[byte]func(m *Meta)
+var lk_map map[byte]string
 
 func prepare_op_table() {
 
@@ -484,11 +485,13 @@ func prepare_op_table() {
 
 	op_map = make(map[string]byte)
 	fn_map = make(map[byte]func(*Meta))
+	lk_map = make(map[byte]string)
 
 	var i byte = 0
 	for k, v := range op_fn_map {
 		op_map[k] = i
 		fn_map[i] = v
+		lk_map[i] = k
 		i++
 	}
 

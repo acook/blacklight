@@ -14,7 +14,11 @@ func vm(bc []byte) {
 	for {
 		b = bc[offset]
 
-		if b == 0xF4 {
+		if b < 0xF0 {
+			print(" -- opword at offset #" + fmt.Sprint(offset) + ": ")
+			fmt.Println(lk_map[b])
+			//fn_map[b](m)
+		} else if b == 0xF4 {
 			// Integer
 			buf := bc[offset+1 : offset+9]
 			n := Varint64(buf)
