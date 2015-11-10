@@ -37,6 +37,7 @@ var cv_map = map[string]byte{
 var op_map map[string]byte
 var fn_map map[byte]func(m *Meta)
 var lk_map map[byte]string
+var total_ops uint8
 
 func prepare_op_table() {
 
@@ -494,11 +495,12 @@ func prepare_op_table() {
 		lk_map[i] = k
 		i++
 	}
+	total_ops = uint8(i)
 
 }
 
 func NOPE(str string) {
-	print(" -- UNIMPLEMENTED op: " + str)
+	print(" -- UNIMPLEMENTED op: " + str + "\n")
 }
 
 func doBC(meta *Meta, ops []operation) {
