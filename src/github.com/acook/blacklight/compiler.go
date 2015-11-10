@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/binary"
+	"encoding/hex"
 	"fmt"
 	"strconv"
 	//"unicode/utf8"
@@ -44,13 +45,15 @@ func compile(tokens []string) []byte {
 				PutVarint32(cha_buf, runes[1])
 				ops = append(ops, cha_buf...)
 			} else if runes[1] == 'u' {
-				for i, r := range runes[1:] {
-					print(i)
-					print(":")
-					print(r)
-					print("\n")
-				}
-				fmt.Printf("%#v\n", runes)
+				// if the second rune is u then it's a unicode char in hex
+				h, _ := hex.DecodeString(string(runes[2:]))
+				ops = append(ops, h...)
+			} else if runes[1] == 'a' {
+				// if the second rune is a then it's a ascii char in decimal
+				a, _ := strconv.Atoi(string(runes[2:]))
+				ops = append(ops, byte(a))
+			} else {
+				panic("compiler: invalid char " + t)
 			}
 
 		case isWord(t):

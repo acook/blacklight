@@ -1,7 +1,7 @@
-\39 c-to-cv print
-\39 print
-\39 c-to-n print
+\' c-to-cv print
+\' print
+\' c-to-n print
 
-'Here' \39 c-to-cv 's Johnny!' cat cat print
+'Here' \u27 c-to-cv 's Johnny!' cat cat print
 
-'What' \39 app 's up, Doc?' cat print
+'What' \a39 app 's up, Doc?' cat print
