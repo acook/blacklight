@@ -28,6 +28,7 @@ func vm(bc []byte) {
 			print(" -- number at offset #" + fmt.Sprint(offset) + ": ")
 			fmt.Printf("%#v\n", n)
 			offset = offset + 8
+			m.Current().Push(N(n))
 		} else {
 			// UNKNOWN
 			print(" -- UNKNOWN at offset #" + fmt.Sprint(offset) + ": ")
