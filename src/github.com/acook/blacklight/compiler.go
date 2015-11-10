@@ -89,11 +89,8 @@ func compile(tokens []string) []byte {
 			// FIXME: When the input stream becomes []rune
 			// we'll have to do rune->byte conversion here
 
-			// FIXME: CVs max out at 255 bytes
-			// need to implement byte chaining
-
-			l := byte(len(t) - 2)
-			bc = append(bc, l)
+			binary.BigEndian.PutUint64(int_buf, uint64(len(t)-2))
+			bc = append(bc, int_buf...)
 
 			str_buf := t[1 : len(t)-1]
 			bc = append(bc, str_buf...)

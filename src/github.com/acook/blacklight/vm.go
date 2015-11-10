@@ -17,7 +17,7 @@ func vm(bc []byte) {
 	for {
 		b = bc[offset]
 
-		print(" -- ")
+		print("\n -- ")
 		print(offset)
 		print(" : ")
 		fmt.Printf("x%x\n", b)
@@ -46,7 +46,10 @@ func vm(bc []byte) {
 			offset++
 			kind := bc[offset]
 			offset++
-			length := uint64(bc[offset])
+
+			buf := bc[offset : offset+8]
+			length := binary.BigEndian.Uint64(buf)
+			offset = offset + 7
 
 			if kind == 0xF3 { // CharVector
 				print("CV(")

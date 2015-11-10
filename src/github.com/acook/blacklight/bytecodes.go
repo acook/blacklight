@@ -2,7 +2,6 @@ package main
 
 // bytes spec
 
-// (chain)    : max value (or sign) means additional byte continues value, following byte may be 0x00 if value is actually 0xFF
 // (length)   : length specified by attribute
 // (bytetype) : uint8 in range 0xF1-0xFA to specify type
 // (type)     : expects full type signature
@@ -18,8 +17,8 @@ package main
 // 0xF5 : float - float64
 // 0xF6 : stack
 // 0xF7 : queue
-// 0xF8 : vector - kind:(bytetype) length:int8(chain) data:(length types)
-// 0xF9 : object - length:int8(chain) [slot:uint32 value:(type)]
+// 0xF8 : vector - kind:(bytetype) length:uint64 data:(length types)
+// 0xF9 : object - length:int64 [slot:uint32 value:(type)]
 // 0xFA : tag - kind:uint8 metadata:uint32 msg:CV
 // 0xFB-0xFE : FUTURE DATATYPES
 // 0xFF : RESERVED EXTENDED FLAG
