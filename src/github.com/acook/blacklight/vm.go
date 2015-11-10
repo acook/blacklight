@@ -8,8 +8,11 @@ import (
 func vm(bc []byte) {
 	var offset, l uint64
 	var b byte
+	var m *Meta
 
 	l = uint64(len(bc))
+	m = NewMeta()
+	m.Push(NewSystemStack())
 
 	for {
 		b = bc[offset]
