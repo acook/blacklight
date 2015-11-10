@@ -81,9 +81,23 @@ func compile(tokens []string) []byte {
 			//} else {
 			//panic("unmatched closing paren")
 			//}
+
 		case isCharVector(t):
-			//op = newPushCharVector(t)
-			//ops = append(ops, op)
+			bc = append(bc, 0xF8) // type Vector
+			bc = append(bc, 0xF3) // type Char
+
+			// FIXME: When the input stream becomes []rune
+			// we'll have to do rune->byte conversion here
+
+			// FIXME: CVs max out at 255 bytes
+			// need to implement byte chaining
+
+			l := byte(len(t) - 2)
+			bc = append(bc, l)
+
+			str_buf := t[1 : len(t)-1]
+			bc = append(bc, str_buf...)
+
 		case t == "[": // WordVector literal (start)
 			//wv_stack.push(ops)
 			//ops = []operation{}

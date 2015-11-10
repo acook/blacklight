@@ -17,18 +17,53 @@ func vm(bc []byte) {
 	for {
 		b = bc[offset]
 
-		if b < 0xF0 {
+		print(" -- ")
+		print(offset)
+		print(" : ")
+		fmt.Printf("x%x\n", b)
+
+		if b < total_ops {
+			// Opwords
 			print(" -- opword at offset #" + fmt.Sprint(offset) + ": ")
-			fmt.Println(lk_map[b])
-			//fn_map[b](m)
+			fmt.Printf("%v", b)
+			print(" (" + fmt.Sprint(lk_map[b]) + ")")
+			fn_map[b](m)
 		} else if b == 0xF4 {
 			// Integer
-			buf := bc[offset+1 : offset+9]
+			print(" -- N at offset #" + fmt.Sprint(offset) + ": ")
+			offset++
+			buf := bc[offset : offset+8]
+
 			n := Varint64(buf)
-			print(" -- number at offset #" + fmt.Sprint(offset) + ": ")
+
 			fmt.Printf("%#v\n", n)
-			offset = offset + 8
+
+			offset = offset + 7
 			m.Current().Push(N(n))
+		} else if b == 0xF8 {
+			print(" -- V at offset #" + fmt.Sprint(offset) + " ")
+			// Vector
+			offset++
+			kind := bc[offset]
+			offset++
+			length := uint64(bc[offset])
+
+			if kind == 0xF3 { // CharVector
+				print("CV(")
+				print(length)
+				print("): ")
+				offset++
+				str_buf := bc[offset : offset+length]
+				print(string(str_buf))
+				print("\n")
+			} else {
+				print(" -- unrecognized V kind at offset #" + fmt.Sprint(offset) + ": ")
+				fmt.Printf("x%x ", b)
+				print("\n")
+			}
+
+			offset = offset + (length - 1)
+
 		} else {
 			// UNKNOWN
 			print(" -- UNKNOWN at offset #" + fmt.Sprint(offset) + ": ")
