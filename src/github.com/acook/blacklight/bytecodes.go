@@ -451,9 +451,9 @@ func prepare_op_table() {
 			NOPE("pick")
 		},
 		"rmo": func(m *Meta) {
-			n := m.Current().Pop().(*Number).Value().(int)
+			n := m.Current().Pop().(N)
 			v := m.Current().Pop().(vector)
-			nv := v.Rmo(n)
+			nv := v.Rmo(int(n))
 			m.Current().Push(nv)
 		},
 		"v-to-s": func(m *Meta) {
