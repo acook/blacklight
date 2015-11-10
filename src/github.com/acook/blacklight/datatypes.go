@@ -173,7 +173,7 @@ type CharVector struct {
 }
 
 type cvstringer interface {
-	CVString() string
+	CVString() CV
 }
 
 func NewCharVector(str string) *CharVector {
@@ -199,7 +199,7 @@ func (v CharVector) Rmo(n int) vector {
 }
 
 func (v CharVector) App(i datatypes) vector {
-	return NewCharVector(v.Data + i.(cvstringer).CVString())
+	return NewCharVector(v.Data + string(i.(cvstringer).CVString()))
 }
 
 func (cv CharVector) Cat(cv2 vector) vector {

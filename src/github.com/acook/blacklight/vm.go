@@ -28,6 +28,12 @@ func vm(bc []byte) {
 			fmt.Printf("%v", b)
 			print(" (" + fmt.Sprint(lk_map[b]) + ")")
 			fn_map[b](m)
+		} else if b == 0xF3 {
+			// Char
+			print(" -- C at offset #" + fmt.Sprint(offset) + ": ")
+			offset++
+
+			m.Current().Push(C(b))
 		} else if b == 0xF4 {
 			// Integer
 			print(" -- N at offset #" + fmt.Sprint(offset) + ": ")

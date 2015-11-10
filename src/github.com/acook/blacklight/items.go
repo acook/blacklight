@@ -29,6 +29,10 @@ func (c C) C_to_CV() CV {
 	return CV(c)
 }
 
+func (c C) CVString() CV {
+	return c.C_to_CV()
+}
+
 type CV string
 
 func (cv CV) String() string {
