@@ -29,6 +29,19 @@ func vm(bc []byte) {
 			fmt.Printf("%v", b)
 			print(" (" + fmt.Sprint(lk_map[b]) + ")\n")
 			fn_map[b](m)
+		} else if b == 0xF1 { // Word
+			print(" -- W at offset #" + fmt.Sprint(offset) + ": ")
+
+			offset++
+			buf := bc[offset : offset+8]
+			wd_uint := binary.BigEndian.Uint64(buf)
+
+			fmt.Printf("0x%x", wd_uint)
+			print("(" + string(wd_map[wd_uint]) + ")")
+			print("\n")
+
+			offset = offset + 7
+			m.Current().Push(W(wd_uint))
 		} else if b == 0xF3 { // Char
 			print(" -- C at offset #" + fmt.Sprint(offset) + ": ")
 

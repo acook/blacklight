@@ -91,12 +91,13 @@ func compile(tokens []string) []byte {
 			}
 
 		case isWord(t):
-			//op = newPushWord(t)
-			//ops = append(ops, op)
+			bc = wd_make(bc, []rune(t[1:]))
 		case isSetWord(t):
-			//ops = append(ops, newPushWord(t), newOp("set"))
+			bc = wd_make(bc, []rune(t[:len(t)-1]))
+			bc = append(bc, op_map["set"])
 		case isGetWord(t):
-			//ops = append(ops, newPushWord(t), newMetaOp("get"))
+			bc = wd_make(bc, []rune(t[1:]))
+			bc = append(bc, op_map["get"])
 
 		case t == "(": // Vector literal (start)
 			bc = append(bc, 0xF8)
@@ -191,4 +192,23 @@ func PutVarint64(buf []byte, x int64) {
 		ux = ^ux
 	}
 	binary.BigEndian.PutUint64(buf, ux)
+}
+
+var wd_map map[uint64][]rune = make(map[uint64][]rune)
+var wd_count uint64
+
+func wd_add(t []rune) uint64 {
+	wd_count++
+	wd_map[wd_count] = t
+	return wd_count
+}
+
+func wd_make(bc []byte, r []rune) []byte {
+	int_buf := make([]byte, 8)
+	bc = append(bc, 0xF1)
+	v := wd_add(r)
+	wd_map[v] = r
+	binary.BigEndian.PutUint64(int_buf, v)
+	bc = append(bc, int_buf...)
+	return bc
 }
