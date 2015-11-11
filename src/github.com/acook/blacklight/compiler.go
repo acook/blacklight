@@ -111,7 +111,7 @@ func compile(tokens []string) []byte {
 				v_new = false
 			}
 
-		case isCharVector(t):
+		case isText(t):
 			bc = append(bc, 0xF6) // type Text
 
 			// FIXME: When the input stream becomes []rune

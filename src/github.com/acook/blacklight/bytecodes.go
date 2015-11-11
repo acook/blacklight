@@ -106,12 +106,12 @@ func prepare_op_table() {
 
 		// concurrency
 		"bkg": func(m *Meta) {
-			ops := m.Current().Pop().(WordVector).Ops
+			block := m.Current().Pop().(B)
 
 			items := NewStack("bkg")
 			items.Push(m.Current().Pop())
 
-			conEval("bkg", items, ops)
+			coBC("bkg", items, block)
 		},
 		"co": func(m *Meta) {
 			filename := m.Current().Pop().String()
@@ -125,15 +125,15 @@ func prepare_op_table() {
 
 			code := loadFile(filename)
 			tokens := parse(code)
-			ops := lex(tokens)
+			file_bc := compile(tokens)
 
 			m.Current().Push(out)
 			m.Current().Push(in)
 
-			conEval("co", stack, ops)
+			coBC("co", stack, file_bc)
 		},
 		"work": func(m *Meta) {
-			ops := m.Current().Pop().(WordVector).Ops
+			block := m.Current().Pop().(B)
 			in := m.Current().Items[len(m.Current().Items)-1].(*Queue)
 			out := m.Current().Items[len(m.Current().Items)-2].(*Queue)
 
@@ -144,7 +144,7 @@ func prepare_op_table() {
 			m.Current().Push(out)
 			m.Current().Push(in)
 
-			conEval("work", stack, ops)
+			coBC("work", stack, block)
 		},
 		"wait": func(m *Meta) {
 			threads.Wait()
@@ -167,9 +167,9 @@ func prepare_op_table() {
 
 			code := loadFile(filename)
 			tokens := parse(code)
-			ops := lex(tokens)
+			file_bc := compile(tokens)
 
-			doBC(m, ops)
+			doBC(m, file_bc)
 		},
 		"imp": func(m *Meta) {
 			NOPE("imp")
@@ -229,9 +229,9 @@ func prepare_op_table() {
 
 		// logic & loops
 		"either": func(m *Meta) {
-			comp := m.Current().Pop().(WordVector).Ops
-			iffalse := m.Current().Pop().(WordVector).Ops
-			iftrue := m.Current().Pop().(WordVector).Ops
+			comp := m.Current().Pop().(B)
+			iffalse := m.Current().Pop().(B)
+			iftrue := m.Current().Pop().(B)
 			doBC(m, comp)
 			if m.Current().Pop().(*Tag).Kind == "true" {
 				doBC(m, iftrue)
@@ -245,8 +245,8 @@ func prepare_op_table() {
 			m.Current().Push(blEq(i1, i2))
 		},
 		"if": func(m *Meta) {
-			comp := m.Current().Pop().(WordVector).Ops
-			actn := m.Current().Pop().(WordVector).Ops
+			comp := m.Current().Pop().(B)
+			actn := m.Current().Pop().(B)
 			doBC(m, comp)
 			if m.Current().Pop().(*Tag).Kind == "true" {
 				doBC(m, actn)
@@ -273,8 +273,8 @@ func prepare_op_table() {
 			m.Current().Push(t)
 		},
 		"until": func(m *Meta) {
-			comp := m.Current().Pop().(WordVector).Ops
-			actn := m.Current().Pop().(WordVector).Ops
+			comp := m.Current().Pop().(B)
+			actn := m.Current().Pop().(B)
 		Until:
 			for {
 				doBC(m, comp)
@@ -285,8 +285,8 @@ func prepare_op_table() {
 			}
 		},
 		"while": func(m *Meta) {
-			comp := m.Current().Pop().(WordVector).Ops
-			actn := m.Current().Pop().(WordVector).Ops
+			comp := m.Current().Pop().(B)
+			actn := m.Current().Pop().(B)
 		While:
 			for {
 				doBC(m, comp)
@@ -297,7 +297,7 @@ func prepare_op_table() {
 			}
 		},
 		"loop": func(m *Meta) {
-			actn := m.Current().Pop().(WordVector).Ops
+			actn := m.Current().Pop().(B)
 			for {
 				doBC(m, actn)
 			}
@@ -343,7 +343,7 @@ func prepare_op_table() {
 			m.Current().Peek().(*Queue).Enqueue(i)
 		},
 		"proq": func(m *Meta) {
-			wv := m.Current().Pop().(WordVector)
+			block := m.Current().Pop().(B)
 			q := m.Current().Pop().(*Queue)
 
 		ProcQLoop:
@@ -351,7 +351,7 @@ func prepare_op_table() {
 				select {
 				case item := <-q.Items:
 					m.Current().Push(item)
-					doBC(m, wv.Ops)
+					doBC(m, block)
 				default:
 					break ProcQLoop
 				}
@@ -505,6 +505,10 @@ func NOPE(str string) {
 	print(" -- UNIMPLEMENTED op: " + str + "\n")
 }
 
-func doBC(meta *Meta, ops []operation) {
+func doBC(meta *Meta, ops []byte) {
+	NOPE("can't call or eval shit yet")
+}
+
+func coBC(name string, items *Stack, ops []byte) {
 	NOPE("can't call or eval shit yet")
 }
