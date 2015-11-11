@@ -205,14 +205,14 @@ func (o Op) Eval(current stack) stack {
 	case "o-new":
 		current.Push(NewObject())
 	case "set":
-		slot := current.Pop().(Word)
-		i := current.Pop()
-		o := current.Peek().(*Object)
-		o.Set(slot, i)
+		//slot := current.Pop().(Word)
+		//i := current.Pop()
+		//o := current.Peek().(*Object)
+		//o.Set(slot, i)
 	case "fetch":
-		slot := current.Pop().(Word)
-		o := current.Peek().(*Object)
-		current.Push(o.Fetch(slot))
+		//slot := current.Pop().(Word)
+		//o := current.Peek().(*Object)
+		//current.Push(o.Fetch(slot))
 	case "child":
 		o := current.Peek().(*Object)
 		child := NewChildObject(o)

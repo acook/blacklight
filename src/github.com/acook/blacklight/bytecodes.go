@@ -316,16 +316,16 @@ func prepare_op_table() {
 			m.Current().Push(child)
 		},
 		"fetch": func(m *Meta) {
-			slot := m.Current().Pop().(Word)
+			slot := m.Current().Pop().(W)
 			o := m.Object()
 			m.Current().Push(o.Fetch(slot))
 		},
 		"get": func(m *Meta) {
-			slot := m.Current().Pop().(Word)
+			slot := m.Current().Pop().(W)
 			m.Object().Get(m, slot)
 		},
 		"set": func(m *Meta) {
-			slot := m.Current().Pop().(Word)
+			slot := m.Current().Pop().(W)
 			i := m.Current().Pop()
 			m.Object().Set(slot, i)
 		},

@@ -48,7 +48,7 @@ func (c C) TString() T {
 type W uint64
 
 func (w W) String() string {
-	return strconv.Itoa(int(w))
+	return string(wd_map[uint64(w)])
 }
 
 func (w W) Value() interface{} {
