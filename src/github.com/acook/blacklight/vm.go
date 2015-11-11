@@ -29,14 +29,16 @@ func vm(bc []byte) {
 			fmt.Printf("%v", b)
 			print(" (" + fmt.Sprint(lk_map[b]) + ")")
 			fn_map[b](m)
-		} else if b == 0xF3 {
-			// Char
+		} else if b == 0xF3 { // Char
 			print(" -- C at offset #" + fmt.Sprint(offset) + ": ")
-			offset++
 
-			m.Current().Push(C(b))
-		} else if b == 0xF4 {
-			// Integer
+			offset++
+			c := C(bc[offset])
+
+			fmt.Printf("%#v\n", c)
+
+			m.Current().Push(c)
+		} else if b == 0xF4 { // Integer
 			print(" -- N at offset #" + fmt.Sprint(offset) + ": ")
 			offset++
 			buf := bc[offset : offset+8]
@@ -47,36 +49,28 @@ func vm(bc []byte) {
 
 			offset = offset + 7
 			m.Current().Push(N(n))
-		} else if b == 0xF8 {
-			print(" -- V at offset #" + fmt.Sprint(offset) + " ")
-			// Vector
-			offset++
-			kind := bc[offset]
-			offset++
+		} else if b == 0xF6 { // Text
+			print(" -- T at offset #" + fmt.Sprint(offset) + " ")
 
+			offset++
 			buf := bc[offset : offset+8]
 			length := binary.BigEndian.Uint64(buf)
 			offset = offset + 7
 
-			if kind == 0xF3 { // CharVector
-				print("CV(")
-				print(length)
-				print("): ")
-				offset++
-				str_buf := bc[offset : offset+length]
-				print(string(str_buf))
-				print("\n")
-				m.Current().Push(CV(str_buf))
-			} else {
-				print(" -- unrecognized V kind at offset #" + fmt.Sprint(offset) + ": ")
-				fmt.Printf("x%x ", b)
-				print("\n")
-			}
+			print("T(")
+			print(length)
+			print("): ")
+
+			offset++
+			str_buf := bc[offset : offset+length]
+
+			print(string(str_buf))
+			print("\n")
+
+			m.Current().Push(T(str_buf))
 
 			offset = offset + (length - 1)
-
-		} else {
-			// UNKNOWN
+		} else { // UNKNOWN
 			print(" -- UNKNOWN at offset #" + fmt.Sprint(offset) + ": ")
 			fmt.Printf("x%x ", b)
 			print("\n")

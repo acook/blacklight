@@ -173,7 +173,7 @@ type CharVector struct {
 }
 
 type cvstringer interface {
-	CVString() CV
+	CVString() T
 }
 
 func NewCharVector(str string) *CharVector {
@@ -252,7 +252,7 @@ func (c Char) String() string {
 	return c.Data
 }
 
-func (c Char) C_to_CV() string {
+func (c Char) C_to_T() string {
 	i, _ := strconv.Atoi(c.Data[1:])
 	return string(i)
 }
@@ -268,7 +268,7 @@ func (c Char) C_to_N() int {
 }
 
 func (c Char) Bytes() []byte {
-	return []byte(c.C_to_CV())
+	return []byte(c.C_to_T())
 }
 
 type byter interface {

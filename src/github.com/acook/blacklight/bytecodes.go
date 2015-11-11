@@ -15,9 +15,9 @@ package main
 // 0xF3 : char - uint32 (rune)
 // 0xF4 : number - int64
 // 0xF5 : float - float64
-// 0xF6 : stack
-// 0xF7 : queue
-// 0xF8 : vector - kind:(bytetype) length:uint64 data:(length types)
+// 0xF6 : text - length:uint64 data:Cs
+// 0xF7 : block - length:uint64 data:bc
+// 0xF8 : vector - length:uint64 data:items
 // 0xF9 : object - length:int64 [slot:uint32 value:(type)]
 // 0xFA : tag - kind:uint8 metadata:uint32 msg:CV
 // 0xFB-0xFE : FUTURE DATATYPES
@@ -476,10 +476,10 @@ func prepare_op_table() {
 
 		// chars
 		"c-to-cv": func(m *Meta) {
-			m.Current().Push(m.Current().Pop().(C).C_to_CV())
+			m.Current().Push(m.Current().Pop().(C).C_to_T())
 		},
 		"c-to-n": func(m *Meta) {
-			m.Current().Push(NewNumber(m.Current().Pop().(Char).C_to_N()))
+			m.Current().Push(m.Current().Pop().(C).C_to_N())
 		},
 	}
 

@@ -25,43 +25,51 @@ func (c C) Value() interface{} {
 	return rune(c)
 }
 
-func (c C) C_to_CV() CV {
-	return CV(c)
+func (c C) C_to_T() T {
+	return T(c)
 }
 
-func (c C) CVString() CV {
-	return c.C_to_CV()
+func (c C) C_to_N() N {
+	return N(c)
 }
 
-type CV string
-
-func (cv CV) String() string {
-	return string(cv)
+func (c C) TString() T {
+	return c.C_to_T()
 }
 
-func (cv CV) Value() interface{} {
-	return string(cv)
+type tstringer interface {
+	TString() T
 }
 
-func (cv CV) Cat(v vector) vector {
-	return cv + v.(CV)
+type T string
+
+func (t T) String() string {
+	return string(t)
 }
 
-func (cv CV) App(d datatypes) vector {
-	return cv + CV(d.(cvstringer).CVString())
+func (t T) Value() interface{} {
+	return string(t)
 }
 
-func (cv CV) Ato(n int) datatypes {
-	return C(cv[n])
+func (t T) Cat(v vector) vector {
+	return t + v.(T)
 }
 
-func (cv CV) Rmo(n int) vector {
-	a := cv[:n]
-	b := cv[n+1:]
-	cv = (a + b)
-	return cv
+func (t T) App(d datatypes) vector {
+	return t + T(d.(tstringer).TString())
 }
 
-func (cv CV) Len() int {
-	return len(cv)
+func (t T) Ato(n int) datatypes {
+	return C(t[n])
+}
+
+func (t T) Rmo(n int) vector {
+	a := t[:n]
+	b := t[n+1:]
+	t = (a + b)
+	return t
+}
+
+func (t T) Len() int {
+	return len(t)
 }

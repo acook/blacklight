@@ -87,7 +87,7 @@ func (o Op) Eval(current stack) stack {
 	// Chars
 	case "c-to-cv":
 		c := current.Pop()
-		current.Push(NewCharVector(c.(Char).C_to_CV()))
+		current.Push(NewCharVector(c.(Char).C_to_T()))
 	case "c-to-n":
 		c := current.Pop().(Char)
 		current.Push(NewNumber(c.C_to_N()))

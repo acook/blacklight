@@ -103,8 +103,7 @@ func compile(tokens []string) []byte {
 			//}
 
 		case isCharVector(t):
-			bc = append(bc, 0xF8) // type Vector
-			bc = append(bc, 0xF3) // type Char
+			bc = append(bc, 0xF6) // type Text
 
 			// FIXME: When the input stream becomes []rune
 			// we'll have to do rune->byte conversion here
