@@ -186,23 +186,6 @@ func compile(tokens []string) []byte {
 	return bc
 }
 
-func isInteger(t string) bool {
-
-	// take signage into consideration
-	if t[0] == "+"[0] || t[0] == "-"[0] {
-		t = t[1:]
-	}
-
-	// check that the bytes are in the ASCII number range
-	for _, b := range t {
-		if b < 47 || b > 58 {
-			return false
-		}
-	}
-
-	return true
-}
-
 func PutVarint32(buf []byte, x int32) {
 	ux := uint32(x) << 1
 	if x < 0 {
