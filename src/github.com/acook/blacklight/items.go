@@ -137,7 +137,7 @@ type B []byte
 func (b B) String() string {
 	str := "[ "
 	for _, x := range b {
-		str += fmt.Sprintf("%#v", x)
+		str += fmt.Sprintf("0x%x", x)
 		str += " "
 	}
 	if str[len(str)-1] == " "[0] {
