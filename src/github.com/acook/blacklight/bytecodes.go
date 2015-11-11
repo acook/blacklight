@@ -83,7 +83,7 @@ func prepare_op_table() {
 			m.Current().Decap()
 		},
 		"depth": func(m *Meta) {
-			m.Current().Push(NewNumber(m.Current().Depth()))
+			m.Current().Push(N(m.Current().Depth()))
 		},
 		"drop": func(m *Meta) {
 			m.Current().Drop()
