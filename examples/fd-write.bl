@@ -1,7 +1,7 @@
 ;; Use file descriptors (N) to write to stderr
 ;; the queue acts as a communication channel to the write-thread
 
-newq 2 write swap
+q-new 2 write swap
 'big' enq
 \32 enq
 'bada' enq

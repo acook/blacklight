@@ -1,7 +1,7 @@
 ;; co runs a file in its own thread and $stack and returns two queues
 'examples/_file_to_run_with_co.bl' co
 
-newq 1 enq 2 enq 3 enq    ;; make a Q of work
+q-new 1 enq 2 enq 3 enq   ;; make a Q of work
 [
   [
     print                 ;; print items in Q

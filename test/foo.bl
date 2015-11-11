@@ -6,7 +6,7 @@ errs:        ;; creates slot ‘errs’ on object(1) and stores reference to sta
              ;; the @stack now only contains object(1)
 'examples/hello_world.bl'
              ;; ^- put a character-vector on the stack
-newq         ;; creates a new queue(1) and puts it on top of the @stack
+q-new        ;; creates a new queue(1) and puts it on top of the @stack
 read         ;; opens the 'text.txt' file for reading
 q-to-t       ;; converts the contents of the queue into text giving us “Hello world!"
 greeting:    ;; make the object into [errs:s1 greeting:’Hello world!’]

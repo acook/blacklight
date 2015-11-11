@@ -2,7 +2,7 @@
 34543 print '' print
 
 'queues' print
-newq 1 enq 2 enq 3 enq 4 enq print '' print
+q-new 1 enq 2 enq 3 enq 4 enq print '' print
 
 'stacks' print
 s-new 1 push 2 push 3 push 4 push print '' print

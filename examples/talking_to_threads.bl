@@ -1,4 +1,4 @@
-newq newq                ;; create send and receive queues
+q-new q-new              ;; create send and receive queues
 [
   [
     deq                  ;; will block if the queue is empty
