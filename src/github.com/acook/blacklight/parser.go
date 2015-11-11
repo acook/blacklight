@@ -40,16 +40,13 @@ func parse(code string) []string {
 			h := tokens[:l]
 			tokens = append(h, (t + glyph))
 		case glyph == "(":
-			tokens = append(tokens, glyph)
-			tokens = ws(glyph, tokens)
+			fallthrough
 		case glyph == ")":
-			tokens = append(tokens, glyph)
-			tokens = ws(glyph, tokens)
+			fallthrough
 		case glyph == "[":
-			tokens = append(tokens, glyph)
-			tokens = ws(glyph, tokens)
+			fallthrough
 		case glyph == "]":
-			tokens = append(tokens, glyph)
+			tokens = tk(glyph, tokens)
 			tokens = ws(glyph, tokens)
 		case unicode.IsSpace(b):
 			tokens = ws(glyph, tokens)
@@ -67,6 +64,13 @@ func parse(code string) []string {
 	}
 
 	return tokens
+}
+
+func tk(glyph string, tokens []string) []string {
+	if tokens[len(tokens)-1] == "" {
+		tokens = tokens[:len(tokens)-1]
+	}
+	return append(tokens, glyph)
 }
 
 func ws(current string, tokens []string) []string {
