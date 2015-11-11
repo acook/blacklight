@@ -28,7 +28,10 @@ func compile(tokens []string) []byte {
 
 	//var b byte
 	var bc []byte
-	//var inside_vector, is_op bool
+
+	// for vector literals
+	var v_new bool
+	var v_nest uint
 	var wv_stack ops_fifo
 
 	int_buf := make([]byte, 8)
@@ -96,20 +99,16 @@ func compile(tokens []string) []byte {
 			//ops = append(ops, newPushWord(t), newMetaOp("get"))
 
 		case t == "(": // Vector literal (start)
-			//inside_vector = true
-			//real_ops = ops
-			//ops = []operation{}
+			bc = append(bc, 0xF8)
+			v_nest++
+			v_new = true
 		case t == ")": // Vector literal (end)
-			//if inside_vector {
-			//inside_vector = false
+			if v_nest == 0 {
+				panic("compiler: unmatched closing paren")
+			}
 
-			//pv := newPushVector("()")
-
-			//pv.Contents = append(pv.Contents, ops...)
-			//ops = append(real_ops, pv)
-			//} else {
-			//panic("unmatched closing paren")
-			//}
+			v_nest--
+			v_new = false
 
 		case isCharVector(t):
 			bc = append(bc, 0xF6) // type Text
@@ -138,13 +137,19 @@ func compile(tokens []string) []byte {
 		default:
 			panic("unrecognized operation: " + t)
 		}
+
+		if v_nest > 0 && !v_new {
+			bc = append(bc, op_map["app"])
+		} else if v_new {
+			v_new = false
+		}
 	}
 
 	switch {
 	case wv_stack.depth() > 0:
-		panic("unclosed WordVector literal")
-		//case inside_vector:
-		//panic("unclosed Vector literal")
+		panic("compiler: unclosed WordVector literal")
+	case v_nest > 0:
+		panic("compiler: unclosed paren in V literal")
 	}
 
 	return bc

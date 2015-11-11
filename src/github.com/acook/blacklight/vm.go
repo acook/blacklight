@@ -73,6 +73,8 @@ func vm(bc []byte) {
 			m.Current().Push(T(str_buf))
 
 			offset = offset + (length - 1)
+		} else if b == 0xF8 {
+			m.Current().Push(V{})
 		} else { // UNKNOWN
 			print(" -- UNKNOWN at offset #" + fmt.Sprint(offset) + ": ")
 			fmt.Printf("x%x ", b)
