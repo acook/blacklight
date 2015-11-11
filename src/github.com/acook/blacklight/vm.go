@@ -33,11 +33,14 @@ func vm(bc []byte) {
 			print(" -- C at offset #" + fmt.Sprint(offset) + ": ")
 
 			offset++
-			c := C(bc[offset])
+			buf := bc[offset : offset+4]
+
+			c := Varint32(buf)
 
 			fmt.Printf("%#v\n", c)
 
-			m.Current().Push(c)
+			offset = offset + 3
+			m.Current().Push(C(c))
 		} else if b == 0xF4 { // Integer
 			print(" -- N at offset #" + fmt.Sprint(offset) + ": ")
 			offset++
