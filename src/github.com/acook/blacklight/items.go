@@ -15,6 +15,14 @@ func (n N) Value() interface{} {
 	return int64(n)
 }
 
+func (n N) N_to_C() C {
+	return C(n)
+}
+
+func (n N) N_to_T() T {
+	return T(n.String())
+}
+
 type C rune
 
 func (c C) String() string {

@@ -177,40 +177,40 @@ func prepare_op_table() {
 
 		// math
 		"add": func(m *Meta) {
-			n1 := m.Current().Pop().Value().(int)
-			n2 := m.Current().Pop().Value().(int)
+			n1 := m.Current().Pop().(N)
+			n2 := m.Current().Pop().(N)
 
-			m.Current().Push(NewNumber(n2 + n1))
+			m.Current().Push(n2 + n1)
 		},
 		"sub": func(m *Meta) {
-			n1 := m.Current().Pop().Value().(int)
-			n2 := m.Current().Pop().Value().(int)
+			n1 := m.Current().Pop().(N)
+			n2 := m.Current().Pop().(N)
 
-			m.Current().Push(NewNumber(n2 - n1))
+			m.Current().Push(n2 - n1)
 		},
 		"div": func(m *Meta) {
-			n1 := m.Current().Pop().Value().(int)
-			n2 := m.Current().Pop().Value().(int)
+			n1 := m.Current().Pop().(N)
+			n2 := m.Current().Pop().(N)
 
-			m.Current().Push(NewNumber(n2 / n1))
+			m.Current().Push(n2 / n1)
 		},
 		"mod": func(m *Meta) {
-			n1 := m.Current().Pop().Value().(int)
-			n2 := m.Current().Pop().Value().(int)
+			n1 := m.Current().Pop().(N)
+			n2 := m.Current().Pop().(N)
 
-			m.Current().Push(NewNumber(n2 % n1))
+			m.Current().Push(n2 % n1)
 		},
 		"mul": func(m *Meta) {
-			n1 := m.Current().Pop().Value().(int)
-			n2 := m.Current().Pop().Value().(int)
+			n1 := m.Current().Pop().(N)
+			n2 := m.Current().Pop().(N)
 
-			m.Current().Push(NewNumber(n2 * n1))
+			m.Current().Push(n2 * n1)
 		},
 		"n-to-c": func(m *Meta) {
-			m.Current().Push(NewCharFromString(m.Current().Pop().String()))
+			m.Current().Push(m.Current().Pop().(N).N_to_C())
 		},
-		"n-to-cv": func(m *Meta) {
-			m.Current().Push(NewCharVector(m.Current().Pop().String()))
+		"n-to-t": func(m *Meta) {
+			m.Current().Push(m.Current().Pop().(N).N_to_T())
 		},
 
 		// file io
