@@ -1,7 +1,7 @@
 ;; Pretty much identical to basic V ops
 
 'abc'
-1 ato c-to-cv print
+1 ato c-to-t print
 1 rmo print
 
 ;; Except that Cs become part of the CV
