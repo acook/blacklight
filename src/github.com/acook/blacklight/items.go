@@ -45,6 +45,16 @@ func (c C) TString() T {
 	return c.C_to_T()
 }
 
+type W uint64
+
+func (w W) String() string {
+	return strconv.Itoa(int(w))
+}
+
+func (w W) Value() interface{} {
+	return int(w)
+}
+
 type tstringer interface {
 	TString() T
 }
@@ -138,4 +148,26 @@ func (b B) String() string {
 
 func (b B) Value() interface{} {
 	return b
+}
+
+func (b B) Cat(v vector) vector {
+	return append(b, v.(B)...)
+}
+
+func (b B) App(i datatypes) vector {
+	return b
+	//return append(b, i.(W))
+}
+
+func (b B) Ato(n int) datatypes {
+	return C(b[n])
+	//return W(b[n])
+}
+
+func (b B) Rmo(n int) vector {
+	return append(b[:n], b[n:]...)
+}
+
+func (b B) Len() int {
+	return len(b)
 }
