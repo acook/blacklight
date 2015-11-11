@@ -1,23 +1,23 @@
-'numbers' print
+'number' print
 34543 print '' print
 
-'queues' print
+'queue' print
 q-new 1 enq 2 enq 3 enq 4 enq print '' print
 
-'stacks' print
+'stack' print
 s-new 1 push 2 push 3 push 4 push print '' print
 
-'words' print
+'word' print
 ~1 print
 
-'word vectors' print
+'block' print
 [ 1 2 3 4 ] print '' print
 
-'char vectors' print
+'text' print
 '1 2 3 4' print '' print
 
-'vectors of numbers' print
+'vector of numbers' print
 (1 2 3 4) print '' print
 
-'charvector vectors' print
+'vector of text' print
 ('1' '2' '3' '4') print
