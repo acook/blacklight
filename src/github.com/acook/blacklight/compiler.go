@@ -132,10 +132,10 @@ func compile(tokens []string) []byte {
 				//pwv.Contents = append(pwv.Contents, ops...)
 				//ops = append(wv_ops, pwv)
 			} else {
-				panic("lexer: closing bracket without opening bracket")
+				panic("compiler: closing bracket without opening bracket")
 			}
 		default:
-			panic("unrecognized operation: " + t)
+			panic("compiler: unrecognized operation: " + t)
 		}
 
 		if v_nest > 0 && !v_new {
