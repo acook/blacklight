@@ -18,19 +18,21 @@ package main
 // 0xF6 : text - length:uint64 data:Cs
 // 0xF7 : block - length:uint64 data:bc
 // 0xF8 : vector - length:uint64 data:items
-// 0xF9 : object - length:int64 [slot:uint32 value:(type)]
-// 0xFA : tag - kind:uint8 metadata:uint32 msg:CV
+// 0xF9 : tag - kind:uint8 metadata:uint32 msg:CV
 // 0xFB-0xFE : FUTURE DATATYPES
 // 0xFF : RESERVED EXTENDED FLAG
 
-var cv_map = map[string]byte{
+var inb_map = map[string]byte{ // item name->byte map
 	"opword": 0xF0,
 	"word":   0xF1,
 	"byte":   0xF2,
 	"char":   0xF3,
 	"number": 0xF4,
 	"float":  0xF5,
-	"stack":  0xf6,
+	"text":   0xF6,
+	"block":  0xF7,
+	"vector": 0xF8,
+	"tag":    0xF9,
 }
 
 var op_map map[string]byte
