@@ -22,8 +22,9 @@ func vm(bc []byte) {
 		print(" : ")
 		fmt.Printf("x%x\n", b)
 
-		if b < total_ops {
-			// Opwords
+		if b == 0x00 { // bare null bytes are always an error
+			panic("vm: aw shit, something is terribly wrong, we encountered a null byte")
+		} else if b < total_ops { // Opwords
 			print(" -- opword at offset #" + fmt.Sprint(offset) + ": ")
 			fmt.Printf("%v", b)
 			print(" (" + fmt.Sprint(lk_map[b]) + ")")

@@ -487,7 +487,7 @@ func prepare_op_table() {
 	fn_map = make(map[byte]func(*Meta))
 	lk_map = make(map[byte]string)
 
-	var i byte = 0
+	var i byte = 1
 	for k, v := range op_fn_map {
 		op_map[k] = i
 		fn_map[i] = v
