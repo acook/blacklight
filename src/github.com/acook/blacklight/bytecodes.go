@@ -376,7 +376,7 @@ func prepare_op_table() {
 
 			m.Current().Push(NewVector(items))
 		},
-		"q-to-cv": func(m *Meta) {
+		"q-to-t": func(m *Meta) {
 			q := m.Current().Pop().(*Queue)
 			str := ""
 
@@ -467,8 +467,8 @@ func prepare_op_table() {
 		},
 
 		// tags
-		"t-to-cv": func(m *Meta) {
-			NOPE("t-to-cv")
+		"?-to-t": func(m *Meta) {
+			NOPE("?-to-t")
 		},
 		"true": func(m *Meta) {
 			m.Current().Push(NewTrue("true"))

@@ -4,5 +4,5 @@ newq                  ;; creates a new Q that we'll use as our read-queue
 'examples/_text.txt'  ;; this is the filename we'll read from
 read                  ;; starts reading from our file in a background thread
 swap                  ;; hide the fd T and being read-queue to top
-q-to-cv               ;; blocks until EOF and returns CV
+q-to-t                ;; blocks until EOF and returns T
 print                 ;; prints CV to stdout
