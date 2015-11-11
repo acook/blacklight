@@ -65,8 +65,33 @@ func compile(tokens []string) []byte {
 
 			if len(runes) == 2 {
 				// if it's 2 runes long then it's just a /x char
-
 				PutVarint32(cha_buf, runes[1])
+				bc = append(bc, cha_buf...)
+			} else if runes[1] == '\\' {
+				var e rune
+				switch runes[2] {
+				case 'a': // terminal bell
+					e = '\a'
+				case 'b': // backspace
+					e = '\b'
+				case 'e': // escape
+					e = rune(0x1b)
+				case 'f': // form feed
+					e = '\f'
+				case 'n': // newline
+					e = '\n'
+				case 'r': // carriage return
+					e = '\r'
+				case 's': // space
+					e = rune(0x20)
+				case 't': // horizontal tab
+					e = '\t'
+				case 'v': // vertical tab
+					e = '\v'
+				default:
+					panic("compiler: unrecognized escape code: " + string(runes))
+				}
+				PutVarint32(cha_buf, e)
 				bc = append(bc, cha_buf...)
 			} else if runes[1] == 'u' {
 				// if the second rune is u then it's a unicode char in hex
