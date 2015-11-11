@@ -102,7 +102,7 @@ func compile(tokens []string) []byte {
 					PutVarint32(cha_buf, r)
 					bc = append(bc, cha_buf...)
 				} else {
-					panic("char: utf sequence incorrect length")
+					panic("compiler: utf sequence incorrect length in C literal")
 				}
 			} else if runes[1] == 'a' {
 				// if the second rune is a then it's a ascii char in decimal
@@ -111,8 +111,8 @@ func compile(tokens []string) []byte {
 				PutVarint32(cha_buf, rune(a))
 				bc = append(bc, cha_buf...)
 			} else {
-				fmt.Println("compiler: invalid char: " + t[1:])
-				panic("compiler: invalid char: " + t)
+				fmt.Println("compiler: invalid C literal: " + t[1:])
+				panic("compiler: invalid C literal: " + t)
 			}
 
 		case isWord(t):
