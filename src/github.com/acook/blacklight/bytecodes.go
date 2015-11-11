@@ -442,7 +442,9 @@ func prepare_op_table() {
 		"emt": func(m *Meta) {
 			NOPE("emt")
 		},
-		"eval": func(m *Meta) {},
+		"call": func(m *Meta) {
+			NOPE("call")
+		},
 		"len": func(m *Meta) {
 			v := m.Current().Peek().(vector)
 			m.Current().Push(NewNumber(v.Len()))
