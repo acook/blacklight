@@ -68,7 +68,11 @@ func compile(tokens []string) []byte {
 			} else if runes[1] == 'u' {
 				// if the second rune is u then it's a unicode char in hex
 				h, _ := hex.DecodeString(string(runes[2:]))
-				bc = append(bc, h...)
+				if len(h) < 3 {
+					bc = append(bc, h...)
+				} else {
+					panic("char: utf sequence incorrect length")
+				}
 			} else if runes[1] == 'a' {
 				// if the second rune is a then it's a ascii char in decimal
 				a, _ := strconv.Atoi(string(runes[2:]))
