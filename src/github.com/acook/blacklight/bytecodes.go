@@ -405,7 +405,8 @@ func prepare_op_table() {
 			m.Current().Push(m.Current().Peek().(stack).Pop())
 		},
 		"push": func(m *Meta) {
-			m.Current().Peek().(stack).Push(m.Current().Pop())
+			d := m.Current().Pop()
+			m.Current().Peek().(stack).Push(d)
 		},
 		"size": func(m *Meta) {
 			m.Current().Push(NewNumber(m.Current().Peek().(stack).Depth()))

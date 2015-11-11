@@ -1,7 +1,21 @@
 ;; normal stacks can be created and used for stack-based algorithms
-;; s-new and <> are essentially synonyms
 ;; this shows that stacks are untyped, you can even put other stacks on them
 
-s-new <> push 99 push size print
+;; create a new stack
+s-new
+
+;; create another stack and push it onto the first one
+s-new push
+;; push a number onto the stack
+99 push
+
+;; print the size of the stack
+size print
+
+;; get the top item off the stack and print it
 pop print
-tail size print
+
+;; get rid of everything except the top item
+tail
+;; show that the size is now 1
+size print
