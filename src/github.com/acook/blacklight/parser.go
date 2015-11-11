@@ -21,9 +21,15 @@ func parse(code string) []string {
 		case comment:
 			// ignore comments
 		case glyph == "'" && last_glyph == "\\":
-			t := tokens[l]
-			h := tokens[:l]
-			tokens = append(h, (t[:len(t)-1] + glyph))
+			if str {
+				t := tokens[l]
+				h := tokens[:l]
+				tokens = append(h, (t[:len(t)-1] + glyph))
+			} else {
+				t := tokens[l]
+				h := tokens[:l]
+				tokens = append(h, (t + glyph))
+			}
 		case glyph == "'":
 			str = !str
 			fallthrough
