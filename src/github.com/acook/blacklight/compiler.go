@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"strconv"
-	//"unicode/utf8"
+	"unicode/utf8"
 )
 
 type Debug struct {
@@ -68,15 +68,20 @@ func compile(tokens []string) []byte {
 			} else if runes[1] == 'u' {
 				// if the second rune is u then it's a unicode char in hex
 				h, _ := hex.DecodeString(string(runes[2:]))
-				if len(h) < 3 {
-					bc = append(bc, h...)
+				r, size := utf8.DecodeRune(h)
+
+				if size > 0 {
+					PutVarint32(cha_buf, r)
+					bc = append(bc, cha_buf...)
 				} else {
 					panic("char: utf sequence incorrect length")
 				}
 			} else if runes[1] == 'a' {
 				// if the second rune is a then it's a ascii char in decimal
 				a, _ := strconv.Atoi(string(runes[2:]))
-				bc = append(bc, byte(a))
+
+				PutVarint32(cha_buf, rune(a))
+				bc = append(bc, cha_buf...)
 			} else {
 				fmt.Println("compiler: invalid char: " + t[1:])
 				panic("compiler: invalid char: " + t)
