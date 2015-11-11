@@ -73,7 +73,29 @@ func vm(bc []byte) {
 			m.Current().Push(T(str_buf))
 
 			offset = offset + (length - 1)
-		} else if b == 0xF8 {
+		} else if b == 0xF7 { // Block
+			print(" -- B at offset #" + fmt.Sprint(offset) + " ")
+
+			offset++
+			buf := bc[offset : offset+8]
+			length := binary.BigEndian.Uint64(buf)
+			offset = offset + 7
+
+			print("B(")
+			print(length)
+			print("): ")
+
+			offset++
+			blk_buf := bc[offset : offset+length]
+
+			fmt.Printf("0x%x", blk_buf)
+			print("\n")
+
+			m.Current().Push(B(blk_buf))
+
+			offset = offset + (length - 1)
+		} else if b == 0xF8 { // Vector
+			print(" -- V at offset #" + fmt.Sprint(offset) + " ")
 			m.Current().Push(V{})
 		} else { // UNKNOWN
 			print(" -- UNKNOWN at offset #" + fmt.Sprint(offset) + ": ")

@@ -1,7 +1,7 @@
 package main
 
 import (
-	//"fmt"
+	"fmt"
 	"strconv"
 )
 
@@ -120,4 +120,22 @@ func (v V) Rmo(n int) vector {
 
 func (v V) Len() int {
 	return len(v)
+}
+
+type B []byte
+
+func (b B) String() string {
+	str := "[ "
+	for _, x := range b {
+		str += fmt.Sprintf("%#v", x)
+		str += " "
+	}
+	if str[len(str)-1] == " "[0] {
+		str = str[:len(str)-1]
+	}
+	return str + " ]"
+}
+
+func (b B) Value() interface{} {
+	return b
 }

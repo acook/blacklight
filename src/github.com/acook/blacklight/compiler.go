@@ -32,7 +32,7 @@ func compile(tokens []string) []byte {
 	// for vector literals
 	var v_new bool
 	var v_nest uint
-	var wv_stack ops_fifo
+	var b_cache [][]byte
 
 	int_buf := make([]byte, 8)
 	cha_buf := make([]byte, 4)
@@ -105,10 +105,10 @@ func compile(tokens []string) []byte {
 		case t == ")": // Vector literal (end)
 			if v_nest == 0 {
 				panic("compiler: unmatched closing paren")
+			} else {
+				v_nest--
+				v_new = false
 			}
-
-			v_nest--
-			v_new = false
 
 		case isCharVector(t):
 			bc = append(bc, 0xF6) // type Text
@@ -123,17 +123,22 @@ func compile(tokens []string) []byte {
 			bc = append(bc, str_buf...)
 
 		case t == "[": // WordVector literal (start)
-			//wv_stack.push(ops)
-			//ops = []operation{}
+			bc = append(bc, 0xF7)
+			b_cache = append(b_cache, bc)
+			bc = []byte{}
 		case t == "]": // WordVector literal (end)
-			if wv_stack.depth() > 0 {
-				//pwv := newPushWordVector("[" + fmt.Sprint(wv_stack.depth()+1) + "]")
-				//wv_ops := wv_stack.pop()
-				//pwv.Contents = append(pwv.Contents, ops...)
-				//ops = append(wv_ops, pwv)
+			if len(b_cache) > 0 {
+				my_bc := bc
+				bc = b_cache[len(b_cache)-1]
+				b_cache = b_cache[:len(b_cache)-1]
+
+				binary.BigEndian.PutUint64(int_buf, uint64(len(my_bc)))
+				bc = append(bc, int_buf...)
+				bc = append(bc, my_bc...)
 			} else {
 				panic("compiler: closing bracket without opening bracket")
 			}
+
 		default:
 			panic("compiler: unrecognized operation: " + t)
 		}
@@ -146,7 +151,7 @@ func compile(tokens []string) []byte {
 	}
 
 	switch {
-	case wv_stack.depth() > 0:
+	case len(b_cache) > 0:
 		panic("compiler: unclosed WordVector literal")
 	case v_nest > 0:
 		panic("compiler: unclosed paren in V literal")
