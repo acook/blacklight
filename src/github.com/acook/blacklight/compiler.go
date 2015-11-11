@@ -8,7 +8,24 @@ import (
 	//"unicode/utf8"
 )
 
+type Debug struct {
+	token  string
+	offset int
+}
+
+func (d *Debug) Rescue() {
+	if err := recover(); err != nil {
+		warn("encountered an error during compilation")
+		warn("at offset: " + fmt.Sprint(d.offset))
+		warn("current token: " + fmt.Sprintf("%#v", d.token))
+		panic(err)
+	}
+}
+
 func compile(tokens []string) []byte {
+	var debug *Debug = new(Debug)
+	defer debug.Rescue()
+
 	//var b byte
 	var bc []byte
 	//var inside_vector, is_op bool
@@ -17,7 +34,10 @@ func compile(tokens []string) []byte {
 	int_buf := make([]byte, 8)
 	cha_buf := make([]byte, 4)
 
-	for _, t := range tokens {
+	for i, t := range tokens {
+		debug.token = t
+		debug.offset = i
+
 		b, is_op := op_map[t]
 
 		if is_op {
