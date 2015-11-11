@@ -27,7 +27,7 @@ func vm(bc []byte) {
 		} else if b < total_ops { // Opwords
 			print(" -- opword at offset #" + fmt.Sprint(offset) + ": ")
 			fmt.Printf("%v", b)
-			print(" (" + fmt.Sprint(lk_map[b]) + ")")
+			print(" (" + fmt.Sprint(lk_map[b]) + ")\n")
 			fn_map[b](m)
 		} else if b == 0xF3 { // Char
 			print(" -- C at offset #" + fmt.Sprint(offset) + ": ")
