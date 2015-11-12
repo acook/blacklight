@@ -31,7 +31,7 @@ func (m *Meta) String() string {
 		str += i.String() + " "
 	}
 
-	return str + " >"
+	return str + ">"
 }
 
 func (m *Meta) Push(s *Stack) {
