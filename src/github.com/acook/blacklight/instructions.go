@@ -5,6 +5,9 @@ import (
 	"fmt"
 )
 
+// bytecode type functions
+// signature: (vm *VMState) void
+
 func nullbyte(vm *VMstate) {
 	print(" -- NULL BYTE ENCOUNTERED\n")
 	vm.debug()
@@ -111,4 +114,43 @@ func block(vm *VMstate) {
 func vector(vm *VMstate) {
 	print(" -- V at offset #" + fmt.Sprint(vm.o) + "\n")
 	vm.m.Current().Push(V{})
+}
+
+// opword instructions
+// signature: (m *Meta) void
+
+// meta ops
+func push_current(m *Meta) {
+	m.Current().Push(m.Current())
+}
+
+func push_last(m *Meta) {
+	c := m.Current()
+	n := m.Items[len(m.Items)-2]
+	c.Push(n)
+}
+
+func push_meta(m *Meta) {
+	m.Current().Push(m)
+}
+
+func meta_decap(m *Meta) {
+	m.Decap()
+}
+
+func meta_drop(m *Meta) {
+	m.Drop()
+	if m.Depth() < 1 {
+		m.Push(NewSystemStack())
+	}
+}
+
+func meta_new_system_stack(m *Meta) {
+	s := NewSystemStack()
+	s.Push(m.Current())
+	m.Push(s)
+}
+
+func meta_swap(m *Meta) {
+	m.Swap()
 }

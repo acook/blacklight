@@ -45,34 +45,13 @@ func prepare_op_table() {
 	var op_fn_map = map[string]func(*Meta){
 
 		// meta
-		"@": func(m *Meta) {
-			m.Current().Push(m.Current())
-		},
-		"^": func(m *Meta) {
-			c := m.Current()
-			n := m.Items[len(m.Items)-2]
-			c.Push(n)
-		},
-		"$": func(m *Meta) {
-			m.Current().Push(m)
-		},
-		"$decap": func(m *Meta) {
-			m.Decap()
-		},
-		"$drop": func(m *Meta) {
-			m.Drop()
-			if m.Depth() < 1 {
-				m.Push(NewSystemStack())
-			}
-		},
-		"$new": func(m *Meta) {
-			s := NewSystemStack()
-			s.Push(m.Current())
-			m.Push(s)
-		},
-		"$swap": func(m *Meta) {
-			m.Swap()
-		},
+		"@":      push_current,
+		"^":      push_last,
+		"$":      push_meta,
+		"$decap": meta_decap,
+		"$drop":  meta_drop,
+		"$new":   meta_new_system_stack,
+		"$swap":  meta_swap,
 
 		// stack
 		//"pop": func(m *Meta) {
