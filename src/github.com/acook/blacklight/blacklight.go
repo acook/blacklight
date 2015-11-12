@@ -28,7 +28,7 @@ func main() {
 	//ops := lex(tokens)
 	ops := compile(tokens)
 
-	vm(ops)
+	run_vm(ops)
 }
 
 func loadFile(filename string) string {

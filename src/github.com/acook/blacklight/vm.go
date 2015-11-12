@@ -5,119 +5,43 @@ import (
 	"fmt"
 )
 
-func vm(bc []byte) {
-	var offset, l uint64
-	var b byte
-	var m *Meta
+func run_vm(bc []byte) {
+	vm := new(VMstate)
 
-	l = uint64(len(bc))
-	m = NewMeta()
-	m.Push(NewSystemStack())
+	vm.bc = bc
+	vm.l = uint64(len(vm.bc))
+	vm.m = NewMeta()
+	vm.m.Push(NewSystemStack())
 
 	for {
-		b = bc[offset]
+		vm.b = vm.bc[vm.o]
 
-		print("\n -- ")
-		print(offset)
-		print(" : ")
-		fmt.Printf("x%x\n", b)
-
-		if b == 0x00 { // bare null bytes are always an error
-			panic("vm: aw shit, something is terribly wrong, we encountered a null byte")
-		} else if b < total_ops { // Opwords
-			print(" -- opword at offset #" + fmt.Sprint(offset) + ": ")
-			fmt.Printf("%v", b)
-			print(" (" + fmt.Sprint(lk_map[b]) + ")\n")
-			fn_map[b](m)
-		} else if b == 0xF1 { // Word
-			print(" -- W at offset #" + fmt.Sprint(offset) + ": ")
-
-			offset++
-			buf := bc[offset : offset+8]
-			wd_uint := binary.BigEndian.Uint64(buf)
-
-			fmt.Printf("0x%x", wd_uint)
-			print("(" + string(wd_map[wd_uint]) + ")")
-			print("\n")
-
-			offset = offset + 7
-			m.Current().Push(W(wd_uint))
-		} else if b == 0xF3 { // Char
-			print(" -- C at offset #" + fmt.Sprint(offset) + ": ")
-
-			offset++
-			buf := bc[offset : offset+4]
-
-			c := Varint32(buf)
-
-			fmt.Printf("%#v\n", c)
-
-			offset = offset + 3
-			m.Current().Push(C(c))
-		} else if b == 0xF4 { // Integer
-			print(" -- N at offset #" + fmt.Sprint(offset) + ": ")
-			offset++
-			buf := bc[offset : offset+8]
-
-			n := Varint64(buf)
-
-			fmt.Printf("%#v\n", n)
-
-			offset = offset + 7
-			m.Current().Push(N(n))
-		} else if b == 0xF6 { // Text
-			print(" -- T at offset #" + fmt.Sprint(offset) + " ")
-
-			offset++
-			buf := bc[offset : offset+8]
-			length := binary.BigEndian.Uint64(buf)
-			offset = offset + 7
-
-			print("T(")
-			print(length)
-			print("): ")
-
-			offset++
-			str_buf := bc[offset : offset+length]
-
-			print(string(str_buf))
-			print("\n")
-
-			m.Current().Push(T(str_buf))
-
-			offset = offset + (length - 1)
-		} else if b == 0xF7 { // Block
-			print(" -- B at offset #" + fmt.Sprint(offset) + " ")
-
-			offset++
-			buf := bc[offset : offset+8]
-			length := binary.BigEndian.Uint64(buf)
-			offset = offset + 7
-
-			print("B(")
-			print(length)
-			print("): ")
-
-			offset++
-			blk_buf := bc[offset : offset+length]
-
-			fmt.Printf("0x%x", blk_buf)
-			print("\n")
-
-			m.Current().Push(B(blk_buf))
-
-			offset = offset + (length - 1)
-		} else if b == 0xF8 { // Vector
-			print(" -- V at offset #" + fmt.Sprint(offset) + " ")
-			m.Current().Push(V{})
+		if vm.b == 0x00 { // bare null bytes are always an error
+			nullbyte(vm)
+		} else if vm.b < total_ops { // Opwords
+			opword(vm)
+		} else if vm.b == 0xF1 { // Word
+			word(vm)
+		} else if vm.b == 0xF3 { // Char
+			char(vm)
+		} else if vm.b == 0xF4 { // Integer
+			integer(vm)
+		} else if vm.b == 0xF6 { // Text
+			text(vm)
+		} else if vm.b == 0xF7 { // Block
+			block(vm)
+		} else if vm.b == 0xF8 { // Vector
+			vect(vm)
 		} else { // UNKNOWN
-			print(" -- UNKNOWN at offset #" + fmt.Sprint(offset) + ": ")
-			fmt.Printf("x%x ", b)
+			print(" -- UNKNOWN at offset #" + fmt.Sprint(vm.o) + ": ")
+			fmt.Printf("x%x ", vm.b)
 			print("\n")
 		}
 
-		offset++
-		if offset >= l {
+		print("\n")
+
+		vm.o++
+		if vm.o >= vm.l {
 			return
 		}
 	}
