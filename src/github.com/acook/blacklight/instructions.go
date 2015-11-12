@@ -109,6 +109,6 @@ func block(vm *VMstate) {
 }
 
 func vect(vm *VMstate) {
-	print(" -- V at offset #" + fmt.Sprint(vm.o) + " ")
+	print(" -- V at offset #" + fmt.Sprint(vm.o) + "\n")
 	vm.m.Current().Push(V{})
 }
