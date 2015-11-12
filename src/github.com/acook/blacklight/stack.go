@@ -120,7 +120,7 @@ func (s *Stack) Pop() datatypes {
 		s.Items = s.Items[:s.Depth()-1]
 	} else {
 		str := "Stack.Pop: " + s.Type + "-stack is empty"
-		item = NewErr(str)
+		item = NewErr(str, s)
 		warn(str)
 		panic(item)
 	}

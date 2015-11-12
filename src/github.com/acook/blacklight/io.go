@@ -15,12 +15,12 @@ type IO struct {
 
 func ReadIO(i datatypes, q *Queue) *Tag {
 	switch i.(type) {
-	case *Number:
-		fd := NewFD(i.Value().(int), q)
-		return NewTag("FD#"+i.String(), fd)
-	case *CharVector:
-		file := NewFile(i.String(), q)
-		return NewTag("File#"+i.String(), file)
+	case *N:
+		fd := ReadFD(i.Value().(int), q)
+		return NewFDTag(i.String(), fd)
+	case *T:
+		file := ReadFile(i.String(), q)
+		return NewFileTag("File#"+i.String(), file)
 	default:
 		panic("ReadIO: unrecognized type for IO - " + i.String())
 	}
@@ -29,12 +29,12 @@ func ReadIO(i datatypes, q *Queue) *Tag {
 
 func WriteIO(i datatypes, q *Queue) *Tag {
 	switch i.(type) {
-	case *Number:
+	case *N:
 		fd := WriteFD(i.Value().(int), q)
-		return NewTag("FD#"+i.String(), fd)
-	case *CharVector:
+		return NewFDTag("FD#"+i.String(), fd)
+	case *T:
 		file := WriteFile(i.String(), q)
-		return NewTag("File#"+i.String(), file)
+		return NewFileTag("File#"+i.String(), file)
 	default:
 		panic("WriteIO: unrecognized type for IO - " + i.String())
 	}
@@ -59,7 +59,7 @@ type FD struct {
 	File *os.File
 }
 
-func NewFD(i int, q *Queue) *FD {
+func ReadFD(i int, q *Queue) *FD {
 	initFDtable()
 	fd := new(FD)
 	fd.Queue = q
@@ -73,7 +73,7 @@ func NewFD(i int, q *Queue) *FD {
 		for b := make([]byte, 1); ; {
 			l, _ := fd.File.Read(b)
 			if l > 0 {
-				q.Enqueue(NewCharFromString(string(b)))
+				q.Enqueue(C(string(b)[0]))
 			} else {
 				fd.File.Close()
 				q.Enqueue(NewNil("EOF"))
@@ -115,7 +115,7 @@ func WriteFD(i int, q *Queue) *FD {
 	return fd
 }
 
-func NewFile(filename string, q *Queue) *FD {
+func ReadFile(filename string, q *Queue) *FD {
 	fd := new(FD)
 	fd.Queue = q
 	fd.File, _ = os.Open(filename)
@@ -131,7 +131,7 @@ func NewFile(filename string, q *Queue) *FD {
 		for {
 			l, _ := fd.File.Read(b)
 			if l > 0 {
-				q.Enqueue(NewCharFromString(string(b)))
+				q.Enqueue(C(string(b)[0]))
 			} else {
 				fd.File.Close()
 				q.Enqueue(NewNil("EOF"))

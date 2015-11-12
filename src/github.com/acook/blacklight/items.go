@@ -52,44 +52,7 @@ func (w W) String() string {
 }
 
 func (w W) Value() interface{} {
-	return int(w)
-}
-
-type tstringer interface {
-	TString() T
-}
-
-type T string
-
-func (t T) String() string {
-	return string(t)
-}
-
-func (t T) Value() interface{} {
-	return string(t)
-}
-
-func (t T) Cat(v vector) vector {
-	return t + v.(T)
-}
-
-func (t T) App(d datatypes) vector {
-	return t + T(d.(tstringer).TString())
-}
-
-func (t T) Ato(n int) datatypes {
-	return C(t[n])
-}
-
-func (t T) Rmo(n int) vector {
-	a := t[:n]
-	b := t[n+1:]
-	t = (a + b)
-	return t
-}
-
-func (t T) Len() int {
-	return len(t)
+	return uint64(w)
 }
 
 type V []datatypes
@@ -117,19 +80,52 @@ func (v V) App(d datatypes) vector {
 	return append(v, d)
 }
 
-func (v V) Ato(n int) datatypes {
+func (v V) Ato(n N) datatypes {
 	return v[n]
 }
 
-func (v V) Rmo(n int) vector {
+func (v V) Rmo(n N) vector {
 	a := v[:n]
 	b := v[n+1:]
 	v = append(a, b...)
 	return v
 }
 
-func (v V) Len() int {
-	return len(v)
+func (v V) Len() N {
+	return N(len(v))
+}
+
+type T string
+
+func (t T) String() string {
+	return string(t)
+}
+
+func (t T) Value() interface{} {
+	return string(t)
+}
+
+func (t T) Cat(v vector) vector {
+	return t + v.(T)
+}
+
+func (t T) App(d datatypes) vector {
+	return t + T(d.(tstringer).TString())
+}
+
+func (t T) Ato(n N) datatypes {
+	return C(t[n])
+}
+
+func (t T) Rmo(n N) vector {
+	a := t[:n]
+	b := t[n+1:]
+	t = (a + b)
+	return t
+}
+
+func (t T) Len() N {
+	return N(len(t))
 }
 
 type B []byte
@@ -159,15 +155,15 @@ func (b B) App(i datatypes) vector {
 	//return append(b, i.(W))
 }
 
-func (b B) Ato(n int) datatypes {
+func (b B) Ato(n N) datatypes {
 	return C(b[n])
 	//return W(b[n])
 }
 
-func (b B) Rmo(n int) vector {
+func (b B) Rmo(n N) vector {
 	return append(b[:n], b[n:]...)
 }
 
-func (b B) Len() int {
-	return len(b)
+func (b B) Len() N {
+	return N(len(b))
 }

@@ -18,7 +18,7 @@ package main
 // 0xF6 : text - length:uint64 data:Cs
 // 0xF7 : block - length:uint64 data:bc
 // 0xF8 : vector - length:uint64 data:items
-// 0xF9 : tag - kind:uint8 metadata:uint32 msg:CV
+// 0xF9 : tag - kind:uint8 metadata:uint32 msg:text
 // 0xFB-0xFE : FUTURE DATATYPES
 // 0xFF : RESERVED EXTENDED FLAG
 
@@ -376,24 +376,23 @@ func prepare_op_table() {
 				}
 			}
 
-			m.Current().Push(NewVector(items))
+			m.Current().Push(V(items))
 		},
 		"q-to-t": func(m *Meta) {
 			q := m.Current().Pop().(*Queue)
-			str := ""
+			str := T("")
 
-		QtoCV:
+		QtoT:
 			for {
 				i := <-q.Items
-				if blEq(i, NewNil("q_to_cv")).Bool() {
-					break QtoCV
+				if blEq(i, NewNil("q_to_t")).Bool {
+					break QtoT
 				} else {
-					str = str + i.(Char).CVString()
+					str = str + i.(C).TString()
 				}
 			}
 
-			v := NewCharVector(str)
-			m.Current().Push(v)
+			m.Current().Push(str)
 		},
 		"unq": func(m *Meta) {
 			NOPE("unq")
@@ -411,7 +410,7 @@ func prepare_op_table() {
 			m.Current().Peek().(stack).Push(d)
 		},
 		"size": func(m *Meta) {
-			m.Current().Push(NewNumber(m.Current().Peek().(stack).Depth()))
+			m.Current().Push(N(m.Current().Peek().(stack).Depth()))
 		},
 		"tail": func(m *Meta) {
 			m.Current().Peek().(stack).Drop()
@@ -419,7 +418,7 @@ func prepare_op_table() {
 
 		// vectors
 		"v-new": func(m *Meta) {
-			m.Current().Push(NewVector([]datatypes{}))
+			m.Current().Push(V{})
 		},
 		"app": func(m *Meta) {
 			i := m.Current().Pop()
@@ -430,7 +429,7 @@ func prepare_op_table() {
 			c := m.Current()
 			n := c.Pop().(N)
 			v := m.Current().Peek().(vector)
-			i := v.Ato(int(n.Value().(int64)))
+			i := v.Ato(n)
 			m.Current().Push(i)
 		},
 		"cat": func(m *Meta) {
@@ -450,7 +449,7 @@ func prepare_op_table() {
 		},
 		"len": func(m *Meta) {
 			v := m.Current().Peek().(vector)
-			m.Current().Push(NewNumber(v.Len()))
+			m.Current().Push(N(v.Len()))
 		},
 		"pick": func(m *Meta) {
 			NOPE("pick")
@@ -458,7 +457,7 @@ func prepare_op_table() {
 		"rmo": func(m *Meta) {
 			n := m.Current().Pop().(N)
 			v := m.Current().Pop().(vector)
-			nv := v.Rmo(int(n))
+			nv := v.Rmo(n)
 			m.Current().Push(nv)
 		},
 		"v-to-s": func(m *Meta) {
