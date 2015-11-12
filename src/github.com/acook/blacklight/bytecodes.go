@@ -380,7 +380,7 @@ func prepare_op_table() {
 		},
 		"q-to-t": func(m *Meta) {
 			q := m.Current().Pop().(*Queue)
-			str := T("")
+			text := T("")
 
 		QtoT:
 			for {
@@ -388,11 +388,11 @@ func prepare_op_table() {
 				if blEq(i, NewNil("q_to_t")).Bool {
 					break QtoT
 				} else {
-					str = str + i.(C).Text()
+					text.App(i)
 				}
 			}
 
-			m.Current().Push(str)
+			m.Current().Push(text)
 		},
 		"unq": func(m *Meta) {
 			NOPE("unq")
