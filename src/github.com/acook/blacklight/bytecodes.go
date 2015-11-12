@@ -416,7 +416,7 @@ func prepare_op_table() {
 			m.Current().Peek().(stack).Drop()
 		},
 
-		// vectors
+		// Vectors & Sequences
 		"v-new": func(m *Meta) {
 			m.Current().Push(V{})
 		},

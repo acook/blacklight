@@ -31,7 +31,7 @@ func run_vm(bc []byte) {
 		} else if vm.b == 0xF7 { // Block
 			block(vm)
 		} else if vm.b == 0xF8 { // Vector
-			vect(vm)
+			vector(vm)
 		} else { // UNKNOWN
 			print(" -- UNKNOWN at offset #" + fmt.Sprint(vm.o) + ": ")
 			fmt.Printf("x%x ", vm.b)
