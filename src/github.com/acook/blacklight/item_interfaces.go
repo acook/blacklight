@@ -15,8 +15,8 @@ type sequence interface {
 	Len() N
 }
 
-type tstringer interface {
-	TString() T
+type texter interface {
+	Text() T
 }
 
 type byter interface {

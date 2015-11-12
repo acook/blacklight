@@ -41,8 +41,8 @@ func (c C) C_to_N() N {
 	return N(c)
 }
 
-func (c C) TString() T {
-	return c.C_to_T()
+func (c C) Text() T {
+	return T(c)
 }
 
 type W uint64
@@ -53,6 +53,10 @@ func (w W) String() string {
 
 func (w W) Value() interface{} {
 	return uint64(w)
+}
+
+func (w W) Text() T {
+	return T(wd_map[uint64(w)])
 }
 
 type V []datatypes
@@ -105,12 +109,16 @@ func (t T) Value() interface{} {
 	return string(t)
 }
 
+func (t T) Text() T {
+	return t
+}
+
 func (t T) Cat(v sequence) sequence {
 	return t + v.(T)
 }
 
 func (t T) App(d datatypes) sequence {
-	return t + T(d.(tstringer).TString())
+	return t + T(d.(texter).Text())
 }
 
 func (t T) Ato(n N) datatypes {

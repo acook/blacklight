@@ -388,7 +388,7 @@ func prepare_op_table() {
 				if blEq(i, NewNil("q_to_t")).Bool {
 					break QtoT
 				} else {
-					str = str + i.(C).TString()
+					str = str + i.(C).Text()
 				}
 			}
 
