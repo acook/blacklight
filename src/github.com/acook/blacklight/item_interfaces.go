@@ -5,13 +5,13 @@ type datatypes interface {
 	Value() interface{}
 }
 
-type vector interface {
+type sequence interface {
 	String() string
 	Value() interface{}
-	Cat(vector) vector
-	App(datatypes) vector
+	Cat(sequence) sequence
+	App(datatypes) sequence
 	Ato(N) datatypes
-	Rmo(N) vector
+	Rmo(N) sequence
 	Len() N
 }
 

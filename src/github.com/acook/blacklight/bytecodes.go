@@ -422,19 +422,19 @@ func prepare_op_table() {
 		},
 		"app": func(m *Meta) {
 			i := m.Current().Pop()
-			v := m.Current().Pop().(vector)
+			v := m.Current().Pop().(sequence)
 			m.Current().Push(v.App(i))
 		},
 		"ato": func(m *Meta) {
 			c := m.Current()
 			n := c.Pop().(N)
-			v := m.Current().Peek().(vector)
+			v := m.Current().Peek().(sequence)
 			i := v.Ato(n)
 			m.Current().Push(i)
 		},
 		"cat": func(m *Meta) {
-			i1 := m.Current().Pop().(vector)
-			i2 := m.Current().Pop().(vector)
+			i1 := m.Current().Pop().(sequence)
+			i2 := m.Current().Pop().(sequence)
 			result := i2.Cat(i1)
 			m.Current().Push(result)
 		},
@@ -448,7 +448,7 @@ func prepare_op_table() {
 			NOPE("call")
 		},
 		"len": func(m *Meta) {
-			v := m.Current().Peek().(vector)
+			v := m.Current().Peek().(sequence)
 			m.Current().Push(N(v.Len()))
 		},
 		"pick": func(m *Meta) {
@@ -456,7 +456,7 @@ func prepare_op_table() {
 		},
 		"rmo": func(m *Meta) {
 			n := m.Current().Pop().(N)
-			v := m.Current().Pop().(vector)
+			v := m.Current().Pop().(sequence)
 			nv := v.Rmo(n)
 			m.Current().Push(nv)
 		},

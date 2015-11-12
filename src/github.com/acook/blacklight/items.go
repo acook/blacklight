@@ -72,11 +72,11 @@ func (v V) Value() interface{} {
 	return []datatypes(v)
 }
 
-func (v V) Cat(v2 vector) vector {
+func (v V) Cat(v2 sequence) sequence {
 	return append(v, v2.(V)...)
 }
 
-func (v V) App(d datatypes) vector {
+func (v V) App(d datatypes) sequence {
 	return append(v, d)
 }
 
@@ -84,7 +84,7 @@ func (v V) Ato(n N) datatypes {
 	return v[n]
 }
 
-func (v V) Rmo(n N) vector {
+func (v V) Rmo(n N) sequence {
 	a := v[:n]
 	b := v[n+1:]
 	v = append(a, b...)
@@ -105,11 +105,11 @@ func (t T) Value() interface{} {
 	return string(t)
 }
 
-func (t T) Cat(v vector) vector {
+func (t T) Cat(v sequence) sequence {
 	return t + v.(T)
 }
 
-func (t T) App(d datatypes) vector {
+func (t T) App(d datatypes) sequence {
 	return t + T(d.(tstringer).TString())
 }
 
@@ -117,7 +117,7 @@ func (t T) Ato(n N) datatypes {
 	return C(t[n])
 }
 
-func (t T) Rmo(n N) vector {
+func (t T) Rmo(n N) sequence {
 	a := t[:n]
 	b := t[n+1:]
 	t = (a + b)
@@ -146,11 +146,11 @@ func (b B) Value() interface{} {
 	return b
 }
 
-func (b B) Cat(v vector) vector {
+func (b B) Cat(v sequence) sequence {
 	return append(b, v.(B)...)
 }
 
-func (b B) App(i datatypes) vector {
+func (b B) App(i datatypes) sequence {
 	return b
 	//return append(b, i.(W))
 }
@@ -160,7 +160,7 @@ func (b B) Ato(n N) datatypes {
 	//return W(b[n])
 }
 
-func (b B) Rmo(n N) vector {
+func (b B) Rmo(n N) sequence {
 	return append(b[:n], b[n:]...)
 }
 
