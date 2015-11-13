@@ -52,21 +52,6 @@ func NewSystemStack() *Stack {
 	return NewStack("system")
 }
 
-type MetaStack struct {
-	Stack
-	Items       []*Stack
-	ObjectStack *ObjectStack
-	SelfFlag    bool
-}
-
-func NewMetaStack() *MetaStack {
-	s := &MetaStack{}
-	s.Type = "$meta"
-	s.Id = getStackId()
-	s.ObjectStack = NewObjectStack()
-	return s
-}
-
 func (s Stack) Value() interface{} {
 	return s
 }
@@ -76,9 +61,10 @@ func (s Stack) String() string {
 
 	for _, i := range s.Items {
 		switch i.(type) {
-		case MetaStack:
-		case *MetaStack:
+		case Meta:
 			str += "$stack"
+		case *Meta:
+			str += "$*stack"
 		case *Stack:
 			if i.(*Stack).Id == s.Id {
 				str += "<...> "

@@ -20,11 +20,11 @@ func NewMeta() *Meta {
 	return m
 }
 
-func (m *Meta) Value() interface{} {
+func (m Meta) Value() interface{} {
 	return m
 }
 
-func (m *Meta) String() string {
+func (m Meta) String() string {
 	str := "$" + strconv.Itoa(m.Id) + "#" + strconv.Itoa(m.Depth()) + "< "
 
 	for _, i := range m.Items {
