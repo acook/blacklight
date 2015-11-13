@@ -15,8 +15,8 @@ type IO struct {
 
 func ReadIO(i datatypes, q *Queue) *Tag {
 	switch i.(type) {
-	case *N:
-		fd := ReadFD(i.Value().(int), q)
+	case N:
+		fd := ReadFD(int(i.(N)), q)
 		return NewFDTag(i.String(), fd)
 	case *T:
 		file := ReadFile(i.String(), q)
@@ -29,8 +29,8 @@ func ReadIO(i datatypes, q *Queue) *Tag {
 
 func WriteIO(i datatypes, q *Queue) *Tag {
 	switch i.(type) {
-	case *N:
-		fd := WriteFD(i.Value().(int), q)
+	case N:
+		fd := WriteFD(int(i.(N)), q)
 		return NewFDTag("FD#"+i.String(), fd)
 	case *T:
 		file := WriteFile(i.String(), q)
