@@ -186,22 +186,6 @@ func compile(tokens []string) []byte {
 	return bc
 }
 
-func PutVarint32(buf []byte, x int32) {
-	ux := uint32(x) << 1
-	if x < 0 {
-		ux = ^ux
-	}
-	binary.BigEndian.PutUint32(buf, ux)
-}
-
-func PutVarint64(buf []byte, x int64) {
-	ux := uint64(x) << 1
-	if x < 0 {
-		ux = ^ux
-	}
-	binary.BigEndian.PutUint64(buf, ux)
-}
-
 var wd_map map[uint64][]rune = make(map[uint64][]rune)
 var wd_count uint64
 
