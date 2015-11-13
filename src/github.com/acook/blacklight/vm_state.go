@@ -27,16 +27,16 @@ func (vm *VMstate) debug() {
 	print("\n")
 
 	print("    current byte: ")
-	print(vm.b)
+	print(fmt.Sprintf("0x%x", vm.b))
 	print("\n")
 
 	print("    current inferred: ")
 	print(vm.infer())
 	print("\n")
 
-	print("    all bytes: ")
-	fmt.Printf("x%x", vm.b)
-	print("\n")
+	print("    all bytes: [")
+	fmt.Printf("0x%x", vm.b)
+	print("]\n")
 
 	print("    meta stack: ")
 	print(vm.m.String())
@@ -46,7 +46,12 @@ func (vm *VMstate) debug() {
 func (vm *VMstate) infer() string {
 	vm.prepare_lookup()
 
-	return vm.all_map[vm.b]
+	v, ok := vm.all_map[vm.b]
+	if ok {
+		return v
+	} else {
+		return "unknown"
+	}
 }
 
 func (vm *VMstate) prepare_lookup() {
