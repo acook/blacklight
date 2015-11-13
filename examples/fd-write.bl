@@ -3,9 +3,9 @@
 
 q-new 2 write swap
 'big' enq
-\32 enq
+\a32 enq
 'bada' enq
-\32 enq
+\a32 enq
 'boom' enq
 nil enq
 wait
