@@ -50,7 +50,7 @@ func (o *Object) DeleGet(meta *Meta, w W) bool {
 	if found {
 		switch i.(type) {
 		case B:
-			//doBC(meta, i.(B))
+			doBC(meta, i.(B))
 		default:
 			current.Push(i)
 		}
