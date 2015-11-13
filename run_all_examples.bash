@@ -8,7 +8,7 @@ failures=0
 for file in $files; do
   echo
   echo " -- running: $file"
-  go run src/github.com/acook/blacklight/*.go $file
+  echo test | go run src/github.com/acook/blacklight/*.go $file
 
   if [ $? -ne 0 ]; then
     failures=$(($failures + 1))
