@@ -32,7 +32,7 @@ func WriteIO(i datatypes, q *Queue) *Tag {
 	case N:
 		fd := WriteFD(int(i.(N)), q)
 		return NewFDTag("FD#"+i.String(), fd)
-	case *T:
+	case T:
 		file := WriteFile(i.String(), q)
 		return NewFileTag("File#"+i.String(), file)
 	default:
