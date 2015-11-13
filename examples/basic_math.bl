@@ -1,19 +1,22 @@
 ;; the basic math operations
-;; n-to-cv converts number to a string (CV)
-;; cat joins two vectors, in this case joins two strings
-;; print sends a string (CV) to stdout
+;; n-to-t converts number to text (T)
+;; cat joins two vectors, in this case joins two bits of text
+;; print sends text to stdout
 
 '1 + 2 = ' 1 2 add
-n-to-cv cat print
+n-to-t cat print
 
 '2 * 3 = ' 2 3 mul
-n-to-cv cat print
+n-to-t cat print
 
 '5 - 4 = ' 5 4 sub
-n-to-cv cat print
+n-to-t cat print
 
 '6 / 3 = ' 6 3 div
-n-to-cv cat print
+n-to-t cat print
 
 '7 % 4 = ' 7 4 mod
-n-to-cv cat print
+n-to-t cat print
+
+'-3 + -4 = ' -3 -4 add
+n-to-t cat print

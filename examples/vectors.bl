@@ -3,10 +3,15 @@
 ;; the ato and rmo operations are 0-based offsets
 
 (1 2 3 4 5)
-;; ato retuns an element at offset
+
+;; ato retuns an item at offset
 1 ato print
-;; rmo removes an element at offset
+
+;; rmo removes an item at offset
 2 rmo
-;; len returns the length of the V
+
+;; len returns the number of items in V
 len print
+
+;; finally print the V
 print

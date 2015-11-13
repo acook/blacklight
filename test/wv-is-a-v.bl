@@ -1,0 +1,25 @@
+;; demonstrating WV ops and the differences from normal Vs
+
+;; define and call a WV literal
+;;[ 'I am inside a WV literal.' print ] call
+
+;; composing two WVs into one with cat
+;; FIXME: appended words are invisible to call unfortunately
+[ 5 6 ] [ add ] cat print
+
+;; basic V ops ato, rmo, and len
+;;[ 1 2 3 ] 2 ato print 1 rmo len print print
+
+;; adding Ws to a WV
+;; FIXME: appended words are invisible to call unfortunately
+;;[ 5 6 ] ~add app ~print app call
+
+;; putting non-op words into a WV will panic with a fatal lexing error
+;;[ foo bar baz ]
+
+;; we can explicitly quote them with ~ but that seems redundant FIXME?
+;;[ ~foo ~bar ~baz ]
+
+;; putting words into a normal Vector doesn't allow calls FIXME?
+;; fix dependent on post-creation vector typing
+;;v-new ~5 app ~print app call

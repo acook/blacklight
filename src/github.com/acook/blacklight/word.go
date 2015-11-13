@@ -1,23 +1,15 @@
 package main
 
-type Word struct {
-	Name string
+type W uint64
+
+func (w W) String() string {
+	return string(wd_map[uint64(w)])
 }
 
-func NewWord(t string) Word {
-	w := *new(Word)
-	if t[0] == "~"[0] {
-		w.Name = string(t[1:])
-	} else {
-		w.Name = t
-	}
-	return w
+func (w W) Value() interface{} {
+	return uint64(w)
 }
 
-func (w Word) Value() interface{} {
-	return w.Name
-}
-
-func (w Word) String() string {
-	return "~" + w.Name
+func (w W) Text() T {
+	return T(wd_map[uint64(w)])
 }

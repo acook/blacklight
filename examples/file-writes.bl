@@ -1,8 +1,8 @@
 ;; writing to a file
 
-newq              ;; create our write-queue
+q-new             ;; create our write-queue
 'write test' enq  ;; send a CV onto the write-queue
-\33 enq           ;; send a C onto the write-queue
+\a33 enq          ;; send a C onto the write-queue
 nil enq           ;; notify the write-function to close file with nil
 
 ;; write to named file from queue and wait for it to complete (via nil)

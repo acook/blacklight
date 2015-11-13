@@ -6,9 +6,9 @@ errs:        ;; creates slot ‘errs’ on object(1) and stores reference to sta
              ;; the @stack now only contains object(1)
 'examples/hello_world.bl'
              ;; ^- put a character-vector on the stack
-newq         ;; creates a new queue(1) and puts it on top of the @stack
+q-new        ;; creates a new queue(1) and puts it on top of the @stack
 read         ;; opens the 'text.txt' file for reading
-q-to-cv      ;; converts the queue into a vector giving us “Hello world!"
+q-to-t       ;; converts the contents of the queue into text giving us “Hello world!"
 greeting:    ;; make the object into [errs:s1 greeting:’Hello world!’]
 
 ;; Inverting a Stack
@@ -75,7 +75,7 @@ send:     ;; save send slot
 swap      ;; put the o on top so we can use the get-slot below
 :send     ;; this should send the above series of messages through the objects
 
-;; Converting c's into a cv Using an until Loop
+;; Converting c's into a T Using an until Loop
 
 nil
 \! \o \l \l \e \H
@@ -86,7 +86,7 @@ until
 drop
 ;; @< ‘Hello!' >
 
-;; Converting c’s into a cv Using an Object and Recursion
+;; Converting c’s into a T Using an Object and Recursion
 
 o-new                        ;; create a new object to store our function
 .                            ;; start a wv block for our entry function
@@ -110,7 +110,7 @@ $new                         ;; new @stack
 ^ pop dup rot push drop  ;; retrieve our object
 :c-to-v                      ;; call our looping function
 swap drop                    ;; get rid of the o
-;; @< ‘Hello!’ >                  ;; the contents of @stack is a cv
+;; @< ‘Hello!’ >                  ;; the contents of @stack is a T
 
 ;; Faking o-fetch
 

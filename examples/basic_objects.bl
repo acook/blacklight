@@ -9,10 +9,10 @@ o-new
 ;; recall and display value
 :num print
 
-;; create a WV slot
+;; create a Block slot
 [ 'omg hai' print ] greet:
-;; call a WV slot
+;; call a Block slot
 :greet
 
-;; view contents of a VW slot
+;; view contents of a Block slot
 ~greet fetch print

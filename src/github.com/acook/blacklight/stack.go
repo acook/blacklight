@@ -17,23 +17,6 @@ func getStackId() int {
 	return id
 }
 
-type stack interface {
-	Push(datatypes)
-	Pop() datatypes
-	Peek() datatypes
-	Drop()
-	Swap()
-	Decap()
-	Dup()
-	Over()
-	Rot()
-	Purge()
-	Depth() int
-	Kind() string
-	String() string
-	Value() interface{}
-}
-
 type Stack struct {
 	sync.Mutex
 	Items []datatypes
@@ -52,19 +35,6 @@ func NewSystemStack() *Stack {
 	return NewStack("system")
 }
 
-type MetaStack struct {
-	Stack
-	ObjectStack *ObjectStack
-}
-
-func NewMetaStack() *MetaStack {
-	s := &MetaStack{}
-	s.Type = "$meta"
-	s.Id = getStackId()
-	s.ObjectStack = NewObjectStack()
-	return s
-}
-
 func (s Stack) Value() interface{} {
 	return s
 }
@@ -74,9 +44,10 @@ func (s Stack) String() string {
 
 	for _, i := range s.Items {
 		switch i.(type) {
-		case MetaStack:
-		case *MetaStack:
-			str += "$stack"
+		case Meta:
+			str += "$<...> "
+		case *Meta:
+			str += "$*<...> "
 		case *Stack:
 			if i.(*Stack).Id == s.Id {
 				str += "<...> "
@@ -118,7 +89,7 @@ func (s *Stack) Pop() datatypes {
 		s.Items = s.Items[:s.Depth()-1]
 	} else {
 		str := "Stack.Pop: " + s.Type + "-stack is empty"
-		item = NewErr(str)
+		item = NewErr(str, s)
 		warn(str)
 		panic(item)
 	}

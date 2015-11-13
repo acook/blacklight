@@ -2,7 +2,7 @@
 ;; to read from stdin and convert Cs to a CV
 ;; NOTE -> this will block and wait on input!
 
-newq 0 read swap newq      ;; Q for read-queue, hide FD, Q for work-queue
+q-new 0 read swap q-new    ;; Q for read-queue, hide FD, Q for work-queue
 [
   '' swap                  ;; create empty CV and bring recv Q back to top
   [ rot swap app swap ]    ;; bring Cv to top, then item, append item, bring Q to top

@@ -1,8 +1,8 @@
-newq newq                ;; create send and receive queues
+q-new q-new              ;; create send and receive queues
 [
   [
     deq                  ;; will block if the queue is empty
-    n-to-cv rot swap enq ;; convert number into a cv (string) and send back
+    n-to-t rot swap enq  ;; convert number into a T (Text) and send back
     swap                 ;; reorder queues so we can loop without confusion
   ] loop                 ;; using loop since it goes forever
 ] work                   ;; start new thread and swap the queues
