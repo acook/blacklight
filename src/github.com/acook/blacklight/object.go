@@ -16,8 +16,7 @@ func NewObject() *Object {
 }
 
 func NewChildObject(parent *Object) *Object {
-	o := new(Object)
-	o.Slots = make(map[W]datatypes)
+	o := NewObject()
 	o.Parent = parent
 	return o
 }
