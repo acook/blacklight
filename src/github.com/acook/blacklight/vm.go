@@ -27,8 +27,21 @@ func doBC(meta *Meta, bc []byte) {
 	run_vm(vm)
 }
 
-func coBC(name string, items *Stack, bc []byte) {
-	NOPE("can't call or eval shit yet")
+func coBC(label string, stack *Stack, bc []byte) {
+	threads.Add(1)
+	go func(label string, bc []byte, stack *Stack) {
+		defer threads.Done()
+
+		vm := new(VMstate)
+
+		vm.label = label
+		vm.bc = bc
+		vm.l = uint64(len(vm.bc))
+		vm.m = NewMeta()
+		vm.m.Push(stack)
+
+		run_vm(vm)
+	}(label, bc, stack)
 }
 
 func run_vm(vm *VMstate) {
