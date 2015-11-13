@@ -26,7 +26,6 @@ func compile(tokens []string) []byte {
 	var debug *Debug = new(Debug)
 	defer debug.Rescue()
 
-	//var b byte
 	var bc []byte
 
 	// for vector literals
@@ -50,7 +49,7 @@ func compile(tokens []string) []byte {
 
 		switch {
 		case t == "":
-			// nope
+			// ignore
 		case isInteger(t):
 			bc = append(bc, 0xF4)
 			n, _ := strconv.Atoi(t)
