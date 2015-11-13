@@ -102,14 +102,5 @@ func (m *Meta) Self() {
 }
 
 func (m *Meta) Object() *Object {
-	var o *Object
-
-	if m.SelfFlag {
-		o = m.Current().Pop().(*Object)
-		m.SelfFlag = false
-	} else {
-		o = m.Current().Peek().(*Object)
-	}
-
-	return o
+	return m.Current().Peek().(*Object)
 }
