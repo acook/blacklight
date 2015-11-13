@@ -11,7 +11,7 @@ o-new
 
 ;; create a Block slot
 [ 'omg hai' print ] greet:
-;; call a WV slot
+;; call a Block slot
 :greet
 
 ;; view contents of a Block slot
