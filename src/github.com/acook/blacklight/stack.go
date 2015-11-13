@@ -45,9 +45,9 @@ func (s Stack) String() string {
 	for _, i := range s.Items {
 		switch i.(type) {
 		case Meta:
-			str += "$stack"
+			str += "$<...> "
 		case *Meta:
-			str += "$*stack"
+			str += "$*<...> "
 		case *Stack:
 			if i.(*Stack).Id == s.Id {
 				str += "<...> "
