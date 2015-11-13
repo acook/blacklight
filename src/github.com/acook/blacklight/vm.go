@@ -1,11 +1,10 @@
 package main
 
 import (
-	"encoding/binary"
 	"fmt"
 )
 
-func run_vm(bc []byte) {
+func doVM(bc []byte) {
 	vm := new(VMstate)
 
 	vm.bc = bc
@@ -13,6 +12,24 @@ func run_vm(bc []byte) {
 	vm.m = NewMeta()
 	vm.m.Push(NewSystemStack())
 
+	run_vm(vm)
+}
+
+func doBC(meta *Meta, bc []byte) {
+	vm := new(VMstate)
+
+	vm.bc = bc
+	vm.l = uint64(len(vm.bc))
+	vm.m = meta
+
+	run_vm(vm)
+}
+
+func coBC(name string, items *Stack, bc []byte) {
+	NOPE("can't call or eval shit yet")
+}
+
+func run_vm(vm *VMstate) {
 	for {
 		vm.b = vm.bc[vm.o]
 

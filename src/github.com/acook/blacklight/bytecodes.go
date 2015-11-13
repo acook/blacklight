@@ -53,13 +53,7 @@ func prepare_op_table() {
 		"$new":   meta_new_system_stack,
 		"$swap":  meta_swap,
 
-		// stack
-		//"pop": func(m *Meta) {
-		//	m.Current().Pop()
-		//},
-		//"drop": func(m *Meta) {
-		//	m.Current().Drop()
-		//},
+		// current stack
 		"decap": func(m *Meta) {
 			m.Current().Decap()
 		},
@@ -424,7 +418,7 @@ func prepare_op_table() {
 			NOPE("emt")
 		},
 		"call": func(m *Meta) {
-			NOPE("call")
+			doBC(m, m.Current().Pop().(B))
 		},
 		"len": func(m *Meta) {
 			v := m.Current().Peek().(sequence)
@@ -483,12 +477,4 @@ func prepare_op_table() {
 
 func NOPE(str string) {
 	print(" -- UNIMPLEMENTED op: " + str + "\n")
-}
-
-func doBC(meta *Meta, ops []byte) {
-	NOPE("can't call or eval shit yet")
-}
-
-func coBC(name string, items *Stack, ops []byte) {
-	NOPE("can't call or eval shit yet")
 }
