@@ -127,7 +127,7 @@ func prepare_op_table() {
 
 		// debug
 		"print": func(m *Meta) {
-			print(m.Current().Pop().String())
+			print(m.Current().Pop().String(), "\n")
 		},
 		"refl": func(m *Meta) {
 			NOPE("refl")
