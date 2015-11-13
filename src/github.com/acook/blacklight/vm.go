@@ -11,7 +11,7 @@ func doVM(bc []byte) {
 	vm.bc = bc
 	vm.l = uint64(len(vm.bc))
 	vm.m = NewMeta()
-	vm.m.Push(NewSystemStack())
+	vm.m.Put(NewSystemStack())
 
 	run_vm(vm)
 }
@@ -38,7 +38,7 @@ func coBC(label string, stack *Stack, bc []byte) {
 		vm.bc = bc
 		vm.l = uint64(len(vm.bc))
 		vm.m = NewMeta()
-		vm.m.Push(stack)
+		vm.m.Put(stack)
 
 		run_vm(vm)
 	}(label, bc, stack)

@@ -34,14 +34,22 @@ func (m Meta) String() string {
 	return str + ">"
 }
 
-func (m *Meta) Push(s *Stack) {
-	m.Items = append(m.Items, s)
+// for stack interface compatibility
+
+func (m *Meta) Push(i datatypes) {
+	m.Items = append(m.Items, i.(*Stack))
 }
 
-func (m *Meta) Pop() *Stack {
+func (m *Meta) Pop() datatypes { // quite dangerous
 	s := m.Items[m.Depth()-1]
 	m.Items = m.Items[:m.Depth()-1]
 	return s
+}
+
+// basic meta operations
+
+func (m *Meta) Put(s *Stack) { // equivilent to push but typed
+	m.Items = append(m.Items, s)
 }
 
 func (m *Meta) Peek() *Stack {
@@ -80,6 +88,8 @@ func (m *Meta) Swap() {
 		m.Items = append(m.Items[:depth-2], m.Items[depth-1], m.Items[depth-2])
 	}
 }
+
+// meta helpers
 
 func (m *Meta) Current() *Stack {
 	return m.Items[len(m.Items)-1]
