@@ -44,7 +44,7 @@ func (o *Object) Get(meta *Meta, w W) {
 }
 
 func (o *Object) DeleGet(meta *Meta, w W) bool {
-	current := meta.Peek()
+	current := meta.Current()
 	i, found := o.Slots[w]
 
 	if found {
