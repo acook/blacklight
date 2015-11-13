@@ -45,6 +45,10 @@ func (c C) Text() T {
 	return T(c)
 }
 
+func (c C) Bytes() []byte {
+	return c.C_to_T().Bytes()
+}
+
 type W uint64
 
 func (w W) String() string {
@@ -134,6 +138,10 @@ func (t T) Rmo(n N) sequence {
 
 func (t T) Len() N {
 	return N(len(t))
+}
+
+func (t T) Bytes() []byte {
+	return []byte(t)
 }
 
 type B []byte

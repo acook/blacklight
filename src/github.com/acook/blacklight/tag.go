@@ -15,6 +15,15 @@ func (t Tag) Value() interface{} {
 	return t
 }
 
+func (t Tag) Bytes() []byte {
+	if t.Kind == "nil" {
+		return nil
+	} else {
+		panic("Tag.Bytes: Attempt to serialize non-nil Tag!")
+		return nil
+	}
+}
+
 func NewTag(kind string, label string) *Tag {
 	t := new(Tag)
 	t.Kind = kind
