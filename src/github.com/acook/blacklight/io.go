@@ -18,7 +18,7 @@ func ReadIO(i datatypes, q *Queue) *Tag {
 	case N:
 		fd := ReadFD(int(i.(N)), q)
 		return NewFDTag(i.String(), fd)
-	case *T:
+	case T:
 		file := ReadFile(i.String(), q)
 		return NewFileTag("File#"+i.String(), file)
 	default:
