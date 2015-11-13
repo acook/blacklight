@@ -186,13 +186,20 @@ func compile(tokens []string) []byte {
 	return bc
 }
 
+var rev_wd_map map[string]uint64 = make(map[string]uint64)
 var wd_map map[uint64][]rune = make(map[uint64][]rune)
 var wd_count uint64
 
 func wd_add(t []rune) uint64 {
-	wd_count++
-	wd_map[wd_count] = t
-	return wd_count
+	value, found := rev_wd_map[string(t)]
+	if !found {
+		wd_count++
+		value = wd_count
+
+		wd_map[value] = t
+		rev_wd_map[string(t)] = value
+	}
+	return value
 }
 
 func wd_make(bc []byte, r []rune) []byte {
