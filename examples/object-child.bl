@@ -1,13 +1,9 @@
 ;; Objects can delegate to other Objects
 ;; one way is through a form of prototypical inheritance
 
-o-new  ;; This will be the parent object
-child  ;; And this creates a child object that checks the parent
-
-swap                     ;; let's add some slots to the parent
+o-new                    ;; This will be the parent object
 [ self print ] inspect:  ;; this lets us check out what object we have
+:inspect                 ;; calling it on the parent displays the object with a populated inspect slot
 
-swap                     ;; bring the child back to the top
-:inspect                 ;; call the inspect slot on the child
-
-;; the above works successfully and shows the empty child object in the output
+child                    ;; Creates a child object that checks the parent
+:inspect                 ;; calling inspect on the child displays the empty object
