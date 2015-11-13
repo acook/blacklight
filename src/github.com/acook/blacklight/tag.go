@@ -12,7 +12,7 @@ func (t Tag) String() string {
 }
 
 func (t Tag) Value() interface{} {
-	return t
+	return t.Kind
 }
 
 func (t Tag) Bytes() []byte {
