@@ -22,3 +22,14 @@ type texter interface {
 type byter interface {
 	Bytes() []byte
 }
+
+type stack interface {
+	Push(datatypes)
+	Pop() datatypes
+	Drop()
+	Swap()
+	Decap()
+	Depth() int
+	String() string
+	Value() interface{}
+}

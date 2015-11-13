@@ -17,23 +17,6 @@ func getStackId() int {
 	return id
 }
 
-type stack interface {
-	Push(datatypes)
-	Pop() datatypes
-	Peek() datatypes
-	Drop()
-	Swap()
-	Decap()
-	Dup()
-	Over()
-	Rot()
-	Purge()
-	Depth() int
-	Kind() string
-	String() string
-	Value() interface{}
-}
-
 type Stack struct {
 	sync.Mutex
 	Items []datatypes
