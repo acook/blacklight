@@ -45,7 +45,7 @@ func (o *Object) Get(meta *MetaStack, w Word) {
 }
 
 func (o *Object) DeleGet(meta *MetaStack, w Word) bool {
-	current := (*meta.Peek()).(*Stack)
+	current := meta.Peek().(*Stack)
 	i, found := o.Slots[w]
 
 	if found {
@@ -62,10 +62,10 @@ func (o *Object) DeleGet(meta *MetaStack, w Word) bool {
 	return found
 }
 
-func (o *Object) String() string {
+func (o Object) String() string {
 	return "|OBJ# " + fmt.Sprintf("%v", o.Slots) + "|"
 }
 
-func (o *Object) Value() interface{} {
+func (o Object) Value() interface{} {
 	return o.Slots
 }

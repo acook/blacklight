@@ -20,7 +20,7 @@ func getStackId() int {
 type stack interface {
 	Push(datatypes)
 	Pop() datatypes
-	Peek() *datatypes
+	Peek() datatypes
 	Drop()
 	Swap()
 	Decap()
@@ -52,13 +52,9 @@ func NewSystemStack() *Stack {
 	return NewStack("system")
 }
 
-func NewObjectStack() *Stack {
-	return NewStack("object")
-}
-
 type MetaStack struct {
 	Stack
-	ObjectStack *Stack
+	ObjectStack *ObjectStack
 }
 
 func NewMetaStack() *MetaStack {
@@ -129,10 +125,10 @@ func (s *Stack) Pop() datatypes {
 	return item
 }
 
-func (s *Stack) Peek() *datatypes {
+func (s *Stack) Peek() datatypes {
 	depth := s.Depth()
 	if depth > 0 {
-		return &s.Items[depth-1]
+		return s.Items[depth-1]
 	} else {
 		str := "Stack.Peek: " + s.Type + "-stack is empty"
 		panic(str)

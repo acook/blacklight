@@ -14,7 +14,7 @@ func doEval(meta *MetaStack, ops []operation) {
 	defer rescue(meta)
 
 	for _, op := range ops {
-		s := *meta.Peek()
+		s := meta.Peek()
 		current = s.(*Stack)
 
 		switch op.(type) {
@@ -29,11 +29,11 @@ func doEval(meta *MetaStack, ops []operation) {
 	}
 }
 
-func rescue(meta stack) {
+func rescue(meta *MetaStack) {
 	if err := recover(); err != nil {
 		warn("evaluation error")
 		warn("$meta:", meta.String())
-		s := *meta.Peek()
+		s := meta.Peek()
 		warn("@current:", s.String())
 		panic(err)
 	}
