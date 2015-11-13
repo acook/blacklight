@@ -5,6 +5,7 @@ import (
 )
 
 type VMstate struct {
+	label    string // a label for error reporting
 	o        uint64 // offset
 	l        uint64 // total length of bc
 	b        byte   // current byte

@@ -7,6 +7,7 @@ import (
 func doVM(bc []byte) {
 	vm := new(VMstate)
 
+	vm.label = "main"
 	vm.bc = bc
 	vm.l = uint64(len(vm.bc))
 	vm.m = NewMeta()
@@ -18,6 +19,7 @@ func doVM(bc []byte) {
 func doBC(meta *Meta, bc []byte) {
 	vm := new(VMstate)
 
+	vm.label = "block"
 	vm.bc = bc
 	vm.l = uint64(len(vm.bc))
 	vm.m = meta
