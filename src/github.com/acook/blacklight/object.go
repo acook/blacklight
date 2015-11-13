@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+//"fmt"
 )
 
 type Object struct {
@@ -37,8 +37,15 @@ func (o *Object) Fetch(w W) datatypes {
 func (o *Object) Get(meta *Meta, w W) {
 	meta.ObjectStack.Push(o)
 	defer meta.ObjectStack.Pop()
-	result := o.DeleGet(meta, w)
-	if !result {
+
+	ok := o.DeleGet(meta, w)
+
+	if !ok {
+		print("\n")
+		print("error in Object.Get: ")
+		print("slot `", w.String(), "` not found!\n")
+		print(" -- given: ", w.String(), "\n")
+		print(" --   has: ", o.Labels().String(), "\n")
 		panic("Object.Get: slot `" + w.String() + "` does not exist!")
 	}
 }
@@ -62,9 +69,23 @@ func (o *Object) DeleGet(meta *Meta, w W) bool {
 }
 
 func (o Object) String() string {
-	return "|OBJ# " + fmt.Sprintf("%v", o.Slots) + "|"
+	str := "OBJ< "
+
+	for k, v := range o.Slots {
+		str += k.String() + ":" + v.String() + " "
+	}
+
+	return str + ">"
 }
 
 func (o Object) Value() interface{} {
 	return o.Slots
+}
+
+func (o Object) Labels() V {
+	var labels V
+	for label, _ := range o.Slots {
+		labels = append(labels, label)
+	}
+	return labels
 }
