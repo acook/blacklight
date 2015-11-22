@@ -1,0 +1,10 @@
+---
+baseurl: "https://acook.github.com/blacklight"
+languageCode: "en-us"
+title: "blacklight"
+
+MetaDataFormat: "yaml"
+editor: "vim"
+
+SectionPagesMenu: "section"
+
