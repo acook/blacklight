@@ -37,10 +37,16 @@ func (m Meta) String() string {
 // for stack interface compatibility
 
 func (m *Meta) Push(i datatypes) {
+	m.Lock()
+	defer m.Unlock()
+
 	m.Items = append(m.Items, i.(*Stack))
 }
 
 func (m *Meta) Pop() datatypes { // quite dangerous
+	m.Lock()
+	defer m.Unlock()
+
 	s := m.Items[m.Depth()-1]
 	m.Items = m.Items[:m.Depth()-1]
 	return s
@@ -49,10 +55,16 @@ func (m *Meta) Pop() datatypes { // quite dangerous
 // basic meta operations
 
 func (m *Meta) Put(s *Stack) { // equivilent to push but typed
+	m.Lock()
+	defer m.Unlock()
+
 	m.Items = append(m.Items, s)
 }
 
 func (m *Meta) Peek() *Stack {
+	m.Lock()
+	defer m.Unlock()
+
 	return m.Items[m.Depth()-1]
 }
 
@@ -96,6 +108,9 @@ func (m *Meta) Current() *Stack {
 }
 
 func (m *Meta) Self() {
+	m.Lock()
+	defer m.Unlock()
+
 	o := m.ObjectStack.Peek()
 	m.Current().Push(o)
 	m.SelfFlag = true
