@@ -1,10 +1,10 @@
 ;; Pretty much identical to basic V ops
 
 'abc'
-1 ato c-to-t print
+1 ato r-to-t print
 1 rmo print
 
-;; Except that Cs become part of the CV
+;; Except that Rs become part of the T
 'foo' \a32 app 'bar' cat print
 
 ;; You can also escape single quotes
