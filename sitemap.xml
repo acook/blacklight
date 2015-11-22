@@ -2,12 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://localhost:1313/blacklight/</loc>
+    <loc>https://acook.github.com/blacklight/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://localhost:1313/blacklight/blurb/</loc>
+    <loc>https://acook.github.com/blacklight/blurb/</loc>
   </url>
   
 </urlset>
