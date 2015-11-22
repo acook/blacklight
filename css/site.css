@@ -1,0 +1,44 @@
+@charset "UTF-8";
+body {
+  background-color: black;
+  color: white; }
+
+blockquote {
+  background: rgba(0, 0, 0, 0.57);
+  border-left: 10px solid rgba(255, 255, 255, 0.8);
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "“" "”" "‘" "’"; }
+
+blockquote:before {
+  color: rgba(255, 255, 255, 0.8);
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em; }
+
+blockquote:after {
+  content: none; }
+
+blockquote p {
+  display: inline; }
+
+.homepage {
+  background: url("/blacklight/header.jpg") center/cover;
+  background-position: top; }
+
+.mdl-layout__header, .mdl-layout__drawer-button {
+  color: white; }
+
+.mdl-layout-title,
+.mdl-layout__drawer-button .material-icons {
+  line-height: 48px; }
+
+h1#logo {
+  background: url("/blacklight/logo.jpg") center/cover;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center; }
+
+/*# sourceMappingURL=site.css.map */

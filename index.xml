@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>blacklight</title>
+    <link>http://localhost:1313/blacklight/</link>
+    <description>Recent content on blacklight</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://localhost:1313/blacklight/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title></title>
+      <link>http://localhost:1313/blacklight/blurb/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/blacklight/blurb/</guid>
+      <description>
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;blacklight&lt;/code&gt;&lt;/strong&gt; is a general-pupose multithreading concatenative stack-based programming language with first-class queues and objects with delegation.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Program state is stored in a simple set of stacks.&lt;/p&gt;
+
+&lt;p&gt;Code reuse through vectors of operations and object slots.&lt;/p&gt;
+
+&lt;h3 id=&#34;features:04b01de8c086d7aeeb3aaf6ffc28d6aa&#34;&gt;Features&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;blacklight&lt;/code&gt; is &lt;em&gt;awesome&lt;/em&gt;, here&amp;rsquo;s a few reasons why:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;easy to use builtin parallelism through native multithreading&lt;/li&gt;
+&lt;li&gt;data structures are threadsafe by default&lt;/li&gt;
+&lt;li&gt;native queue type for inter-thread communication&lt;/li&gt;
+&lt;li&gt;stack-oriented &amp;amp; concatenative programming&lt;/li&gt;
+&lt;li&gt;objects with prototypical delegation&lt;/li&gt;
+&lt;li&gt;great for MapReducing, ETLing, and general data processing&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
