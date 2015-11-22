@@ -93,17 +93,13 @@ func prepare_op_table() {
 
 		// logic & loops
 		"either": bl_either,
-		"eq": func(m *Meta) {
-			i1 := m.Current().Pop()
-			i2 := m.Current().Peek()
-			m.Current().Push(blEq(i1, i2))
-		},
-		"if":    bl_if,
-		"is":    bl_is,
-		"not":   bl_not,
-		"until": bl_until,
-		"while": bl_while,
-		"loop":  bl_loop,
+		"eq":     bl_eq,
+		"if":     bl_if,
+		"is":     bl_is,
+		"not":    bl_not,
+		"until":  bl_until,
+		"while":  bl_while,
+		"loop":   bl_loop,
 
 		// objects
 		"o-new": o_new,
