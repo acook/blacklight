@@ -54,8 +54,8 @@ func run_vm(vm *VMstate) {
 			opword(vm)
 		} else if vm.b == 0xF1 { // Word
 			word(vm)
-		} else if vm.b == 0xF3 { // Char
-			char(vm)
+		} else if vm.b == 0xF3 { // Rune
+			bl_rune(vm)
 		} else if vm.b == 0xF4 { // Integer
 			integer(vm)
 		} else if vm.b == 0xF6 { // Text

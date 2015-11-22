@@ -17,7 +17,7 @@ func isInteger(t string) bool {
 	return true
 }
 
-func isChar(t string) bool {
+func isRune(t string) bool {
 	if t[0] == "\\"[0] {
 		return true
 	}

@@ -14,8 +14,8 @@ func (n N) Value() interface{} {
 	return int64(n)
 }
 
-func (n N) N_to_C() C {
-	return C(n)
+func (n N) N_to_R() R {
+	return R(n)
 }
 
 func (n N) N_to_T() T {

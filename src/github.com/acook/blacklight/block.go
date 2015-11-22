@@ -32,7 +32,7 @@ func (b B) App(i datatypes) sequence {
 }
 
 func (b B) Ato(n N) datatypes {
-	return C(b[n])
+	return R(b[n])
 	//return W(b[n])
 }
 

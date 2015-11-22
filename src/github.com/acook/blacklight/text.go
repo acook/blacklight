@@ -23,7 +23,7 @@ func (t T) App(d datatypes) sequence {
 }
 
 func (t T) Ato(n N) datatypes {
-	return C(t[n])
+	return R(t[n])
 }
 
 func (t T) Rmo(n N) sequence {

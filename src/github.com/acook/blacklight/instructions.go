@@ -32,14 +32,14 @@ func word(vm *VMstate) {
 	vm.m.Current().Push(W(wd_uint))
 }
 
-func char(vm *VMstate) {
+func bl_rune(vm *VMstate) {
 	vm.o++
 	buf := vm.bc[vm.o : vm.o+4]
 
-	c := Varint32(buf)
+	r := Varint32(buf)
 
 	vm.o = vm.o + 3
-	vm.m.Current().Push(C(c))
+	vm.m.Current().Push(R(r))
 }
 
 func integer(vm *VMstate) {
@@ -273,8 +273,8 @@ func mul(m *Meta) {
 	m.Current().Push(n2 * n1)
 }
 
-func n_to_c(m *Meta) {
-	m.Current().Push(m.Current().Pop().(N).N_to_C())
+func n_to_r(m *Meta) {
+	m.Current().Push(m.Current().Pop().(N).N_to_R())
 }
 
 func n_to_t(m *Meta) {
@@ -585,10 +585,10 @@ func bl_nil(m *Meta) {
 
 // RUNES
 
-func c_to_t(m *Meta) {
-	m.Current().Push(m.Current().Pop().(C).C_to_T())
+func r_to_t(m *Meta) {
+	m.Current().Push(m.Current().Pop().(R).R_to_T())
 }
 
-func c_to_n(m *Meta) {
-	m.Current().Push(m.Current().Pop().(C).C_to_N())
+func r_to_n(m *Meta) {
+	m.Current().Push(m.Current().Pop().(R).R_to_N())
 }

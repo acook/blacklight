@@ -73,7 +73,7 @@ func ReadFD(i int, q *Queue) *FD {
 		for b := make([]byte, 1); ; {
 			l, _ := fd.File.Read(b)
 			if l > 0 {
-				q.Enqueue(C(string(b)[0]))
+				q.Enqueue(R(string(b)[0]))
 			} else {
 				fd.File.Close()
 				q.Enqueue(NewNil("EOF"))
@@ -131,7 +131,7 @@ func ReadFile(filename string, q *Queue) *FD {
 		for {
 			l, _ := fd.File.Read(b)
 			if l > 0 {
-				q.Enqueue(C(string(b)[0]))
+				q.Enqueue(R(string(b)[0]))
 			} else {
 				fd.File.Close()
 				q.Enqueue(NewNil("EOF"))

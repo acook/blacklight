@@ -12,10 +12,10 @@ package main
 // 0x00-0xF0 : opword (currently auto-generated)
 // 0xF1 : word - uint32
 // 0xF2 : byte - uint8 (byte)
-// 0xF3 : char - uint32 (rune)
+// 0xF3 : rune - uint32 (rune)
 // 0xF4 : number - int64
 // 0xF5 : float - float64
-// 0xF6 : text - length:uint64 data:Cs
+// 0xF6 : text - length:uint64 data:Rs
 // 0xF7 : block - length:uint64 data:bc
 // 0xF8 : vector - length:uint64 data:items
 // 0xF9 : tag - kind:uint8 metadata:uint32 msg:text
@@ -26,7 +26,7 @@ var inb_map = map[string]byte{ // item name->byte map
 	"opword": 0xF0,
 	"word":   0xF1,
 	"byte":   0xF2,
-	"char":   0xF3,
+	"rune":   0xF3,
 	"number": 0xF4,
 	"float":  0xF5,
 	"text":   0xF6,
@@ -84,7 +84,7 @@ func prepare_op_table() {
 		"div":    div,
 		"mod":    mod,
 		"mul":    mod,
-		"n-to-c": n_to_c,
+		"n-to-r": n_to_r,
 		"n-to-t": n_to_t,
 
 		// file io
@@ -145,9 +145,9 @@ func prepare_op_table() {
 		"true":   bl_true,
 		"nil":    bl_nil,
 
-		// chars
-		"c-to-t": c_to_t,
-		"c-to-n": c_to_n,
+		// runes
+		"r-to-t": r_to_t,
+		"r-to-n": r_to_n,
 	}
 
 	op_map = make(map[string]byte)

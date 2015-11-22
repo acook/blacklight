@@ -56,14 +56,14 @@ func compile(tokens []string) []byte {
 			PutVarint64(int_buf, int64(n))
 			bc = append(bc, int_buf...)
 
-		case isChar(t):
+		case isRune(t):
 			bc = append(bc, 0xF3)
 
 			// FIXME: the whole incoming stream should already be runes
 			runes := []rune(t)
 
 			if len(runes) == 2 {
-				// if it's 2 runes long then it's just a /x char
+				// if it's 2 runes long then it's just a /x R
 				PutVarint32(cha_buf, runes[1])
 				bc = append(bc, cha_buf...)
 			} else if runes[1] == '\\' {
@@ -93,7 +93,7 @@ func compile(tokens []string) []byte {
 				PutVarint32(cha_buf, e)
 				bc = append(bc, cha_buf...)
 			} else if runes[1] == 'u' {
-				// if the second rune is u then it's a unicode char in hex
+				// if the second rune is u then it's a unicode R in hex
 				h, _ := hex.DecodeString(string(runes[2:]))
 				r, size := utf8.DecodeRune(h)
 
@@ -104,7 +104,7 @@ func compile(tokens []string) []byte {
 					panic("compiler: utf sequence incorrect length in C literal")
 				}
 			} else if runes[1] == 'a' {
-				// if the second rune is a then it's a ascii char in decimal
+				// if the second rune is a then it's a ascii R in decimal
 				a, _ := strconv.Atoi(string(runes[2:]))
 
 				PutVarint32(cha_buf, rune(a))
