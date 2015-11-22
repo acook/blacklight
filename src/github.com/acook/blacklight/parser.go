@@ -4,33 +4,33 @@ import (
 	"unicode"
 )
 
-func parse(code string) []string {
+func parse(code []rune) []string {
 	var tokens []string
 	tokens = append(tokens, "")
 	l := 0
 	comment, str := false, false
-	var last_glyph string
+	var last_glyph rune
 
 	for _, b := range code {
-		glyph := string(b)
+		glyph := b
 
 		switch {
-		case glyph == "\n":
+		case glyph == '\n':
 			comment = false
 			tokens = ws(glyph, tokens)
 		case comment:
 			// ignore comments
-		case glyph == "'" && last_glyph == "\\":
+		case glyph == '\'' && last_glyph == '\\':
 			if str {
 				t := tokens[l]
 				h := tokens[:l]
-				tokens = append(h, (t[:len(t)-1] + glyph))
+				tokens = append(h, (t[:len(t)-1] + string(glyph)))
 			} else {
 				t := tokens[l]
 				h := tokens[:l]
-				tokens = append(h, (t + glyph))
+				tokens = append(h, (t + string(glyph)))
 			}
-		case glyph == "'":
+		case glyph == '\'':
 			str = !str
 			fallthrough
 		case str:
@@ -38,14 +38,14 @@ func parse(code string) []string {
 		default:
 			t := tokens[l]
 			h := tokens[:l]
-			tokens = append(h, (t + glyph))
-		case glyph == "(":
+			tokens = append(h, (t + string(glyph)))
+		case glyph == '(':
 			fallthrough
-		case glyph == ")":
+		case glyph == ')':
 			fallthrough
-		case glyph == "[":
+		case glyph == '[':
 			fallthrough
-		case glyph == "]":
+		case glyph == ']':
 			tokens = tk(glyph, tokens)
 			tokens = ws(glyph, tokens)
 		case unicode.IsSpace(b):
@@ -66,20 +66,20 @@ func parse(code string) []string {
 	return tokens
 }
 
-func tk(glyph string, tokens []string) []string {
+func tk(glyph rune, tokens []string) []string {
 	if tokens[len(tokens)-1] == "" {
 		tokens = tokens[:len(tokens)-1]
 	}
-	return append(tokens, glyph)
+	return append(tokens, string(glyph))
 }
 
-func ws(current string, tokens []string) []string {
+func ws(current rune, tokens []string) []string {
 	if tokens[len(tokens)-1] != "" {
 		return append(tokens, "")
 	}
 	return tokens
 }
 
-func isComment(current string, tokens []string) bool {
-	return current == ";" && tokens[len(tokens)-1] == ";"
+func isComment(current rune, tokens []string) bool {
+	return current == ';' && tokens[len(tokens)-1] == ";"
 }

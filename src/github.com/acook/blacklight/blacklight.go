@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -30,17 +31,13 @@ func main() {
 	doVM(ops)
 }
 
-func loadFile(filename string) string {
-	bytes, err := ioutil.ReadFile(filename)
+func loadFile(filename string) []rune {
+	contents, err := ioutil.ReadFile(filename)
 	if err != nil {
 		panic(err)
 	}
 
-	return prepare(bytes)
-}
-
-func prepare(code []byte) string {
-	return string(code[:])
+	return bytes.Runes(contents)
 }
 
 func warn(text ...string) {
