@@ -376,17 +376,17 @@ func prepare_op_table() {
 			m.Current().Push(NewStack("user"))
 		},
 		"pop": func(m *Meta) {
-			m.Current().Push(m.Current().Peek().(stack).Pop())
+			m.Current().Push(m.Current().Peek().(stackable).Pop())
 		},
 		"push": func(m *Meta) {
 			d := m.Current().Pop()
-			m.Current().Peek().(stack).Push(d)
+			m.Current().Peek().(stackable).Push(d)
 		},
 		"size": func(m *Meta) {
-			m.Current().Push(N(m.Current().Peek().(stack).Depth()))
+			m.Current().Push(N(m.Current().Peek().(stackable).Depth()))
 		},
 		"tail": func(m *Meta) {
-			m.Current().Peek().(stack).Drop()
+			m.Current().Peek().(stackable).Drop()
 		},
 
 		// Vectors & Sequences

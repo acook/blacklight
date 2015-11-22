@@ -23,7 +23,7 @@ type byter interface {
 	Bytes() []byte
 }
 
-type stack interface {
+type stackable interface {
 	Push(datatypes)
 	Pop() datatypes
 	Drop()
