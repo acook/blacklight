@@ -54,410 +54,104 @@ func prepare_op_table() {
 		"$swap":  meta_swap,
 
 		// current stack
-		"decap": func(m *Meta) {
-			m.Current().Decap()
-		},
-		"depth": func(m *Meta) {
-			m.Current().Push(N(m.Current().Depth()))
-		},
-		"drop": func(m *Meta) {
-			m.Current().Drop()
-		},
-		"dup": func(m *Meta) {
-			m.Current().Dup()
-		},
-		"over": func(m *Meta) {
-			m.Current().Over()
-		},
-		"purge": func(m *Meta) {
-			m.Current().Purge()
-		},
-		"rot": func(m *Meta) {
-			m.Current().Rot()
-		},
-		"swap": func(m *Meta) {
-			m.Current().Swap()
-		},
+		"decap": current_decap,
+		"depth": current_depth,
+		"drop":  current_drop,
+		"dup":   current_dup,
+		"over":  current_over,
+		"purge": current_purge,
+		"rot":   current_rot,
+		"swap":  current_swap,
 
 		// concurrency
-		"bkg": func(m *Meta) {
-			block := m.Current().Pop().(B)
-
-			items := NewStack("bkg")
-			items.Push(m.Current().Pop())
-
-			coBC("bkg", items, block)
-		},
-		"co": func(m *Meta) {
-			filename := m.Current().Pop().String()
-
-			in := NewQueue()
-			out := NewQueue()
-
-			stack := NewStack("co")
-			stack.Push(in)
-			stack.Push(out)
-
-			code := loadFile(filename)
-			tokens := parse(code)
-			file_bc := compile(tokens)
-
-			m.Current().Push(out)
-			m.Current().Push(in)
-
-			coBC("co", stack, file_bc)
-		},
-		"work": func(m *Meta) {
-			block := m.Current().Pop().(B)
-			in := m.Current().Items[len(m.Current().Items)-1].(*Queue)
-			out := m.Current().Items[len(m.Current().Items)-2].(*Queue)
-
-			stack := NewStack("work")
-			stack.Push(in)
-			stack.Push(out)
-
-			m.Current().Push(out)
-			m.Current().Push(in)
-
-			coBC("work", stack, block)
-		},
-		"wait": func(m *Meta) {
-			threads.Wait()
-		},
+		"bkg":  bkg,
+		"co":   co,
+		"work": work,
+		"wait": wait,
 
 		// debug
-		"print": func(m *Meta) {
-			print(m.Current().Pop().String(), "\n")
-		},
-		"refl": func(m *Meta) {
-			NOPE("refl")
-		},
-		"warn": func(m *Meta) {
-			NOPE("warn")
-		},
+		"print": bl_print,
+		"refl":  bl_refl,
+		"warn":  bl_warn,
 
 		// loading
-		"do": func(m *Meta) {
-			filename := m.Current().Pop().String()
-
-			code := loadFile(filename)
-			tokens := parse(code)
-			file_bc := compile(tokens)
-
-			doBC(m, file_bc)
-		},
-		"imp": func(m *Meta) {
-			NOPE("imp")
-		},
+		"do":  do,
+		"imp": imp,
 
 		// math
-		"add": func(m *Meta) {
-			n1 := m.Current().Pop().(N)
-			n2 := m.Current().Pop().(N)
-
-			m.Current().Push(n2 + n1)
-		},
-		"sub": func(m *Meta) {
-			n1 := m.Current().Pop().(N)
-			n2 := m.Current().Pop().(N)
-
-			m.Current().Push(n2 - n1)
-		},
-		"div": func(m *Meta) {
-			n1 := m.Current().Pop().(N)
-			n2 := m.Current().Pop().(N)
-
-			m.Current().Push(n2 / n1)
-		},
-		"mod": func(m *Meta) {
-			n1 := m.Current().Pop().(N)
-			n2 := m.Current().Pop().(N)
-
-			m.Current().Push(n2 % n1)
-		},
-		"mul": func(m *Meta) {
-			n1 := m.Current().Pop().(N)
-			n2 := m.Current().Pop().(N)
-
-			m.Current().Push(n2 * n1)
-		},
-		"n-to-c": func(m *Meta) {
-			m.Current().Push(m.Current().Pop().(N).N_to_C())
-		},
-		"n-to-t": func(m *Meta) {
-			m.Current().Push(m.Current().Pop().(N).N_to_T())
-		},
+		"add":    add,
+		"sub":    sub,
+		"div":    div,
+		"mod":    mod,
+		"mul":    mod,
+		"n-to-c": n_to_c,
+		"n-to-t": n_to_t,
 
 		// file io
-		"read": func(m *Meta) {
-			source := m.Current().Pop()
-			q := m.Current().Peek().(*Queue)
-			io := ReadIO(source, q)
-			m.Current().Push(io)
-		},
-		"write": func(m *Meta) {
-			dest := m.Current().Pop()
-			q := m.Current().Peek().(*Queue)
-			io := WriteIO(dest, q)
-			m.Current().Push(io)
-		},
+		"read":  read,
+		"write": write,
 
 		// logic & loops
-		"either": func(m *Meta) {
-			comp := m.Current().Pop().(B)
-			iffalse := m.Current().Pop().(B)
-			iftrue := m.Current().Pop().(B)
-			doBC(m, comp)
-			if m.Current().Pop().(*Tag).Kind == "true" {
-				doBC(m, iftrue)
-			} else {
-				doBC(m, iffalse)
-			}
-		},
+		"either": bl_either,
 		"eq": func(m *Meta) {
 			i1 := m.Current().Pop()
 			i2 := m.Current().Peek()
 			m.Current().Push(blEq(i1, i2))
 		},
-		"if": func(m *Meta) {
-			comp := m.Current().Pop().(B)
-			actn := m.Current().Pop().(B)
-			doBC(m, comp)
-			if m.Current().Pop().(*Tag).Kind == "true" {
-				doBC(m, actn)
-			}
-		},
-		"is": func(m *Meta) {
-			NOPE("is")
-		},
-		"not": func(m *Meta) {
-			var t *Tag
-			i := m.Current().Pop()
-
-			switch i.(type) {
-			case *Tag:
-				if i.(*Tag).Kind == "nil" {
-					t = NewTrue("not")
-				} else {
-					t = NewNil("not")
-				}
-			default:
-				t = NewNil("not")
-			}
-
-			m.Current().Push(t)
-		},
-		"until": func(m *Meta) {
-			comp := m.Current().Pop().(B)
-			actn := m.Current().Pop().(B)
-		Until:
-			for {
-				doBC(m, comp)
-				if m.Current().Pop().(*Tag).Kind == "true" {
-					break Until
-				}
-				doBC(m, actn)
-			}
-		},
-		"while": func(m *Meta) {
-			comp := m.Current().Pop().(B)
-			actn := m.Current().Pop().(B)
-		While:
-			for {
-				doBC(m, comp)
-				if m.Current().Pop().(*Tag).Kind != "true" {
-					break While
-				}
-				doBC(m, actn)
-			}
-		},
-		"loop": func(m *Meta) {
-			actn := m.Current().Pop().(B)
-			for {
-				doBC(m, actn)
-			}
-		},
+		"if":    bl_if,
+		"is":    bl_is,
+		"not":   bl_not,
+		"until": bl_until,
+		"while": bl_while,
+		"loop":  bl_loop,
 
 		// objects
-		"o-new": func(m *Meta) {
-			m.Current().Push(NewObject())
-		},
-		"self": func(m *Meta) {
-			m.Self()
-		},
-		"child": func(m *Meta) {
-			o := m.Object()
-			child := NewChildObject(o)
-			m.Current().Push(child)
-		},
-		"fetch": func(m *Meta) {
-			slot := m.Current().Pop().(W)
-			o := m.Object()
-			m.Current().Push(o.Fetch(slot))
-		},
-		"get": func(m *Meta) {
-			slot := m.Current().Pop().(W)
-			m.Object().Get(m, slot)
-		},
-		"set": func(m *Meta) {
-			slot := m.Current().Pop().(W)
-			i := m.Current().Pop()
-			m.Object().Set(slot, i)
-		},
+		"o-new": o_new,
+		"self":  o_self,
+		"child": o_child,
+		"fetch": o_fetch,
+		"get":   o_get,
+		"set":   o_set,
 
 		// queues
-		"q-new": func(m *Meta) {
-			m.Current().Push(NewQueue())
-		},
-		"deq": func(m *Meta) {
-			i := m.Current().Peek().(*Queue).Dequeue()
-			m.Current().Push(i)
-		},
-		"enq": func(m *Meta) {
-			i := m.Current().Pop()
-			m.Current().Peek().(*Queue).Enqueue(i)
-		},
-		"proq": func(m *Meta) {
-			block := m.Current().Pop().(B)
-			q := m.Current().Pop().(*Queue)
-
-		ProcQLoop:
-			for {
-				select {
-				case item := <-q.Items:
-					m.Current().Push(item)
-					doBC(m, block)
-				default:
-					break ProcQLoop
-				}
-			}
-		},
-		"q-to-s": func(m *Meta) {
-			NOPE("q-to-s")
-		},
-		"q-to-v": func(m *Meta) {
-			q := m.Current().Pop().(*Queue)
-			items := []datatypes{}
-
-		QtoV:
-			for {
-				select {
-				case i := <-q.Items:
-					items = append(items, i)
-				default:
-					break QtoV
-				}
-			}
-
-			m.Current().Push(V(items))
-		},
-		"q-to-t": func(m *Meta) {
-			q := m.Current().Pop().(*Queue)
-			text := T("")
-
-		QtoT:
-			for {
-				i := <-q.Items
-				if blEq(i, NewNil("q_to_t")).Bool {
-					break QtoT
-				} else {
-					text = text.App(i).(T)
-				}
-			}
-
-			m.Current().Push(text)
-		},
-		"unq": func(m *Meta) {
-			NOPE("unq")
-		},
+		"q-new":  q_new,
+		"deq":    q_deq,
+		"enq":    q_enq,
+		"proq":   q_proq,
+		"q-to-s": q_to_s,
+		"q-to-v": q_to_v,
+		"q-to-t": q_to_t,
+		"unq":    q_unq,
 
 		// stacks
-		"s-new": func(m *Meta) {
-			m.Current().Push(NewStack("user"))
-		},
-		"pop": func(m *Meta) {
-			m.Current().Push(m.Current().Peek().(stackable).Pop())
-		},
-		"push": func(m *Meta) {
-			d := m.Current().Pop()
-			m.Current().Peek().(stackable).Push(d)
-		},
-		"size": func(m *Meta) {
-			m.Current().Push(N(m.Current().Peek().(stackable).Depth()))
-		},
-		"tail": func(m *Meta) {
-			m.Current().Peek().(stackable).Drop()
-		},
+		"s-new": s_new,
+		"pop":   s_pop,
+		"push":  s_push,
+		"size":  s_size,
+		"tail":  s_tail,
 
 		// Vectors & Sequences
-		"v-new": func(m *Meta) {
-			m.Current().Push(V{})
-		},
-		"app": func(m *Meta) {
-			i := m.Current().Pop()
-			v := m.Current().Pop().(sequence)
-			m.Current().Push(v.App(i))
-		},
-		"ato": func(m *Meta) {
-			c := m.Current()
-			n := c.Pop().(N)
-			v := m.Current().Peek().(sequence)
-			i := v.Ato(n)
-			m.Current().Push(i)
-		},
-		"cat": func(m *Meta) {
-			i1 := m.Current().Pop().(sequence)
-			i2 := m.Current().Pop().(sequence)
-			result := i2.Cat(i1)
-			m.Current().Push(result)
-		},
-		"del": func(m *Meta) {
-			NOPE("del")
-		},
-		"emt": func(m *Meta) {
-			NOPE("emt")
-		},
-		"call": func(m *Meta) {
-			doBC(m, m.Current().Pop().(B))
-		},
-		"len": func(m *Meta) {
-			v := m.Current().Peek().(sequence)
-			m.Current().Push(N(v.Len()))
-		},
-		"pick": func(m *Meta) {
-			NOPE("pick")
-		},
-		"rmo": func(m *Meta) {
-			n := m.Current().Pop().(N)
-			v := m.Current().Pop().(sequence)
-			nv := v.Rmo(n)
-			m.Current().Push(nv)
-		},
-		"v-to-s": func(m *Meta) {
-			NOPE("v-to-s")
-		},
-		"v-to-q": func(m *Meta) {
-			NOPE("v-to-q")
-		},
+		"v-new":  v_new,
+		"cat":    seq_cat,
+		"app":    seq_app,
+		"ato":    seq_ato,
+		"rmo":    seq_rmo,
+		"len":    seq_len,
+		"call":   block_call,
+		"del":    seq_del,
+		"emt":    seq_emt,
+		"pick":   seq_pick,
+		"v-to-s": v_to_s,
+		"v-to-q": v_to_q,
 
 		// tags
-		"?-to-t": func(m *Meta) {
-			NOPE("?-to-t")
-		},
-		"true": func(m *Meta) {
-			m.Current().Push(NewTrue("true"))
-		},
-		"nil": func(m *Meta) {
-			m.Current().Push(NewNil("nil"))
-		},
+		"?-to-t": tag_to_t,
+		"true":   bl_true,
+		"nil":    bl_nil,
 
 		// chars
-		"c-to-t": func(m *Meta) {
-			m.Current().Push(m.Current().Pop().(C).C_to_T())
-		},
-		"c-to-n": func(m *Meta) {
-			m.Current().Push(m.Current().Pop().(C).C_to_N())
-		},
+		"c-to-t": c_to_t,
+		"c-to-n": c_to_n,
 	}
 
 	op_map = make(map[string]byte)
@@ -473,8 +167,4 @@ func prepare_op_table() {
 	}
 	total_ops = uint8(i)
 
-}
-
-func NOPE(str string) {
-	print(" -- UNIMPLEMENTED op: " + str + "\n")
 }
