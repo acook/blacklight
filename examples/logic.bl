@@ -6,5 +6,5 @@ if
 (1 2)
 [ 'empty' ]
 [ 'not empty!' ]
-[ len 0 eq swap drop ]
+[ len 0 eq ]
 either print

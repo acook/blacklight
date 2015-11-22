@@ -313,7 +313,7 @@ func bl_either(m *Meta) {
 
 func bl_eq(m *Meta) {
 	i1 := m.Current().Pop()
-	i2 := m.Current().Peek()
+	i2 := m.Current().Pop()
 	m.Current().Push(blEq(i1, i2))
 }
 

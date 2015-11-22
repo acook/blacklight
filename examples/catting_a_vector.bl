@@ -5,7 +5,7 @@
 ('a' 'b' 'c' 'd')
 
 [ 0 ato swap 0 rmo rot rot cat swap ]
-[ len 0 eq swap drop ]
+[ len 0 eq ]
 until
 
 drop

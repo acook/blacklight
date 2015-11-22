@@ -12,7 +12,7 @@ swap                     ;; bring send queue to top
 
 0
 [ 1 add ]
-[ 1000 eq ]
+[ dup 1000 eq ]
 until drop               ;; give the main thread busywork
 
 swap q-to-v              ;; get contents of receive Q as V

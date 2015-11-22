@@ -6,7 +6,6 @@ s-new
 [ swap push ]        ;; take whatever is in he @stack and put it into our user-stack
 [
   depth 1 eq         ;; compare the @stack depth with 1
-  swap drop          ;; clean up our lingering number
 ] until
 
 $ swap push          ;; promote our user-stack onto the $stack
