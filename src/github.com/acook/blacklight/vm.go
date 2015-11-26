@@ -27,6 +27,22 @@ func doBC(meta *Meta, bc []byte) {
 	run_vm(vm)
 }
 
+func retBC(label string, bc []byte) *Stack {
+	vm := new(VMstate)
+
+	vm.label = label
+	vm.bc = bc
+	vm.l = uint64(len(vm.bc))
+
+	vm.m = NewMeta()
+	s := NewStack(label)
+	vm.m.Put(s)
+
+	run_vm(vm)
+
+	return s
+}
+
 func coBC(label string, stack *Stack, bc []byte) {
 	threads.Add(1)
 	go func(label string, bc []byte, stack *Stack) {

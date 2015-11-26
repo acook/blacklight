@@ -79,7 +79,22 @@ func block(vm *VMstate) {
 }
 
 func vector(vm *VMstate) {
-	vm.m.Current().Push(V{})
+	vm.o++
+	buf := vm.bc[vm.o : vm.o+8]
+	length := binary.BigEndian.Uint64(buf)
+	vm.o = vm.o + 7
+
+	vm.o++
+	blk_buf := vm.bc[vm.o : vm.o+length]
+
+	vm.o = vm.o + (length - 1)
+
+	if length > 0 {
+		s := retBC("V-literal", blk_buf)
+		vm.m.Current().Push(V(s.Items))
+	} else {
+		vm.m.Current().Push(V{})
+	}
 }
 
 // opword instructions
