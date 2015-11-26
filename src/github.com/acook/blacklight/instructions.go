@@ -89,12 +89,9 @@ func vector(vm *VMstate) {
 
 	vm.o = vm.o + (length - 1)
 
-	if length > 0 {
-		s := retBC("V-literal", blk_buf)
-		vm.m.Current().Push(V(s.Items))
-	} else {
-		vm.m.Current().Push(V{})
-	}
+	retBC("V-literal", vm.m, blk_buf)
+	s := vm.m.Eject()
+	vm.m.Current().Push(s.S_to_V())
 }
 
 // opword instructions

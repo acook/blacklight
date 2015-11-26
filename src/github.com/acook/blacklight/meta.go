@@ -61,6 +61,15 @@ func (m *Meta) Put(s *Stack) { // equivilent to push but typed
 	m.Items = append(m.Items, s)
 }
 
+func (m *Meta) Eject() *Stack { // equivilent to pop but typed, used internally
+	m.Lock()
+	defer m.Unlock()
+
+	s := m.Items[m.Depth()-1]
+	m.Items = m.Items[:m.Depth()-1]
+	return s
+}
+
 func (m *Meta) Peek() *Stack {
 	m.Lock()
 	defer m.Unlock()

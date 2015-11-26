@@ -27,20 +27,19 @@ func doBC(meta *Meta, bc []byte) {
 	run_vm(vm)
 }
 
-func retBC(label string, bc []byte) *Stack {
+func retBC(label string, meta *Meta, bc []byte) {
 	vm := new(VMstate)
-
 	vm.label = label
 	vm.bc = bc
 	vm.l = uint64(len(vm.bc))
 
-	vm.m = NewMeta()
 	s := NewStack(label)
+	vm.m = meta
 	vm.m.Put(s)
 
-	run_vm(vm)
-
-	return s
+	if len(bc) > 0 {
+		run_vm(vm)
+	}
 }
 
 func coBC(label string, stack *Stack, bc []byte) {

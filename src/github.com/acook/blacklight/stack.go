@@ -177,3 +177,7 @@ func (s *Stack) Swap() {
 		s.Items = append(s.Items[:depth-2], s.Items[depth-1], s.Items[depth-2])
 	}
 }
+
+func (s *Stack) S_to_V() V {
+	return s.Items
+}
