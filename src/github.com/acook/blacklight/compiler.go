@@ -31,7 +31,7 @@ func compile(tokens []string) []byte {
 	// for vector literals
 	var v_new bool
 	var v_nest uint
-	var b_cache [][]byte
+	var b_cache, v_cache [][]byte
 
 	int_buf := make([]byte, 8)
 	cha_buf := make([]byte, 4)
@@ -125,14 +125,19 @@ func compile(tokens []string) []byte {
 
 		case t == "(": // Vector literal (start)
 			bc = append(bc, 0xF8)
-			v_nest++
-			v_new = true
+			v_cache = append(v_cache, bc)
+			bc = []byte{}
 		case t == ")": // Vector literal (end)
-			if v_nest == 0 {
-				panic("compiler: unmatched closing paren")
+			if len(v_cache) > 0 {
+				my_bc := bc
+				bc = v_cache[len(v_cache)-1]
+				v_cache = v_cache[:len(v_cache)-1]
+
+				binary.BigEndian.PutUint64(int_buf, uint64(len(my_bc)))
+				bc = append(bc, int_buf...)
+				bc = append(bc, my_bc...)
 			} else {
-				v_nest--
-				v_new = false
+				panic("compiler: unmatched closing paren")
 			}
 
 		case isText(t):
@@ -147,11 +152,11 @@ func compile(tokens []string) []byte {
 			str_buf := t[1 : len(t)-1]
 			bc = append(bc, str_buf...)
 
-		case t == "[": // WordVector literal (start)
+		case t == "[": // Block literal (start)
 			bc = append(bc, 0xF7)
 			b_cache = append(b_cache, bc)
 			bc = []byte{}
-		case t == "]": // WordVector literal (end)
+		case t == "]": // Block literal (end)
 			if len(b_cache) > 0 {
 				my_bc := bc
 				bc = b_cache[len(b_cache)-1]
