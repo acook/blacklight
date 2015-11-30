@@ -23,16 +23,17 @@ package main
 // 0xFF : RESERVED EXTENDED FLAG
 
 var inb_map = map[string]byte{ // item name->byte map
-	"opword": 0xF0,
-	"word":   0xF1,
-	"byte":   0xF2,
-	"rune":   0xF3,
-	"number": 0xF4,
-	"float":  0xF5,
-	"text":   0xF6,
-	"block":  0xF7,
-	"vector": 0xF8,
-	"tag":    0xF9,
+	"opword":    0xF0,
+	"word":      0xF1,
+	"byte":      0xF2,
+	"rune":      0xF3,
+	"number":    0xF4,
+	"float":     0xF5,
+	"text":      0xF6,
+	"block":     0xF7,
+	"vector":    0xF8,
+	"endvector": 0xF9,
+	"tag":       0xFA,
 }
 
 var op_map map[string]byte

@@ -29,7 +29,6 @@ func compile(tokens []string) []byte {
 	var bc []byte
 
 	// for vector literals
-	var v_new bool
 	var v_nest uint
 	var b_cache [][]byte
 
@@ -126,13 +125,12 @@ func compile(tokens []string) []byte {
 		case t == "(": // Vector literal (start)
 			bc = append(bc, 0xF8)
 			v_nest++
-			v_new = true
 		case t == ")": // Vector literal (end)
 			if v_nest == 0 {
 				panic("compiler: unmatched closing paren")
 			} else {
+				bc = append(bc, 0xF9)
 				v_nest--
-				v_new = false
 			}
 
 		case isText(t):
@@ -166,12 +164,6 @@ func compile(tokens []string) []byte {
 
 		default:
 			panic("compiler: unrecognized operation: " + t)
-		}
-
-		if v_nest > 0 && !v_new {
-			bc = append(bc, op_map["app"])
-		} else if v_new {
-			v_new = false
 		}
 	}
 

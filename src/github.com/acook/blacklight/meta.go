@@ -128,3 +128,7 @@ func (m *Meta) Self() {
 func (m *Meta) Object() *Object {
 	return m.Current().Peek().(*Object)
 }
+
+func (m *Meta) NewStack(label string) {
+	m.Put(NewStack(label))
+}

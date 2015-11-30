@@ -62,8 +62,10 @@ func run_vm(vm *VMstate) {
 			text(vm)
 		} else if vm.b == 0xF7 { // Block
 			block(vm)
-		} else if vm.b == 0xF8 { // Vector
+		} else if vm.b == 0xF8 { // start Vector
 			vector(vm)
+		} else if vm.b == 0xF9 { // end Vector
+			endvector(vm)
 		} else { // UNKNOWN
 			print(" -- UNKNOWN at offset #" + fmt.Sprint(vm.o) + ": ")
 			offset := fmt.Sprintf("x%x ", vm.b)

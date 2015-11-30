@@ -79,7 +79,12 @@ func block(vm *VMstate) {
 }
 
 func vector(vm *VMstate) {
-	vm.m.Current().Push(V{})
+	vm.m.NewStack("vector")
+}
+
+func endvector(vm *VMstate) {
+	v := vm.m.Eject().S_to_V()
+	vm.m.Current().Push(v)
 }
 
 // opword instructions
