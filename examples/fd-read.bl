@@ -1,14 +1,14 @@
 ;; Use file descriptors (N) with threads (work)
-;; to read from stdin and convert Cs to a CV
+;; to read from stdin and convert Cs to a T
 ;; NOTE -> this will block and wait on input!
 
 q-new 0 read swap q-new    ;; Q for read-queue, hide FD, Q for work-queue
 [
-  '' swap                  ;; create empty CV and bring recv Q back to top
-  [ rot swap app swap ]    ;; bring Cv to top, then item, append item, bring Q to top
+  '' swap                  ;; create empty T and bring recv Q back to top
+  [ rot swap app swap ]    ;; bring T to top, then item, append item, bring Q to top
   [ deq dup not ]          ;; deq item, dup it, and make it boolean
   until                    ;; iterate over read-queue until we get to a nil
   drop drop                ;; drop the EOF nil and read-queue
-  enq                      ;; send CV over the other Q to the main thread
+  enq                      ;; send T over the other Q to the main thread
 ] work                     ;; use work thread for read loop
 deq print                  ;; deq will block waiting for a response

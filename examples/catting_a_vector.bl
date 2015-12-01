@@ -1,4 +1,4 @@
-;; starting with an empty CV and a V full of CVs
+;; starting with an empty T and a V full of Ts
 ;; we use an until loop to cat them all together
 
 ''
