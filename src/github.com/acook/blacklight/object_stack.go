@@ -21,11 +21,11 @@ func (s *ObjectStack) Value() interface{} {
 	return s
 }
 
-func (s *ObjectStack) String() string {
+func (s *ObjectStack) Print() string {
 	str := "O" + strconv.Itoa(s.Id) + "#" + strconv.Itoa(s.Depth()) + "< "
 
 	for _, i := range s.Items {
-		str += i.String() + " "
+		str += i.Print() + " "
 	}
 
 	return str + " >"

@@ -24,11 +24,11 @@ func (m Meta) Value() interface{} {
 	return m
 }
 
-func (m Meta) String() string {
+func (m Meta) Print() string {
 	str := "$" + strconv.Itoa(m.Id) + "#" + strconv.Itoa(m.Depth()) + "< "
 
 	for _, i := range m.Items {
-		str += i.String() + " "
+		str += i.Print() + " "
 	}
 
 	return str + ">"

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"strconv"
+	"fmt"
 )
 
 type N int64
 
-func (n N) String() string {
-	return strconv.Itoa(int(n))
+func (n N) Print() string {
+	return fmt.Sprint(n)
 }
 
 func (n N) Value() interface{} {
@@ -19,5 +19,5 @@ func (n N) N_to_R() R {
 }
 
 func (n N) N_to_T() T {
-	return T(n.String())
+	return T(n.Print())
 }

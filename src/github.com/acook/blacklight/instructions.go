@@ -220,7 +220,7 @@ func wait(m *Meta) {
 // DEBUG
 
 func bl_print(m *Meta) {
-	print(m.Current().Pop().String(), "\n")
+	print(m.Current().Pop().Print(), "\n")
 }
 
 func bl_refl(m *Meta) {

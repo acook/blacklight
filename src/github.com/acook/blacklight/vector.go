@@ -2,10 +2,10 @@ package main
 
 type V []datatypes
 
-func (v V) String() string {
+func (v V) Print() string {
 	str := "("
 	for _, i := range v {
-		str += i.String() + " "
+		str += i.Print() + " "
 	}
 	if len(str) > 1 {
 		str = str[:len(str)-1]

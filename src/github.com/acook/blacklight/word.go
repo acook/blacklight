@@ -2,7 +2,7 @@ package main
 
 type W uint64
 
-func (w W) String() string {
+func (w W) Print() string {
 	return string(wd_map[uint64(w)])
 }
 

@@ -7,7 +7,7 @@ type Tag struct {
 	Bool  bool
 }
 
-func (t Tag) String() string {
+func (t Tag) Print() string {
 	return t.Kind + "#" + t.Label
 }
 

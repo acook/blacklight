@@ -39,7 +39,7 @@ func (vm *VMstate) debug() {
 	print("]\n")
 
 	print("    meta stack: ")
-	print(vm.m.String())
+	print(vm.m.Print())
 	print("\n")
 }
 

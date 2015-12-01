@@ -39,7 +39,7 @@ func (s Stack) Value() interface{} {
 	return s
 }
 
-func (s Stack) String() string {
+func (s Stack) Print() string {
 	str := "<#" + s.Type + "#" + strconv.Itoa(s.Id) + "#" + strconv.Itoa(s.Depth()) + "# "
 
 	for _, i := range s.Items {
@@ -52,14 +52,14 @@ func (s Stack) String() string {
 			if i.(*Stack).Id == s.Id {
 				str += "<...> "
 			} else {
-				str += i.String() + " "
+				str += i.Print() + " "
 			}
 		case Stack:
 			panic("direct Stack reference: " + strconv.Itoa(i.(Stack).Id))
 		case nil:
 			str += "??? "
 		default:
-			str += i.String() + " "
+			str += i.Print() + " "
 		}
 	}
 

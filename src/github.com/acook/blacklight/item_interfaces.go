@@ -1,12 +1,12 @@
 package main
 
 type datatypes interface {
-	String() string
+	Print() string
 	Value() interface{}
 }
 
 type sequence interface {
-	String() string
+	Print() string
 	Value() interface{}
 	Cat(sequence) sequence
 	App(datatypes) sequence
@@ -24,12 +24,12 @@ type byter interface {
 }
 
 type stackable interface {
+	Print() string
+	Value() interface{}
 	Push(datatypes)
 	Pop() datatypes
 	Drop()
 	Swap()
 	Decap()
 	Depth() int
-	String() string
-	Value() interface{}
 }

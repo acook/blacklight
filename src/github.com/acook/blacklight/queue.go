@@ -32,19 +32,19 @@ func (q Queue) Value() interface{} {
 	return q.Items
 }
 
-func (q Queue) String() string {
+func (q Queue) Print() string {
 	var s Stack
 	str := "{#" + fmt.Sprint(q.Id) + "# "
 
-StringLoop:
+PrintLoop:
 	for {
 		select {
 		case i := <-q.Items:
 			s.Push(i)
-			str += i.String()
+			str += i.Print()
 			str += " "
 		default:
-			break StringLoop
+			break PrintLoop
 		}
 	}
 

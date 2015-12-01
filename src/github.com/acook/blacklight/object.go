@@ -30,7 +30,7 @@ func (o *Object) Fetch(w W) datatypes {
 	if found {
 		return i
 	} else {
-		panic("Object.Fetch: slot `" + w.String() + "` does not exist!")
+		panic("Object.Fetch: slot `" + w.Print() + "` does not exist!")
 	}
 }
 
@@ -43,10 +43,10 @@ func (o *Object) Get(meta *Meta, w W) {
 	if !ok {
 		print("\n")
 		print("error in Object.Get: ")
-		print("slot `", w.String(), "` not found!\n")
-		print(" -- given: ", w.String(), "\n")
-		print(" --   has: ", o.Labels().String(), "\n")
-		panic("Object.Get: slot `" + w.String() + "` does not exist!")
+		print("slot `", w.Print(), "` not found!\n")
+		print(" -- given: ", w.Print(), "\n")
+		print(" --   has: ", o.Labels().Print(), "\n")
+		panic("Object.Get: slot `" + w.Print() + "` does not exist!")
 	}
 }
 
@@ -68,11 +68,11 @@ func (o *Object) DeleGet(meta *Meta, w W) bool {
 	return found
 }
 
-func (o Object) String() string {
+func (o Object) Print() string {
 	str := "OBJ< "
 
 	for k, v := range o.Slots {
-		str += k.String() + ":" + v.String() + " "
+		str += k.Print() + ":" + v.Print() + " "
 	}
 
 	return str + ">"

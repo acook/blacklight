@@ -6,7 +6,7 @@ import (
 
 type B []byte
 
-func (b B) String() string {
+func (b B) Print() string {
 	str := "[ "
 	for _, x := range b {
 		str += fmt.Sprintf("0x%x", x)

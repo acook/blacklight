@@ -7,7 +7,7 @@ import (
 
 type T string
 
-func (t T) String() string {
+func (t T) Print() string {
 	return string(t)
 }
 

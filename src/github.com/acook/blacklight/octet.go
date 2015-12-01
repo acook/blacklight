@@ -6,7 +6,7 @@ import (
 
 type C byte
 
-func (c C) String() string {
+func (c C) Print() string {
 	return fmt.Sprintf("%x", c)
 }
 

@@ -17,12 +17,12 @@ func ReadIO(i datatypes, q *Queue) *Tag {
 	switch i.(type) {
 	case N:
 		fd := ReadFD(int(i.(N)), q)
-		return NewFDTag(i.String(), fd)
+		return NewFDTag(i.Print(), fd)
 	case T:
-		file := ReadFile(i.String(), q)
-		return NewFileTag("File#"+i.String(), file)
+		file := ReadFile(i.Print(), q)
+		return NewFileTag("File#"+i.Print(), file)
 	default:
-		panic("ReadIO: unrecognized type for IO - " + i.String())
+		panic("ReadIO: unrecognized type for IO - " + i.Print())
 	}
 	return nil
 }
@@ -31,12 +31,12 @@ func WriteIO(i datatypes, q *Queue) *Tag {
 	switch i.(type) {
 	case N:
 		fd := WriteFD(int(i.(N)), q)
-		return NewFDTag("FD#"+i.String(), fd)
+		return NewFDTag("FD#"+i.Print(), fd)
 	case T:
-		file := WriteFile(i.String(), q)
-		return NewFileTag("File#"+i.String(), file)
+		file := WriteFile(i.Print(), q)
+		return NewFileTag("File#"+i.Print(), file)
 	default:
-		panic("WriteIO: unrecognized type for IO - " + i.String())
+		panic("WriteIO: unrecognized type for IO - " + i.Print())
 	}
 	return nil
 }

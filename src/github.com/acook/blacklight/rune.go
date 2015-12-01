@@ -2,7 +2,7 @@ package main
 
 type R rune
 
-func (r R) String() string {
+func (r R) Print() string {
 	return string(r)
 }
 
