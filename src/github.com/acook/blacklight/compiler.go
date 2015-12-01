@@ -68,6 +68,8 @@ func compile(tokens []string) []byte {
 			} else if runes[1] == '\\' {
 				var e rune
 				switch runes[2] {
+				case '0': // null
+					e = rune(0x00)
 				case 'a': // terminal bell
 					e = '\a'
 				case 'b': // backspace
@@ -100,7 +102,7 @@ func compile(tokens []string) []byte {
 					PutVarint32(cha_buf, r)
 					bc = append(bc, cha_buf...)
 				} else {
-					panic("compiler: utf sequence incorrect length in C literal")
+					panic("compiler: utf sequence incorrect length in R literal")
 				}
 			} else if runes[1] == 'a' {
 				// if the second rune is a then it's a ascii R in decimal
@@ -109,8 +111,8 @@ func compile(tokens []string) []byte {
 				PutVarint32(cha_buf, rune(a))
 				bc = append(bc, cha_buf...)
 			} else {
-				fmt.Println("compiler: invalid C literal: " + t[1:])
-				panic("compiler: invalid C literal: " + t)
+				fmt.Println("compiler: invalid R literal: " + t[1:])
+				panic("compiler: invalid R literal: " + t)
 			}
 
 		case isWord(t):
