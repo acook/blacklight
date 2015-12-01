@@ -1,0 +1,5 @@
+'What is your name? ' print
+q-new 0 read '' rot deq
+[ rot swap app swap deq ] [ dup \\n eq ] until
+drop drop
+'Hello, ' swap app '!' app print
