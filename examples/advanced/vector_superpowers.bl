@@ -1,0 +1,15 @@
+;; Vs aren't just a simple list type
+;; their literal form with parens
+;; is evaluated at runtime, similar to a block call
+;; Vs are evaluated in a $new system-stack
+;; which can be leveraged (and abused)
+
+;; simple operation grouping can be done
+( 2 2 add )
+@ print                           ;;=> (4)
+
+;; you can access the previous system-stack in the normal way
+;; using the ^ (last-stack) operation
+( ( 1 ) ^ pop swap drop ( 2 ) )
+@ print                           ;;=> ((1) (4) (2))
+
