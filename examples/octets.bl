@@ -1,0 +1,23 @@
+;; C (oCtet) is a simple grouping of 8 bits
+
+;; C-literals start with 0x and are zero padded to 2
+0x00 print
+
+;; Cs can be converted into Rs
+;; it will represent the first 8 bytes of unicode including 7-bit ASCII
+;; often you'll want to use the R-literal ASCII syntax for that instead
+0x27 c-to-r print
+
+;; when doing IO, you'll get Cs when reading
+;; Vs or Cs can be composed into Ts to get Rs
+;; to demonstrate this pattern, we'll create a Q with some Cs
+q-new 0xE4 enq 0xB8 enq 0x96 enq
+
+''
+
+swap deq rot swap app
+swap deq rot swap app
+swap deq rot swap app
+
+0 ato \世 eq
+print
