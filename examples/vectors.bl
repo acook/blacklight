@@ -1,6 +1,7 @@
-;; vectors are typed sequences of items
-;; they allow random-access to items in the middle of the sequence
+;; V (vector) is different from S and Q
+;; they allow random-access to items in the middle
 ;; the ato and rmo operations are 0-based offsets
+;; V is a "sequence" type, along with T, B, and others
 
 (1 2 3 4 5)
 
@@ -12,6 +13,12 @@
 
 ;; len returns the number of items in V
 len print
+
+;; Vs can be arbitrarily nested
+( ( 0 ) )
+
+;; and the item on top of the stack, even other Vs can be appended to them
+app
 
 ;; finally print the V
 print
