@@ -23,5 +23,5 @@ func (r R) Text() T {
 }
 
 func (r R) Bytes() []byte {
-	return r.R_to_T().Bytes()
+	return []byte(string(r))
 }
