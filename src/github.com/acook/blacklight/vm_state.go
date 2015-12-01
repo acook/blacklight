@@ -27,7 +27,7 @@ func (vm *VMstate) debug() {
 	print("\n")
 
 	print("    current byte: ")
-	print(fmt.Sprintf("0x%x", vm.b))
+	print(fmt.Sprintf("0x%0.2X", vm.b))
 	print("\n")
 
 	print("    current inferred: ")
@@ -35,7 +35,7 @@ func (vm *VMstate) debug() {
 	print("\n")
 
 	print("    all bytes: [")
-	fmt.Printf("0x%x", vm.b)
+	fmt.Printf("0x%0.2X", vm.b)
 	print("]\n")
 
 	print("    meta stack: ")

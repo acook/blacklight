@@ -7,7 +7,7 @@ import (
 type C byte
 
 func (c C) Print() string {
-	return fmt.Sprintf("%x", c)
+	return fmt.Sprintf("0x%0.2X", c)
 }
 
 func (c C) Value() interface{} {
