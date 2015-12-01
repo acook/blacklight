@@ -17,8 +17,9 @@ package main
 // 0xF5 : float - float64
 // 0xF6 : text - length:uint64 data:Rs
 // 0xF7 : block - length:uint64 data:bc
-// 0xF8 : vector - length:uint64 data:items
-// 0xF9 : tag - kind:uint8 metadata:uint32 msg:text
+// 0xF8 : vector - data:bc
+// 0xF9 : endvector
+// 0xFA : tag - kind:uint8 metadata:uint32 msg:text
 // 0xFB-0xFE : FUTURE DATATYPES
 // 0xFF : RESERVED EXTENDED FLAG
 
