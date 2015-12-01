@@ -179,7 +179,7 @@ func bkg(m *Meta) {
 }
 
 func co(m *Meta) {
-	filename := m.Current().Pop().String()
+	filename := string(m.Current().Pop().(T))
 
 	in := NewQueue()
 	out := NewQueue()
@@ -234,7 +234,7 @@ func bl_warn(m *Meta) {
 // LOADING
 
 func do(m *Meta) {
-	filename := m.Current().Pop().String()
+	filename := string(m.Current().Pop().(T))
 
 	code := loadFile(filename)
 	tokens := parse(code)
