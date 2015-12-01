@@ -24,7 +24,10 @@ func (t T) Cat(v sequence) sequence {
 }
 
 func (t T) App(d datatypes) sequence {
-	return t + T(d.(texter).Text())
+	a := []byte(t)
+	b := d.(byter).Bytes()
+	c := append(a, b...)
+	return T(c)
 }
 
 func (t T) Ato(n N) datatypes {
