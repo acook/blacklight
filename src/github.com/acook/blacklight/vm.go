@@ -67,10 +67,12 @@ func run_vm(vm *VMstate) {
 		} else if vm.b == 0xF9 { // end Vector
 			endvector(vm)
 		} else { // UNKNOWN
-			print(" -- UNKNOWN at offset #" + fmt.Sprint(vm.o) + ": ")
-			offset := fmt.Sprintf("x%x ", vm.b)
-			print(offset, "\n")
-			panic("vm: unrecognized bytecode at " + offset)
+			o := fmt.Sprint(vm.o)
+
+			print(" -- vm: UNKNOWN at offset #" + o + ": ")
+			b := fmt.Sprintf("0%X ", vm.b)
+			print(b, "\n")
+			panic("vm: unrecognized bytecode at offset # " + o + ": " + b)
 		}
 
 		vm.o++
