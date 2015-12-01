@@ -25,7 +25,7 @@ func isRune(t string) bool {
 }
 
 func isOctet(t string) bool {
-	if t[0:2] == "0x" {
+	if len(t) > 2 && t[0:2] == "0x" {
 		return true
 	}
 	return false
