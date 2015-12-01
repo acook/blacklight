@@ -49,11 +49,6 @@ func compile(tokens []string) []byte {
 		switch {
 		case t == "":
 			// ignore
-		case isInteger(t):
-			bc = append(bc, 0xF4)
-			n, _ := strconv.Atoi(t)
-			PutVarint64(int_buf, int64(n))
-			bc = append(bc, int_buf...)
 
 		case isRune(t):
 			bc = append(bc, 0xF3)
@@ -114,6 +109,12 @@ func compile(tokens []string) []byte {
 				fmt.Println("compiler: invalid R literal: " + t[1:])
 				panic("compiler: invalid R literal: " + t)
 			}
+
+		case isInteger(t):
+			bc = append(bc, 0xF4)
+			n, _ := strconv.Atoi(t)
+			PutVarint64(int_buf, int64(n))
+			bc = append(bc, int_buf...)
 
 		case isWord(t):
 			bc = wd_make(bc, []rune(t[1:]))
