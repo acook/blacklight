@@ -142,6 +142,9 @@ func prepare_op_table() {
 		"v-to-s": v_to_s,
 		"v-to-q": v_to_q,
 
+		// text
+		"t-to-cv": t_to_cv,
+
 		// tags
 		"?-to-t": tag_to_t,
 		"true":   bl_true,

@@ -581,6 +581,13 @@ func v_to_q(m *Meta) {
 	NOPE("v-to-q")
 }
 
+// TEXT
+
+func t_to_cv(m *Meta) {
+	cv := m.Current().Pop().(T).T_to_CV()
+	m.Current().Push(cv)
+}
+
 // tags
 func tag_to_t(m *Meta) {
 	NOPE("?-to-t")

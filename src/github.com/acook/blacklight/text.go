@@ -49,3 +49,12 @@ func (t T) Len() N {
 func (t T) Bytes() []byte {
 	return []byte(t)
 }
+
+func (t T) T_to_CV() V {
+	cv := V{}
+	l := len(t)
+	for i := 0; i < l; i++ {
+		cv = append(cv, C(t[i]))
+	}
+	return cv
+}
