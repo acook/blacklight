@@ -32,6 +32,12 @@ func word(vm *VMstate) {
 	vm.m.Current().Push(W(wd_uint))
 }
 
+func octet(vm *VMstate) {
+	vm.o++
+	c := vm.bc[vm.o]
+	vm.m.Current().Push(C(c))
+}
+
 func bl_rune(vm *VMstate) {
 	vm.o++
 	buf := vm.bc[vm.o : vm.o+4]
@@ -596,4 +602,14 @@ func r_to_t(m *Meta) {
 
 func r_to_n(m *Meta) {
 	m.Current().Push(m.Current().Pop().(R).R_to_N())
+}
+
+// OCTETS
+
+func c_to_r(m *Meta) {
+	m.Current().Push(m.Current().Pop().(C).C_to_R())
+}
+
+func c_to_n(m *Meta) {
+	m.Current().Push(m.Current().Pop().(C).C_to_N())
 }

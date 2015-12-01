@@ -24,6 +24,13 @@ func isRune(t string) bool {
 	return false
 }
 
+func isOctet(t string) bool {
+	if t[0:2] == "0x" {
+		return true
+	}
+	return false
+}
+
 func isWord(t string) bool {
 	if t[0] == '~' {
 		return true

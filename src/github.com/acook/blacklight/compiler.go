@@ -50,6 +50,16 @@ func compile(tokens []string) []byte {
 		case t == "":
 			// ignore
 
+		case isOctet(t):
+			bc = append(bc, 0xF2)
+
+			if len(t) == 4 {
+				h, _ := hex.DecodeString(t[2:])
+				bc = append(bc, h[0])
+			} else {
+				panic("compiler: hex length in C literal")
+			}
+
 		case isRune(t):
 			bc = append(bc, 0xF3)
 

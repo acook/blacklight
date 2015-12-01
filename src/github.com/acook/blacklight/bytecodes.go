@@ -150,6 +150,10 @@ func prepare_op_table() {
 		// runes
 		"r-to-t": r_to_t,
 		"r-to-n": r_to_n,
+
+		// chars/bytes
+		"c-to-r": c_to_r,
+		"c-to-n": c_to_n,
 	}
 
 	op_map = make(map[string]byte)
