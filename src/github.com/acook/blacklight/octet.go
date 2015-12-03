@@ -33,3 +33,23 @@ func (c C) Text() T {
 func (c C) Bytes() []byte {
 	return []byte{byte(c)}
 }
+
+func (c C) Band(c2 C) C {
+	return c & c2
+}
+
+func (c C) Bor(c2 C) C {
+	return c | c2
+}
+
+func (c C) Bxor(c2 C) C {
+	return c ^ c2
+}
+
+func (c C) Bshiftl(c2 C) C {
+	return c << c2
+}
+
+func (c C) Bshiftr(c2 C) C {
+	return c >> c2
+}

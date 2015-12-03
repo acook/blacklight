@@ -625,6 +625,41 @@ func r_to_n(m *Meta) {
 
 // OCTETS
 
+func b_and(m *Meta) {
+	c1 := m.Current().Pop().(C)
+	c2 := m.Current().Pop().(C)
+	c3 := c1.Band(c2)
+	m.Current().Push(c3)
+}
+
+func b_or(m *Meta) {
+	c1 := m.Current().Pop().(C)
+	c2 := m.Current().Pop().(C)
+	c3 := c1.Bor(c2)
+	m.Current().Push(c3)
+}
+
+func b_xor(m *Meta) {
+	c1 := m.Current().Pop().(C)
+	c2 := m.Current().Pop().(C)
+	c3 := c1.Bxor(c2)
+	m.Current().Push(c3)
+}
+
+func b_shift_l(m *Meta) {
+	c1 := m.Current().Pop().(C)
+	c2 := m.Current().Pop().(C)
+	c3 := c1.Band(c2)
+	m.Current().Push(c3)
+}
+
+func b_shift_r(m *Meta) {
+	c1 := m.Current().Pop().(C)
+	c2 := m.Current().Pop().(C)
+	c3 := c1.Band(c2)
+	m.Current().Push(c3)
+}
+
 func c_to_r(m *Meta) {
 	m.Current().Push(m.Current().Pop().(C).C_to_R())
 }
