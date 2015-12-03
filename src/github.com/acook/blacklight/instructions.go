@@ -519,7 +519,7 @@ func s_size(m *Meta) {
 }
 
 func s_tail(m *Meta) {
-	m.Current().Peek().(stackable).Drop()
+	m.Current().Peek().(stackable).Decap()
 }
 
 // VECTORS AND SEQUENCES
