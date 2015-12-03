@@ -1,28 +1,33 @@
-o-new
-q-new 0 read
-rot swap fd: swap q: swap s-new stack: swap '' line:
+;; Simple native REPL
 
-[
+o-new               ;; an object to store our blocks
+q-new 0 read        ;; set up a read queue from stdin
+rot swap fd:        ;; save FD, but we won't use it later
+swap q:             ;; save read Q
+swap s-new stack:   ;; create a stack that we'll use to save state
+swap '' line:       ;; initialize the line slot
+
+[ ;; style our prompt here
   '>> ' print
 ] prompt:
 
-[
-  self '' line: :line swap :q swap drop
+[ ;; this just reads in one line at a time
+  :q '' swap
   [ rot swap app swap ] [ deq dup \\n eq ] until
-  drop drop
-  self swap line:
+  drop drop line:
 ] readln:
 
-[
+[ ;; evaluates the line in the context of our stack & displays the result
   :stack $ swap push
   self :line swap drop
   [ compile call ';;=> ' print @ say ] [ dup 'exit' eq not ] if
   $drop
 ] eval:
 
-[
+[ ;; here is our basic loop, which exits on a keyword
   [ :prompt :readln :eval ] [ self :line 'exit' eq ] until
   'goodbye!' say
 ] loop:
 
+;; invoke the loop
 :loop
