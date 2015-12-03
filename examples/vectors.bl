@@ -6,13 +6,13 @@
 (1 2 3 4 5)
 
 ;; ato retuns an item at offset
-1 ato print
+1 ato say
 
 ;; rmo removes an item at offset
 2 rmo
 
 ;; len returns the number of items in V
-len print
+len say
 
 ;; Vs can be arbitrarily nested
 ( ( 0 ) )
@@ -20,5 +20,5 @@ len print
 ;; and the item on top of the stack, even other Vs can be appended to them
 app
 
-;; finally print the V
-print
+;; finally say the V
+say

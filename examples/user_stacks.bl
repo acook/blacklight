@@ -9,13 +9,13 @@ s-new push
 ;; push a number onto the stack
 99 push
 
-;; print the size of the stack
-size print
+;; say the size of the stack
+size say
 
-;; get the top item off the stack and print it
-pop print
+;; get the top item off the stack and say it
+pop say
 
 ;; get rid of everything except the top item
 tail
 ;; show that the size is now 1
-size print
+size say

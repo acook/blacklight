@@ -9,4 +9,4 @@
 until
 
 drop
-print
+say

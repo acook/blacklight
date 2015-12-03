@@ -6,10 +6,10 @@
 
 ;; simple operation grouping can be done
 ( 2 2 add )
-@ print                           ;;=> (4)
+@ say                           ;;=> (4)
 
 ;; you can access the previous system-stack in the normal way
 ;; using the ^ (last-stack) operation
 ( ( 1 ) ^ pop swap drop ( 2 ) )
-@ print                           ;;=> ((1) (4) (2))
+@ say                           ;;=> ((1) (4) (2))
 

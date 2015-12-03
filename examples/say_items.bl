@@ -1,0 +1,23 @@
+'number' say
+34543 say '' say
+
+'queue' say
+q-new 1 enq 2 enq 3 enq 4 enq say '' say
+
+'stack' say
+s-new 1 push 2 push 3 push 4 push say '' say
+
+'word' say
+~1 say
+
+'block' say
+[ 1 2 3 4 ] say '' say
+
+'text' say
+'1 2 3 4' say '' say
+
+'vector of numbers' say
+(1 2 3 4) say '' say
+
+'vector of text' say
+('1' '2' '3' '4') say

@@ -28,4 +28,4 @@ $drop           ;; get rid of our working stack
 drop
 
 ;; display result
-print
+say

@@ -4,11 +4,11 @@
 q-new 1 enq 2 enq 3 enq   ;; make a Q of work
 [
   [
-    print                 ;; print items in Q
+    say                   ;; say items in Q
   ]  proq                 ;; interate over items in Q until empty
 ] bkg                     ;; run this Block in the background taking the top item with it
 
 ;; now lets communicate with the thread run by co
 'bar' enq
 swap
-deq print
+deq say

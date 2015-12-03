@@ -7,12 +7,12 @@ o-new
 ;; set a slot to a value
 5 num:
 ;; recall and display value
-:num print
+:num say
 
 ;; create a Block slot
-[ 'omg hai' print ] greet:
+[ 'omg hai' say ] greet:
 ;; call a Block slot
 :greet
 
 ;; view contents of a Block slot
-~greet fetch print
+~greet fetch say

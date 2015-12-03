@@ -1,7 +1,7 @@
 ;; "Hello, Bob!" in blacklight
 
-'What is your name? ' print
+'Enter your name: ' print
 q-new 0 read '' rot deq
 [ rot swap app swap deq ] [ dup \\n eq ] until
 drop drop
-'Hello, ' swap app '!' app print
+'Hello, ' swap app '!' app \\n app print

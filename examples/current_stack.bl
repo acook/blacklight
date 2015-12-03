@@ -1,6 +1,6 @@
 ;; the operations that act directly upon the @stack
 ;; we add some number literals to give it something to manipulate
-;; then we print out the depth of the @stack after various changes
+;; then we say the depth of the @stack after various changes
 
 1 2 3
 dup
@@ -8,8 +8,8 @@ drop
 rot
 swap
 over
-depth n-to-t print
+depth n-to-t say
 decap
-depth n-to-t print
+depth n-to-t say
 purge
-depth n-to-t print
+depth n-to-t say

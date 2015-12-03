@@ -1,12 +1,12 @@
 ;; showcases some of the essential $stack operations
-;; dup is used because print eats the top item
+;; dup is used because say eats the top item
 
 1
 $new
-dup print
+dup say
 2
 $new
-dup print
+dup say
 3
-@ dup print
-^ print
+@ dup say
+^ say

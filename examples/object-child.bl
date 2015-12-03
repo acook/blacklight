@@ -2,7 +2,7 @@
 ;; one way is through a form of prototypical inheritance
 
 o-new                    ;; This will be the parent object
-[ self print ] inspect:  ;; this lets us check out what object we have
+[ self say ] inspect:    ;; this lets us check out what object we have
 :inspect                 ;; calling it on the parent displays the object with a populated inspect slot
 
 child                    ;; Creates a child object that checks the parent

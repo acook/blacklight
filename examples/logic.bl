@@ -1,10 +1,10 @@
 1
-[ 'not zero!' print ]
+[ 'not zero!' ]
 [ 0 eq not ]
-if
+if say
 
 (1 2)
 [ 'empty' ]
 [ 'not empty!' ]
 [ len 0 eq ]
-either print
+either say

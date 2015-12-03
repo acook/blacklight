@@ -219,10 +219,6 @@ func wait(m *Meta) {
 
 // DEBUG
 
-func bl_print(m *Meta) {
-	print(m.Current().Pop().(T))
-}
-
 func bl_println(m *Meta) {
 	print(m.Current().Pop().Print(), "\n")
 }
@@ -586,6 +582,10 @@ func v_to_q(m *Meta) {
 }
 
 // TEXT
+
+func bl_print(m *Meta) {
+	print(m.Current().Pop().(T))
+}
 
 func t_to_cv(m *Meta) {
 	cv := m.Current().Pop().(T).T_to_CV()

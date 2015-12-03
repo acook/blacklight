@@ -11,4 +11,4 @@ s-new
 $ swap push          ;; promote our user-stack onto the $stack
                      ;; this means the user-stack becomes our new @stack
 $decap               ;; get rid of the old system-stack
-@ print              ;; print the contents of the new @stack
+@ say                ;; show the contents of the new @stack

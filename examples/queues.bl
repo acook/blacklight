@@ -1,7 +1,9 @@
 ;; making and storing items on queues
 
-q-new 1 enq
-q-new 2 enq
-swap deq print drop
-3 enq 4 enq
-[ print ] proq
+q-new
+1 enq
+deq say
+
+q-new
+2 enq 3 enq 4 enq
+[ say ] proq
