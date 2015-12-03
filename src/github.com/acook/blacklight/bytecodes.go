@@ -86,7 +86,7 @@ func prepare_op_table() {
 		"sub":    sub,
 		"div":    div,
 		"mod":    mod,
-		"mul":    mod,
+		"mul":    mul,
 		"n-to-r": n_to_r,
 		"n-to-t": n_to_t,
 
