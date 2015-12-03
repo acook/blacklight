@@ -3,9 +3,20 @@ package main
 type V []datatypes
 
 func (v V) Print() string {
+	str := ""
+	for _, i := range v {
+		str += i.Print() + "\n"
+	}
+	if len(str) > 1 {
+		str = str[:len(str)-1]
+	}
+	return str
+}
+
+func (v V) Refl() string {
 	str := "("
 	for _, i := range v {
-		str += i.Print() + " "
+		str += i.Refl() + " "
 	}
 	if len(str) > 1 {
 		str = str[:len(str)-1]

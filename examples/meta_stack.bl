@@ -3,10 +3,10 @@
 
 1
 $new
-dup say
+dup refl say
 2
 $new
-dup say
+dup refl say
 3
-@ dup say
-^ say
+@ dup refl say
+^ refl

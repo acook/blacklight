@@ -6,6 +6,10 @@ func (w W) Print() string {
 	return string(wd_map[uint64(w)])
 }
 
+func (w W) Refl() string {
+	return "~" + w.Print()
+}
+
 func (w W) Value() interface{} {
 	return uint64(w)
 }

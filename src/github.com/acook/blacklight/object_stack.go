@@ -21,14 +21,24 @@ func (s *ObjectStack) Value() interface{} {
 	return s
 }
 
-func (s *ObjectStack) Print() string {
+func (s *ObjectStack) Refl() string {
 	str := "O" + strconv.Itoa(s.Id) + "#" + strconv.Itoa(s.Depth()) + "< "
+
+	for _, i := range s.Items {
+		str += i.Refl() + " "
+	}
+
+	return str + " >"
+}
+
+func (s *ObjectStack) Print() string {
+	str := ""
 
 	for _, i := range s.Items {
 		str += i.Print() + " "
 	}
 
-	return str + " >"
+	return str
 }
 
 func (s *ObjectStack) Push(o *Object) {

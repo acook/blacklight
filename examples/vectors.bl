@@ -20,5 +20,5 @@ len say
 ;; and the item on top of the stack, even other Vs can be appended to them
 app
 
-;; finally say the V
-say
+;; finally display the V
+refl say

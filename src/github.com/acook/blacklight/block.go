@@ -7,6 +7,10 @@ import (
 type B []byte
 
 func (b B) Print() string {
+	return "[...]"
+}
+
+func (b B) Refl() string {
 	str := "[ "
 	for _, x := range b {
 		str += fmt.Sprintf("0x%0.2X", x)

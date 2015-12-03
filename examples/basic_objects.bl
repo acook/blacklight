@@ -15,4 +15,4 @@ o-new
 :greet
 
 ;; view contents of a Block slot
-~greet fetch say
+~greet fetch refl say

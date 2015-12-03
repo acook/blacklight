@@ -11,6 +11,10 @@ func (t T) Print() string {
 	return string(t)
 }
 
+func (t T) Refl() string {
+	return "\"" + string(t) + "\""
+}
+
 func (t T) Value() interface{} {
 	return string(t)
 }

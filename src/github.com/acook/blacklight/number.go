@@ -7,6 +7,11 @@ import (
 type N int64
 
 func (n N) Print() string {
+	// todo, display thousands separator
+	return fmt.Sprint(n)
+}
+
+func (n N) Refl() string {
 	return fmt.Sprint(n)
 }
 

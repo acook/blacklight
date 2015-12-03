@@ -39,7 +39,7 @@ func (s Stack) Value() interface{} {
 	return s
 }
 
-func (s Stack) Print() string {
+func (s Stack) Refl() string {
 	str := "<#" + s.Type + "#" + strconv.Itoa(s.Id) + "#" + strconv.Itoa(s.Depth()) + "# "
 
 	for _, i := range s.Items {
@@ -52,14 +52,14 @@ func (s Stack) Print() string {
 			if i.(*Stack).Id == s.Id {
 				str += "<...> "
 			} else {
-				str += i.Print() + " "
+				str += i.Refl() + " "
 			}
 		case Stack:
 			panic("direct Stack reference: " + strconv.Itoa(i.(Stack).Id))
 		case nil:
 			str += "??? "
 		default:
-			str += i.Print() + " "
+			str += i.Refl() + " "
 		}
 	}
 
@@ -68,6 +68,27 @@ func (s Stack) Print() string {
 	}
 
 	return str + ">"
+}
+
+func (s Stack) Print() string {
+	str := ""
+	for _, i := range s.Items {
+		switch i.(type) {
+		case Meta, *Meta:
+			str += "$ "
+		case *Stack:
+			if i.(*Stack).Id == s.Id {
+				str += "... "
+			} else {
+				str += i.Print() + " "
+			}
+		case nil:
+			str += "??? "
+		default:
+			str += i.Print() + " "
+		}
+	}
+	return str
 }
 
 func (s *Stack) Kind() string {

@@ -7,6 +7,10 @@ import (
 type C byte
 
 func (c C) Print() string {
+	return c.Refl()
+}
+
+func (c C) Refl() string {
 	return fmt.Sprintf("0x%0.2X", c)
 }
 

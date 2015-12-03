@@ -224,7 +224,7 @@ func bl_println(m *Meta) {
 }
 
 func bl_refl(m *Meta) {
-	NOPE("refl")
+	m.Current().Push(T(m.Current().Pop().Refl()))
 }
 
 func bl_warn(m *Meta) {

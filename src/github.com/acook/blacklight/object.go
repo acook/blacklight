@@ -78,6 +78,10 @@ func (o Object) Print() string {
 	return str + ">"
 }
 
+func (o Object) Refl() string {
+	return o.Print()
+}
+
 func (o Object) Value() interface{} {
 	return o.Slots
 }
