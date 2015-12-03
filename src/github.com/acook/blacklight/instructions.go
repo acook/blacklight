@@ -592,6 +592,14 @@ func t_to_cv(m *Meta) {
 	m.Current().Push(cv)
 }
 
+func t_to_b(m *Meta) {
+	code := []rune(string(m.Current().Pop().(T)))
+	tokens := parse(code)
+	ops := compile(tokens)
+	b := B(ops)
+	m.Current().Push(b)
+}
+
 // tags
 func tag_to_t(m *Meta) {
 	NOPE("?-to-t")

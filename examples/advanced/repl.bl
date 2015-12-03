@@ -1,0 +1,28 @@
+o-new
+q-new 0 read
+rot swap fd: swap q: swap s-new stack: swap '' line:
+
+[
+  '>> ' print
+] prompt:
+
+[
+  self '' line: :line swap :q swap drop
+  [ rot swap app swap ] [ deq dup \\n eq ] until
+  drop drop
+  self swap line:
+] readln:
+
+[
+  :stack $ swap push
+  self :line swap drop
+  [ compile call ';;=> ' print @ say ] [ dup 'exit' eq not ] if
+  $drop
+] eval:
+
+[
+  [ :prompt :readln :eval ] [ self :line 'exit' eq ] until
+  'goodbye!' say
+] loop:
+
+:loop

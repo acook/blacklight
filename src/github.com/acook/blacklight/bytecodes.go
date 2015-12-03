@@ -145,6 +145,7 @@ func prepare_op_table() {
 
 		// text
 		"t-to-cv": t_to_cv,
+		"compile": t_to_b,
 
 		// tags
 		"?-to-t": tag_to_t,
