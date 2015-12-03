@@ -1,0 +1,29 @@
+;; Write a T to a FD
+
+o-new
+
+[
+  drop
+  q-new swap write drop
+  self swap out:
+] write:
+
+[
+  drop 0
+  [
+    swap dup rot swap ato
+    self :out swap drop
+    swap enq drop
+    swap 1 add
+  ] [ dup rot len rot eq ] until
+  drop self
+] print:
+
+1
+swap :write
+
+'foo'
+swap :print
+
+;; writing happens asynchronously, so we delay for a few miliseconds
+100 [ 1 sub ] [ dup 0 eq ] until
