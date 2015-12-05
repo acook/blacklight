@@ -598,6 +598,12 @@ func block_decompile(m *Meta) {
 	m.Current().Push(t)
 }
 
+func block_disassemble(m *Meta) {
+	b := m.Current().Pop().(B)
+	v := b.Disassemble()
+	m.Current().Push(v)
+}
+
 // TEXT
 
 func bl_print(m *Meta) {

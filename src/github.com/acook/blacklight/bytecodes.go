@@ -146,6 +146,7 @@ func prepare_op_table() {
 		// blocks
 		"call":      block_call,
 		"decompile": block_decompile,
+		"dis":       block_disassemble,
 
 		// text
 		"t-to-cv": t_to_cv,
