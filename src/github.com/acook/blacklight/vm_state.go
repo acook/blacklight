@@ -55,9 +55,9 @@ func (vm *VMstate) infer() string {
 }
 
 func (vm *VMstate) prepare_lookup() {
-	vm.all_map = make(map[byte]string)
-
 	if !vm.all_flag {
+		vm.all_map = make(map[byte]string)
+
 		for k, v := range lk_map {
 			vm.all_map[k] = v
 		}
