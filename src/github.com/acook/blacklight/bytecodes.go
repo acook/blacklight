@@ -137,12 +137,15 @@ func prepare_op_table() {
 		"ato":    seq_ato,
 		"rmo":    seq_rmo,
 		"len":    seq_len,
-		"call":   block_call,
 		"del":    seq_del,
 		"emt":    seq_emt,
 		"pick":   seq_pick,
 		"v-to-s": v_to_s,
 		"v-to-q": v_to_q,
+
+		// blocks
+		"call":      block_call,
+		"decompile": block_decompile,
 
 		// text
 		"t-to-cv": t_to_cv,

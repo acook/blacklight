@@ -570,10 +570,6 @@ func seq_len(m *Meta) {
 	m.Current().Push(N(v.Len()))
 }
 
-func block_call(m *Meta) {
-	doBC(m, m.Current().Pop().(B))
-}
-
 func seq_pick(m *Meta) {
 	NOPE("pick")
 }
@@ -588,6 +584,18 @@ func v_to_s(m *Meta) {
 }
 func v_to_q(m *Meta) {
 	NOPE("v-to-q")
+}
+
+// BLOCK
+
+func block_call(m *Meta) {
+	doBC(m, m.Current().Pop().(B))
+}
+
+func block_decompile(m *Meta) {
+	b := m.Current().Pop().(B)
+	t := analyze(b)
+	m.Current().Push(t)
 }
 
 // TEXT
