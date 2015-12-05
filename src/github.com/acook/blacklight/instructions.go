@@ -243,6 +243,15 @@ func do(m *Meta) {
 	doBC(m, file_bc)
 }
 
+func bload(m *Meta) {
+	filename := string(m.Current().Pop().(T))
+
+	code := loadFile(filename)
+	tokens := parse(code)
+	file_bc := compile(tokens)
+	m.Current().Push(B(file_bc))
+}
+
 func imp(m *Meta) {
 	NOPE("imp")
 }

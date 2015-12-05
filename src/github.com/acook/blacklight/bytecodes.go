@@ -78,8 +78,9 @@ func prepare_op_table() {
 		"warn":  bl_warn,
 
 		// loading
-		"do":  do,
-		"imp": imp,
+		"do":    do,
+		"imp":   imp,
+		"bload": bload,
 
 		// math
 		"add":    add,
