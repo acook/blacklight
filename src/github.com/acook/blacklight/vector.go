@@ -50,3 +50,16 @@ func (v V) Rmo(n N) sequence {
 func (v V) Len() N {
 	return N(len(v))
 }
+
+func (v V) Bytecode() []byte {
+	bc := []byte{}
+
+	bc = append(bc, 0xF8)
+
+	for _, i := range v {
+		bc = append(bc, i.Bytecode()...)
+	}
+
+	bc = append(bc, 0xF9)
+	return bc
+}

@@ -17,3 +17,7 @@ func (op OP) Value() interface{} {
 func (op OP) Text() T {
 	return T(lk_map[uint8(op)])
 }
+
+func (op OP) Bytecode() []byte {
+	return []byte{byte(op)}
+}

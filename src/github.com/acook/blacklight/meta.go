@@ -44,6 +44,14 @@ func (m Meta) Refl() string {
 	return str + ">"
 }
 
+func (m Meta) Bytecode() []byte {
+	bc := []byte{}
+
+	NOPE("serializable metas")
+
+	return bc
+}
+
 // for stack interface compatibility
 
 func (m *Meta) Push(i datatypes) {

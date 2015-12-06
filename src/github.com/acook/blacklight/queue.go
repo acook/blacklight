@@ -75,3 +75,11 @@ PrintLoop:
 
 	return str + "}"
 }
+
+func (q *Queue) Bytecode() []byte {
+	bc := []byte{}
+
+	NOPE("serializable Qs")
+
+	return bc
+}

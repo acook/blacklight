@@ -36,3 +36,7 @@ func (r R) Text() T {
 func (r R) Bytes() []byte {
 	return []byte(string(r))
 }
+
+func (r R) Bytecode() []byte {
+	return append([]byte{0xF3}, r.Bytes()...)
+}

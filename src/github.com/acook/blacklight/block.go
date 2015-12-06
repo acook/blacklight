@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/binary"
 	"fmt"
 )
 
@@ -48,6 +49,26 @@ func (b B) Len() N {
 	return N(len(b))
 }
 
+func (b B) Bytecode() []byte {
+	l := len(b)
+	bc := make([]byte, l+8+1)
+
+	int_buf := make([]byte, 8)
+	binary.BigEndian.PutUint64(int_buf, uint64(l))
+
+	bc[0] = 0xF7
+
+	for o, ib := range int_buf {
+		bc[1+o] = ib
+	}
+
+	for o, octet := range b {
+		bc[9+o] = octet
+	}
+
+	return bc
+}
+
 func (b B) Disassemble() V {
 	vm := new(VMstate)
 
@@ -89,4 +110,12 @@ func (b B) Disassemble() V {
 			return vm.m.Current().S_to_V()
 		}
 	}
+}
+
+func NewBFromV(v V) B {
+	b := B{}
+	for _, i := range v {
+		b = append(b, i.Bytecode()...)
+	}
+	return b
 }

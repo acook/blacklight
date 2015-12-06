@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/binary"
 	"unicode/utf8"
 )
 
@@ -52,6 +53,29 @@ func (t T) Len() N {
 
 func (t T) Bytes() []byte {
 	return []byte(t)
+}
+
+func (t T) Bytecode() []byte {
+	l := len(t)
+	bc := make([]byte, l+8+1)
+
+	int_buf := make([]byte, 8)
+	binary.BigEndian.PutUint64(int_buf, uint64(l))
+
+	bc[0] = 0xF7
+
+	for o, ib := range int_buf {
+		bc[1+o] = ib
+	}
+
+	for o, go_r := range t {
+		bl_r := R(go_r)
+		for o2, octet := range bl_r.Bytes() {
+			bc[9+o+o2] = octet
+		}
+	}
+
+	return bc
 }
 
 func (t T) T_to_CV() V {
