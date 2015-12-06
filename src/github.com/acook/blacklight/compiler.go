@@ -159,11 +159,11 @@ func compile(tokens []string) []byte {
 			str_buf := t[1 : len(t)-1]
 			bc = append(bc, str_buf...)
 
-		case t == "[": // WordVector literal (start)
+		case t == "[": // Block literal (start)
 			bc = append(bc, 0xF7)
 			b_cache = append(b_cache, bc)
 			bc = []byte{}
-		case t == "]": // WordVector literal (end)
+		case t == "]": // Block literal (end)
 			if len(b_cache) > 0 {
 				my_bc := bc
 				bc = b_cache[len(b_cache)-1]
