@@ -202,11 +202,3 @@ func (s *Stack) Swap() {
 func (s *Stack) S_to_V() V {
 	return s.Items
 }
-
-func (s Stack) Bytecode() []byte {
-	bc := []byte{}
-
-	NOPE("serializable stacks")
-
-	return bc
-}

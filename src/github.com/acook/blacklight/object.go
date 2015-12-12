@@ -93,11 +93,3 @@ func (o Object) Labels() V {
 	}
 	return labels
 }
-
-func (o *Object) Bytecode() []byte {
-	bc := []byte{}
-
-	NOPE("serializable objects")
-
-	return bc
-}
