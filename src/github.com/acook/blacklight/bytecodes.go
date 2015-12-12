@@ -142,6 +142,7 @@ func prepare_op_table() {
 		"pick":   seq_pick,
 		"v-to-s": v_to_s,
 		"v-to-q": v_to_q,
+		"v-to-b": v_to_b,
 
 		// blocks
 		"call":      block_call,
