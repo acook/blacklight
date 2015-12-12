@@ -4,14 +4,12 @@ type datatypes interface {
 	Print() string
 	Refl() string
 	Value() interface{}
-	Bytecode() []byte
 }
 
 type sequence interface {
 	Print() string
 	Refl() string
 	Value() interface{}
-	Bytecode() []byte
 	Cat(sequence) sequence
 	App(datatypes) sequence
 	Ato(N) datatypes
@@ -31,11 +29,14 @@ type stackable interface {
 	Print() string
 	Refl() string
 	Value() interface{}
-	Bytecode() []byte
 	Push(datatypes)
 	Pop() datatypes
 	Drop()
 	Swap()
 	Decap()
 	Depth() int
+}
+
+type serializable interface {
+  Bytecode() []byte
 }

@@ -115,7 +115,7 @@ func (b B) Disassemble() V {
 func NewBFromV(v V) B {
 	b := B{}
 	for _, i := range v {
-		b = append(b, i.Bytecode()...)
+		b = append(b, i.(serializable).Bytecode()...)
 	}
 	return b
 }

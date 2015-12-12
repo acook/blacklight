@@ -57,7 +57,7 @@ func (v V) Bytecode() []byte {
 	bc = append(bc, 0xF8)
 
 	for _, i := range v {
-		bc = append(bc, i.Bytecode()...)
+		bc = append(bc, i.(serializable).Bytecode()...)
 	}
 
 	bc = append(bc, 0xF9)
