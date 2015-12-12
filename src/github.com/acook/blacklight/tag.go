@@ -24,7 +24,6 @@ func (t Tag) Bytes() []byte {
 		return nil
 	} else {
 		panic("Tag.Bytes: Attempt to serialize non-nil Tag!")
-		return nil
 	}
 }
 

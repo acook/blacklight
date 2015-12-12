@@ -24,7 +24,6 @@ func ReadIO(i datatypes, q *Queue) *Tag {
 	default:
 		panic("ReadIO: unrecognized type for IO - " + i.Print())
 	}
-	return nil
 }
 
 func WriteIO(i datatypes, q *Queue) *Tag {
@@ -38,7 +37,6 @@ func WriteIO(i datatypes, q *Queue) *Tag {
 	default:
 		panic("WriteIO: unrecognized type for IO - " + i.Print())
 	}
-	return nil
 }
 
 var FDtable map[uint]*os.File = make(map[uint]*os.File)
