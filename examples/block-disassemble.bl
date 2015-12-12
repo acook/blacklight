@@ -1,0 +1,2 @@
+[ 1 2 3 add mul say ~foo say ]
+dis refl print

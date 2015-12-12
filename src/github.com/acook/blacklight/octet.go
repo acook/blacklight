@@ -34,6 +34,10 @@ func (c C) Bytes() []byte {
 	return []byte{byte(c)}
 }
 
+func (c C) Bytecode() []byte {
+	return []byte{0xF2, byte(c)}
+}
+
 func (c C) Band(c2 C) C {
 	return c & c2
 }

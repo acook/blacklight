@@ -585,6 +585,9 @@ func v_to_s(m *Meta) {
 func v_to_q(m *Meta) {
 	NOPE("v-to-q")
 }
+func v_to_b(m *Meta) {
+	m.Current().Push(NewBFromV(m.Current().Pop().(V)))
+}
 
 // BLOCK
 
@@ -596,6 +599,12 @@ func block_decompile(m *Meta) {
 	b := m.Current().Pop().(B)
 	t := analyze(b)
 	m.Current().Push(t)
+}
+
+func block_disassemble(m *Meta) {
+	b := m.Current().Pop().(B)
+	v := b.Disassemble()
+	m.Current().Push(v)
 }
 
 // TEXT

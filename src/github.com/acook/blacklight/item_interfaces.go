@@ -36,3 +36,7 @@ type stackable interface {
 	Decap()
 	Depth() int
 }
+
+type serializable interface {
+  Bytecode() []byte
+}

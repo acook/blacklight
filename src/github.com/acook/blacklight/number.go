@@ -26,3 +26,17 @@ func (n N) N_to_R() R {
 func (n N) N_to_T() T {
 	return T(n.Print())
 }
+
+func (n N) Bytecode() []byte {
+	bc := make([]byte, 9)
+	int_buf := make([]byte, 8)
+	PutVarint64(int_buf, int64(n))
+
+	bc[0] = 0xF4
+
+	for o, ib := range int_buf {
+		bc[1+o] = ib
+	}
+
+	return bc
+}
