@@ -2,20 +2,24 @@ package main
 
 import (
 	"fmt"
+	"sync/atomic"
 )
 
-var queues int
+var queues uint64
 
 type Queue struct {
 	Items chan datatypes
-	Id    int
+	Id    uint64
+}
+
+func QueueId() uint64 {
+	return atomic.AddUint64(&queues, 1)
 }
 
 func NewQueue() *Queue {
 	q := &Queue{}
 	q.Items = make(chan datatypes, 16)
-	queues++
-	q.Id = queues
+	q.Id = QueueId()
 
 	return q
 }
