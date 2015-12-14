@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"runtime"
 	"sync"
 )
 
@@ -12,6 +13,11 @@ var threads sync.WaitGroup
 
 func main() {
 	defer cleanup()
+
+	// set the maximum number of OS threads to utilize
+	// make it equal to twice the number of physical CPUs
+	// to take advantage of modern multi-thread CPUs
+	_ = runtime.GOMAXPROCS(runtime.NumCPU() * 2)
 
 	var fileName string
 
