@@ -29,7 +29,12 @@ func (q *Queue) Enqueue(item datatypes) {
 }
 
 func (q *Queue) Dequeue() datatypes {
-	return <-q.Items
+	i, ok := <-q.Items
+	if ok {
+		return i
+	} else {
+		return NewNil("Queue Closed")
+	}
 }
 
 func (q *Queue) Close() {
