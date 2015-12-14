@@ -1,9 +1,5 @@
 package main
 
-import (
-//"fmt"
-)
-
 type Object struct {
 	Slots  map[W]datatypes
 	Parent *Object

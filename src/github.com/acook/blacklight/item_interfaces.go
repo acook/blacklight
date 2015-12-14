@@ -38,5 +38,5 @@ type stackable interface {
 }
 
 type serializable interface {
-  Bytecode() []byte
+	Bytecode() []byte
 }
