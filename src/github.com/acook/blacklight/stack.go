@@ -9,7 +9,7 @@ import (
 var Stacks int
 var StacksSync sync.Mutex
 
-func getStackId() int {
+func getStackID() int {
 	StacksSync.Lock()
 	defer StacksSync.Unlock()
 	id := Stacks
@@ -27,7 +27,7 @@ type Stack struct {
 func NewStack(t string) *Stack {
 	s := &Stack{}
 	s.Type = t
-	s.Id = getStackId()
+	s.Id = getStackID()
 	return s
 }
 

@@ -13,7 +13,7 @@ type ObjectStack struct {
 
 func NewObjectStack() *ObjectStack {
 	s := &ObjectStack{}
-	s.Id = getStackId()
+	s.Id = getStackID()
 	return s
 }
 

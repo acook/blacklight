@@ -15,7 +15,7 @@ type Meta struct {
 
 func NewMeta() *Meta {
 	m := &Meta{}
-	m.Id = getStackId()
+	m.Id = getStackID()
 	m.ObjectStack = NewObjectStack()
 	return m
 }
