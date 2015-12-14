@@ -171,6 +171,11 @@ func prepare_op_table() {
 		"bshiftr": b_shift_r,
 		"c-to-r":  c_to_r,
 		"c-to-n":  c_to_n,
+
+		// actors
+		"a-new": a_new,
+		"send":  send,
+		"trig":  trig,
 	}
 
 	op_map = make(map[string]byte)
