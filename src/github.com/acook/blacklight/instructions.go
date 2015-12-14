@@ -697,3 +697,25 @@ func c_to_r(m *Meta) {
 func c_to_n(m *Meta) {
 	m.Current().Push(m.Current().Pop().(C).C_to_N())
 }
+
+// ACTORS
+
+func a_new(m *Meta) {
+	a := NewActor()
+	m.Current().Push(a)
+}
+
+func send(m *Meta) {
+	label := m.Current().Pop().(W)
+	args := m.Current().Pop().(V)
+	a := m.Current().Peek().(Actor)
+	resp := a.Send(label, args)
+	m.Current().Push(resp)
+}
+
+func trig(m *Meta) {
+	label := m.Current().Pop().(W)
+	args := m.Current().Pop().(V)
+	a := m.Current().Peek().(Actor)
+	a.Trigger(label, args)
+}
