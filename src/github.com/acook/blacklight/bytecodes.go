@@ -118,6 +118,7 @@ func prepare_op_table() {
 		"deq":    q_deq,
 		"enq":    q_enq,
 		"proq":   q_proq,
+		"cloq":   q_close,
 		"q-to-s": q_to_s,
 		"q-to-v": q_to_v,
 		"q-to-t": q_to_t,

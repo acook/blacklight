@@ -32,6 +32,10 @@ func (q *Queue) Dequeue() datatypes {
 	return <-q.Items
 }
 
+func (q *Queue) Close() {
+	close(q.Items)
+}
+
 func (q Queue) Value() interface{} {
 	return q.Items
 }

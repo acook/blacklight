@@ -466,6 +466,10 @@ ProcQLoop:
 	}
 }
 
+func q_close(m *Meta) {
+	m.Current().Peek().(*Queue).Close()
+}
+
 func q_to_s(m *Meta) {
 	NOPE("q-to-s")
 }
