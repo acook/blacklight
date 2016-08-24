@@ -20,16 +20,19 @@ func main() {
 	_ = runtime.GOMAXPROCS(runtime.NumCPU() * 2)
 
 	var fileName string
+	var code []rune
 
-	if len(os.Args[1:]) > 0 {
+	prepare_op_table()
+
+	if len(os.Args[1:]) == 1 {
 		fileName = os.Args[1]
+		code = loadFile(fileName)
+	} else if len(os.Args[1:]) == 2 {
+		code = []rune(os.Args[2])
 	} else {
 		panic("no filename argument")
 	}
 
-	prepare_op_table()
-
-	code := loadFile(fileName)
 	tokens := parse(code)
 
 	ops := compile(tokens)
