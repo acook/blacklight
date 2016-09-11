@@ -4,7 +4,7 @@ source "$(dirname $0)/_shared.bash"
 
 timestamp="$(date --utc "+%Y.%m.%d")"
 shortsha="$(git rev-parse --short HEAD)"
-blacklight="$BLROOT/bin/blacklight_$shortsha-$timestamp"
+blacklight="$BLROOT/bin/blacklight_$timestamp-$shortsha"
 
 warn " -- building blacklight binary..."
 go build -o "$blacklight" "$BLROOT/src/"*.go
