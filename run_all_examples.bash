@@ -33,6 +33,6 @@ done
 
 echo
 echo " -- failures: $failures"
-echo " -- failed: $failed"
+echo " -- failed: ${failed-<all passed>}"
 
 exit $failures
