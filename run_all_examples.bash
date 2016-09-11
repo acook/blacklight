@@ -25,7 +25,7 @@ shortsha="$(git rev-parse --short HEAD)"
 blacklight="./bin/blacklight_$shortsha-$timestamp"
 
 echo " -- building blacklight binary..."
-go build -o "$blacklight" src/github.com/acook/blacklight/*.go
+go build -o "$blacklight" src/*.go
 
 if [[ -x $blacklight ]]; then
   echo " -- binary built at: \"$blacklight\""
