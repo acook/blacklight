@@ -26,10 +26,10 @@ function elapsed() {
 
 timestamp="$(date --utc "+%Y.%m.%d")"
 shortsha="$(git rev-parse --short HEAD)"
-blacklight="./bin/blacklight_$shortsha-$timestamp"
+blacklight="$dir/bin/blacklight_$shortsha-$timestamp"
 
 echo " -- building blacklight binary..."
-go build -o "$blacklight" src/*.go
+go build -o "$blacklight" $dir/src/*.go
 
 if [[ -x $blacklight ]]; then
   echo " -- binary built at: \"$blacklight\""
