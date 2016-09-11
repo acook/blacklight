@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+set -o nounset                              # Treat unset variables as an error
+cd "$(dirname $0)/.."
+export dir="$(pwd)"
+
 source gg 2> /dev/null
 
 function timer() {
