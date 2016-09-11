@@ -1,42 +1,14 @@
 #!/usr/bin/env bash
 
-set -o nounset                              # Treat unset variables as an error
-cd "$(dirname $0)/.."
-export dir="$(pwd)"
+blacklight="$1"
+source "$(dirname $0)/_shared.bash"
 
-source gg 2> /dev/null
+this="run_all_examples"
+function usage() { warn "usage: $this ./path/to/blacklight"; exit -1; }
 
-function timer() {
-  date +%s.%N
-}
-
-function elapsed() {
-  started_at=$1
-  ended_at=$2
-  dt=$(echo "$ended_at - $started_at" | bc)
-  dd=$(echo "$dt/86400" | bc)
-  dt2=$(echo "$dt-86400*$dd" | bc)
-  dh=$(echo "$dt2/3600" | bc)
-  dt3=$(echo "$dt2-3600*$dh" | bc)
-  dm=$(echo "$dt3/60" | bc)
-  ds=$(echo "$dt3-60*$dm" | bc)
-
-  printf " -- time elapsed: %d:%02d:%02d:%02.4f\n" $dd $dh $dm $ds
-}
-
-timestamp="$(date --utc "+%Y.%m.%d")"
-shortsha="$(git rev-parse --short HEAD)"
-blacklight="$dir/bin/blacklight_$shortsha-$timestamp"
-
-echo " -- building blacklight binary..."
-go build -o "$blacklight" $dir/src/*.go
-
-if [[ -x $blacklight ]]; then
-  echo " -- binary built at: \"$blacklight\""
-else
-  echo " -- something went wrong!"
-  echo " -- binary not found at: \"$blacklight\""
-  exit -1
+if [[ ! -x $blacklight ]]; then
+  warn " -- binary not found at: \"$blacklight\""
+  usage
 fi
 
 failures=0

@@ -8,7 +8,7 @@ source gg 2> /dev/null
 
 # utility functionso
 
-scriptpath() {
+function scriptpath() {
   # usage: scriptpath [relative_path]
   # relative path is optional and expected to be reliable
   SOURCE="${BASH_SOURCE[0]}"
@@ -20,7 +20,24 @@ scriptpath() {
   echo "$( cd -P "$(dirname "$SOURCE")/$1" && pwd )"
 }
 
-warn() { echo "$@" 1>&2; }
+function warn() { echo "$@" 1>&2; }
+
+function timer() { date "+%s.%N"; }
+
+function elapsed() {
+  started_at=$1
+  ended_at=$2
+  dt=$(echo "$ended_at - $started_at" | bc)
+  dd=$(echo "$dt/86400" | bc)
+  dt2=$(echo "$dt-86400*$dd" | bc)
+  dh=$(echo "$dt2/3600" | bc)
+  dt3=$(echo "$dt2-3600*$dh" | bc)
+  dm=$(echo "$dt3/60" | bc)
+  ds=$(echo "$dt3-60*$dm" | bc)
+
+  printf " -- time elapsed: %d:%02d:%02d:%02.4f\n" $dd $dh $dm $ds
+}
+
 
 # Make sure we're in the right directory
 export OLDDIR="$(pwd)"
