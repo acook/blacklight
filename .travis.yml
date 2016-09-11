@@ -1,0 +1,9 @@
+language: go
+
+go:
+  - 1.7.1
+  - tip
+
+go_import_path: src/
+
+script: scripts/run_all_examples.bash
