@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source "$(dirname $0)/_shared.bash"
+source "$(dirname ${BASH_SOURCE[0]})/_shared.bash"
 
 timestamp="$(date --utc "+%Y.%m.%d")"
 shortsha="$(git rev-parse --short HEAD)"
