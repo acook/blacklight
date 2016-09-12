@@ -9,4 +9,4 @@ if [[ ! -x $(which go) ]]; then
 fi
 
 blacklight="$(./scripts/build_test.bash)"
-time ./scripts/run_all_examples.bash $blacklight
+./scripts/run_all_examples.bash $blacklight

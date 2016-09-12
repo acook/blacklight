@@ -12,4 +12,4 @@ if [[ ! -x $blacklight ]]; then
 fi
 
 examples=$(find ./examples -maxdepth 1 -regextype posix-extended -regex '\./.*/[a-z].*.bl' -type f -printf '%p\n')
-./scripts/examples.bash "$blacklight" "$examples"
+time ./scripts/examples.bash "$blacklight" "$examples"
