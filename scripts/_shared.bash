@@ -6,10 +6,14 @@ set -o nounset
 # setup environment (if available)
 source gg 2> /dev/null
 
-# utility functionso
+# utility functions
 
-function scriptpath() {
-  # usage: scriptpath [relative_path]
+function scriptname() {
+  basename ${BASH_SOURCE[1]-$thisscript}
+}
+
+function realscriptpath() {
+  # usage: realscriptpath [relative_path]
   # relative path is optional and expected to be reliable
   SOURCE="${BASH_SOURCE[0]}"
   while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
@@ -41,5 +45,5 @@ function elapsed() {
 
 # Make sure we're in the right directory
 export OLDDIR="$(pwd)"
-export BLROOT="$(scriptpath ..)"
+export BLROOT="$(realscriptpath ..)"
 cd $BLROOT
