@@ -6,4 +6,4 @@ go:
 
 go_import_path: src/
 
-script: scripts/run_all_examples.bash
+script: scripts/ci.bash
