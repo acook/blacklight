@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+set -o nounset                              # Treat unset variables as an error
+cd "$(dirname $0)/.."
+export dir="$(pwd)"
+
 source gg 2> /dev/null
 
 function timer() {
@@ -22,10 +26,10 @@ function elapsed() {
 
 timestamp="$(date --utc "+%Y.%m.%d")"
 shortsha="$(git rev-parse --short HEAD)"
-blacklight="./bin/blacklight_$shortsha-$timestamp"
+blacklight="$dir/bin/blacklight_$shortsha-$timestamp"
 
 echo " -- building blacklight binary..."
-go build -o "$blacklight" src/github.com/acook/blacklight/*.go
+go build -o "$blacklight" $dir/src/*.go
 
 if [[ -x $blacklight ]]; then
   echo " -- binary built at: \"$blacklight\""
