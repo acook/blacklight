@@ -27,11 +27,11 @@ for file in $examples; do
   fi
 done
 
+ended_at=$(timer)
+
 echo
 echo " -- failures: $failures"
 echo " -- failed: ${failed-<all passed>}"
-
-ended_at=$(timer)
 
 elapsed $started_at $ended_at
 
