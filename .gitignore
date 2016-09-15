@@ -1,9 +1,9 @@
 bin
 pkg
+release
 tags
 TAGS
 .tags
 .tags1
-src/github.com/acook/blacklight/blacklight
 .DS_Store
 examples/_output.txt
