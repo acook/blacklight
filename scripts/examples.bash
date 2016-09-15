@@ -32,7 +32,7 @@ ended_at=$(timer)
 
 echo
 echo " -- failures: $failures"
-echo " -- failed: ${failed-<all passed>}"
+echo " -- failed: ${failed:-<all passed>}"
 
 elapsed $started_at $ended_at
 
