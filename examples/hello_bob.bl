@@ -2,6 +2,8 @@
 
 'Enter your name: ' print
 '' 0 fd fdq deq
-[ rot swap app swap deq ] [ dup \\n eq ] until
+[ rot swap app swap deq ] [
+   [ true ] [ dup \\r eq ] [ dup \\n eq ] either 
+] until
 drop drop
 'Hello, ' swap app '!' app \\n app print
