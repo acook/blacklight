@@ -17,32 +17,6 @@ type IO struct {
 	Mode  uint // 01 read, 10 write
 }
 
-func ReadIO(i datatypes, q *Queue) *Tag {
-	switch i.(type) {
-	case N:
-		fd := ReadFD(int(i.(N)), q)
-		return NewFDTag(i.Print(), fd)
-	case T:
-		file := ReadFile(i.Print(), q)
-		return NewFileTag("File#"+i.Print(), file)
-	default:
-		panic("ReadIO: unrecognized type for IO - " + i.Print())
-	}
-}
-
-func WriteIO(i datatypes, q *Queue) *Tag {
-	switch i.(type) {
-	case N:
-		fd := WriteFD(int(i.(N)), q)
-		return NewFDTag("FD#"+i.Print(), fd)
-	case T:
-		file := WriteFile(i.Print(), q)
-		return NewFileTag("File#"+i.Print(), file)
-	default:
-		panic("WriteIO: unrecognized type for IO - " + i.Print())
-	}
-}
-
 var FDtable map[uint]*IO = make(map[uint]*IO)
 
 func initFDtable() {
@@ -121,11 +95,11 @@ func WriteFD(i int, q *Queue) *IO {
 	return fd
 }
 
-func ReadFile(filename string, q *Queue) *IO {
+func ReadFile(filename T, q *Queue) *Tag {
 	fd := new(IO)
 	fd.Mode = IO_READ
 	fd.Queue = q
-	fd.File, _ = os.Open(filename)
+	fd.File, _ = os.Open(string(filename))
 	fd.FD = uint(fd.File.Fd())
 
 	FDtable[fd.FD] = fd
@@ -147,14 +121,14 @@ func ReadFile(filename string, q *Queue) *IO {
 		}
 	}(fd, q)
 
-	return fd
+	return NewFileTag("File#"+filename.Print(), fd)
 }
 
-func WriteFile(filename string, q *Queue) *IO {
+func WriteFile(filename T, q *Queue) *Tag {
 	fd := new(IO)
 	fd.Mode = IO_WRITE
 	fd.Queue = q
-	fd.File, _ = os.Create(filename)
+	fd.File, _ = os.Create(string(filename))
 	fd.FD = uint(fd.File.Fd())
 
 	FDtable[fd.FD] = fd
@@ -179,5 +153,5 @@ func WriteFile(filename string, q *Queue) *IO {
 		}
 	}(fd, q)
 
-	return fd
+	return NewFileTag("File#"+filename.Print(), fd)
 }
