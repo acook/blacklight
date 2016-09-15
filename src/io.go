@@ -11,6 +11,8 @@ import (
 type IO struct {
 	Name  string
 	Queue *Queue
+	FD    uint
+	File  *os.File
 }
 
 func ReadIO(i datatypes, q *Queue) *Tag {
@@ -47,20 +49,14 @@ func initFDtable() {
 	FDtable[2] = os.Stderr
 }
 
-type FD struct {
-	IO
-	FD   uint
-	File *os.File
-}
-
-func ReadFD(i int, q *Queue) *FD {
-	fd := new(FD)
+func ReadFD(i int, q *Queue) *IO {
+	fd := new(IO)
 	fd.Queue = q
 	fd.FD = uint(i)
 	fd.File = FDtable[uint(i)]
 
 	threads.Add(1)
-	go func(fd *FD, q *Queue) {
+	go func(fd *IO, q *Queue) {
 		defer threads.Done()
 
 		for b := make([]byte, 1); ; {
@@ -78,14 +74,14 @@ func ReadFD(i int, q *Queue) *FD {
 	return fd
 }
 
-func WriteFD(i int, q *Queue) *FD {
-	fd := new(FD)
+func WriteFD(i int, q *Queue) *IO {
+	fd := new(IO)
 	fd.Queue = q
 	fd.FD = uint(i)
 	fd.File = FDtable[uint(i)]
 
 	threads.Add(1)
-	go func(fd *FD, q *Queue) {
+	go func(fd *IO, q *Queue) {
 		defer threads.Done()
 		var b []byte
 
@@ -107,8 +103,8 @@ func WriteFD(i int, q *Queue) *FD {
 	return fd
 }
 
-func ReadFile(filename string, q *Queue) *FD {
-	fd := new(FD)
+func ReadFile(filename string, q *Queue) *IO {
+	fd := new(IO)
 	fd.Queue = q
 	fd.File, _ = os.Open(filename)
 	fd.FD = uint(fd.File.Fd())
@@ -116,7 +112,7 @@ func ReadFile(filename string, q *Queue) *FD {
 	FDtable[fd.FD] = fd.File
 
 	threads.Add(1)
-	go func(fd *FD, q *Queue) {
+	go func(fd *IO, q *Queue) {
 		defer threads.Done()
 		b := make([]byte, 1)
 
@@ -135,8 +131,8 @@ func ReadFile(filename string, q *Queue) *FD {
 	return fd
 }
 
-func WriteFile(filename string, q *Queue) *FD {
-	fd := new(FD)
+func WriteFile(filename string, q *Queue) *IO {
+	fd := new(IO)
 	fd.Queue = q
 	fd.File, _ = os.Create(filename)
 	fd.FD = uint(fd.File.Fd())
@@ -144,7 +140,7 @@ func WriteFile(filename string, q *Queue) *FD {
 	FDtable[fd.FD] = fd.File
 
 	threads.Add(1)
-	go func(fd *FD, q *Queue) {
+	go func(fd *IO, q *Queue) {
 		defer threads.Done()
 		var b []byte
 
