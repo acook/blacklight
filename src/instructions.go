@@ -317,6 +317,16 @@ func write(m *Meta) {
 	m.Current().Push(io)
 }
 
+func fd(m *Meta) {
+	m.Current().Push(GetFD(m.Current().Pop().(N)))
+}
+
+func fdq(m *Meta) {
+	fdt := m.Current().Pop().(*Tag)
+	fdq := GetFDQ(fdt)
+	m.Current().Push(fdq)
+}
+
 // LOGIC AND LOOPS
 
 func bl_either(m *Meta) {

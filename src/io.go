@@ -45,54 +45,55 @@ func initFDtable() {
 	FDtable[2] = stderr
 }
 
-func ReadFD(i int, q *Queue) *IO {
-	fd := FDtable[uint(i)]
-	fd.Queue = q
-
-	threads.Add(1)
-	go func(fd *IO, q *Queue) {
-		defer threads.Done()
-
-		for b := make([]byte, 1); ; {
-			l, _ := fd.File.Read(b)
-			if l > 0 {
-				q.Enqueue(R(string(b)[0]))
-			} else {
-				fd.File.Close()
-				q.Enqueue(NewNil("EOF"))
-				return
-			}
-		}
-	}(fd, q)
-
-	return fd
+func GetFD(fdi N) *Tag {
+	fd := FDtable[uint(fdi)]
+	return NewFileTag(fd.Name.Print(), fd)
 }
 
-func WriteFD(i int, q *Queue) *IO {
-	fd := FDtable[uint(i)]
-	fd.Queue = q
+func GetFDQ(fdt *Tag) *Queue {
+	fd := fdt.Data.(*IO)
 
-	threads.Add(1)
-	go func(fd *IO, q *Queue) {
-		defer threads.Done()
-		var b []byte
+	// HACK: create a worker for default IO
+	// we definitely need a better solution here
+	if fd.FD < 3 || fd.Queue == nil {
+		q := NewQueue()
+		fd.Queue = q
+		threads.Add(1)
+		go func(fd *IO) {
+			defer threads.Done()
 
-		for {
-			b = q.Dequeue().(byter).Bytes()
+			if fd.Mode == IO_WRITE {
+				var b []byte
 
-			if b == nil {
-				fd.File.Close()
-				return
-			} else {
-				l, _ := fd.File.Write(b)
-				if l < len(b) {
-					panic("WriteFile: Write Error!")
+				for {
+					b = q.Dequeue().(byter).Bytes()
+
+					if b == nil {
+						fd.File.Close()
+						return
+					} else {
+						l, _ := fd.File.Write(b)
+						if l < len(b) {
+							panic("WriteFile: Write Error!")
+						}
+					}
+				}
+			} else if fd.Mode == IO_READ {
+				for b := make([]byte, 1); ; {
+					l, _ := fd.File.Read(b)
+					if l > 0 {
+						fd.Queue.Enqueue(R(string(b)[0]))
+					} else {
+						fd.File.Close()
+						fd.Queue.Enqueue(NewNil("EOF"))
+						return
+					}
 				}
 			}
-		}
-	}(fd, q)
+		}(fd)
+	}
 
-	return fd
+	return fd.Queue
 }
 
 func ReadFile(filename T, q *Queue) *Tag {
@@ -121,7 +122,7 @@ func ReadFile(filename T, q *Queue) *Tag {
 		}
 	}(fd, q)
 
-	return NewFileTag("File#"+filename.Print(), fd)
+	return NewFileTag(filename.Print(), fd)
 }
 
 func WriteFile(filename T, q *Queue) *Tag {
@@ -153,5 +154,5 @@ func WriteFile(filename T, q *Queue) *Tag {
 		}
 	}(fd, q)
 
-	return NewFileTag("File#"+filename.Print(), fd)
+	return NewFileTag(filename.Print(), fd)
 }

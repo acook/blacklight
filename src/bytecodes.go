@@ -94,6 +94,8 @@ func prepare_op_table() {
 		// file io
 		"read":  read,
 		"write": write,
+		"fd":    fd,
+		"fdq":   fdq,
 
 		// logic & loops
 		"either": bl_either,
