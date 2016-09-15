@@ -1,7 +1,3 @@
-// use runtime.SetFinalizer to close IOs when their queues are GC'd?
-// Or when their FD tag is GC'd?
-// https://golang.org/pkg/runtime/#SetFinalizer
-
 package main
 
 import (
@@ -41,19 +37,34 @@ func WriteIO(i datatypes, q *Queue) *Tag {
 	}
 }
 
-var FDtable map[uint]*os.File = make(map[uint]*os.File)
+var FDtable map[uint]*IO = make(map[uint]*IO)
 
 func initFDtable() {
-	FDtable[0] = os.Stdin
-	FDtable[1] = os.Stdout
-	FDtable[2] = os.Stderr
+	stdin := new(IO)
+	stdin.Name = "stdin"
+	stdin.FD = 0
+	stdin.File = os.Stdin
+
+	FDtable[0] = stdin
+
+	stdout := new(IO)
+	stdout.Name = "stdout"
+	stdout.FD = 0
+	stdout.File = os.Stdout
+
+	FDtable[1] = stdout
+
+	stderr := new(IO)
+	stderr.Name = "stderr"
+	stderr.FD = 0
+	stderr.File = os.Stderr
+
+	FDtable[2] = stderr
 }
 
 func ReadFD(i int, q *Queue) *IO {
-	fd := new(IO)
+	fd := FDtable[uint(i)]
 	fd.Queue = q
-	fd.FD = uint(i)
-	fd.File = FDtable[uint(i)]
 
 	threads.Add(1)
 	go func(fd *IO, q *Queue) {
@@ -75,10 +86,8 @@ func ReadFD(i int, q *Queue) *IO {
 }
 
 func WriteFD(i int, q *Queue) *IO {
-	fd := new(IO)
+	fd := FDtable[uint(i)]
 	fd.Queue = q
-	fd.FD = uint(i)
-	fd.File = FDtable[uint(i)]
 
 	threads.Add(1)
 	go func(fd *IO, q *Queue) {
@@ -109,7 +118,7 @@ func ReadFile(filename string, q *Queue) *IO {
 	fd.File, _ = os.Open(filename)
 	fd.FD = uint(fd.File.Fd())
 
-	FDtable[fd.FD] = fd.File
+	FDtable[fd.FD] = fd
 
 	threads.Add(1)
 	go func(fd *IO, q *Queue) {
@@ -137,7 +146,7 @@ func WriteFile(filename string, q *Queue) *IO {
 	fd.File, _ = os.Create(filename)
 	fd.FD = uint(fd.File.Fd())
 
-	FDtable[fd.FD] = fd.File
+	FDtable[fd.FD] = fd
 
 	threads.Add(1)
 	go func(fd *IO, q *Queue) {
