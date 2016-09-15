@@ -2,7 +2,7 @@
 ;; to read from stdin and convert Cs to a T
 ;; NOTE -> this will block and wait on input!
 
-q-new 0 read swap q-new    ;; Q for read-queue, hide FD, Q for work-queue
+0 fd fdq q-new             ;; Q for read-queue, Q for work-queue
 [
   '' swap                  ;; create empty T and bring recv Q back to top
   [ rot swap app swap ]    ;; bring T to top, then item, append item, bring Q to top

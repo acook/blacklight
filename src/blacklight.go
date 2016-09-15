@@ -22,8 +22,6 @@ func main() {
 	var fileName string
 	var code []rune
 
-	prepare_op_table()
-
 	if len(os.Args[1:]) == 1 {
 		fileName = os.Args[1]
 		code = loadFile(fileName)
@@ -32,6 +30,9 @@ func main() {
 	} else {
 		panic("no filename argument")
 	}
+
+	prepare_op_table()
+	initFDtable()
 
 	tokens := parse(code)
 

@@ -49,13 +49,13 @@ func NewNil(label string) *Tag {
 	return t
 }
 
-func NewFDTag(label string, handle *FD) *Tag {
+func NewFDTag(label string, handle *IO) *Tag {
 	t := NewTag("FD", label)
 	t.Data = handle
 	return t
 }
 
-func NewFileTag(label string, handle *FD) *Tag {
+func NewFileTag(label string, handle *IO) *Tag {
 	t := NewTag("FILE", label)
 	t.Data = handle
 	return t

@@ -1,11 +1,11 @@
 ;; Write a T to a FD
 
-o-new
+o-new ;; o1
 
 [
   drop
-  q-new swap write drop
-  self swap out:
+  fd fdq          ;; get the FD and then get the Q from it
+  self swap out:  ;; store Q in `out` slot
 ] write:
 
 [

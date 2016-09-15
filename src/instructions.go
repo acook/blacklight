@@ -304,17 +304,27 @@ func n_to_t(m *Meta) {
 // IO
 
 func read(m *Meta) {
-	source := m.Current().Pop()
+	source := m.Current().Pop().(T)
 	q := m.Current().Peek().(*Queue)
-	io := ReadIO(source, q)
+	io := ReadFile(source, q)
 	m.Current().Push(io)
 }
 
 func write(m *Meta) {
-	dest := m.Current().Pop()
+	dest := m.Current().Pop().(T)
 	q := m.Current().Peek().(*Queue)
-	io := WriteIO(dest, q)
+	io := WriteFile(dest, q)
 	m.Current().Push(io)
+}
+
+func fd(m *Meta) {
+	m.Current().Push(GetFD(m.Current().Pop().(N)))
+}
+
+func fdq(m *Meta) {
+	fdt := m.Current().Pop().(*Tag)
+	fdq := GetFDQ(fdt)
+	m.Current().Push(fdq)
 }
 
 // LOGIC AND LOOPS
