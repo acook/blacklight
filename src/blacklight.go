@@ -32,6 +32,7 @@ func main() {
 	}
 
 	prepare_op_table()
+	initFDtable()
 
 	tokens := parse(code)
 

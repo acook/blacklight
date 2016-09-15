@@ -40,15 +40,11 @@ func WriteIO(i datatypes, q *Queue) *Tag {
 }
 
 var FDtable map[uint]*os.File = make(map[uint]*os.File)
-var FDtableinit bool
 
 func initFDtable() {
-	if !FDtableinit {
-		FDtable[0] = os.Stdin
-		FDtable[1] = os.Stdout
-		FDtable[2] = os.Stderr
-		FDtableinit = true
-	}
+	FDtable[0] = os.Stdin
+	FDtable[1] = os.Stdout
+	FDtable[2] = os.Stderr
 }
 
 type FD struct {
@@ -58,7 +54,6 @@ type FD struct {
 }
 
 func ReadFD(i int, q *Queue) *FD {
-	initFDtable()
 	fd := new(FD)
 	fd.Queue = q
 	fd.FD = uint(i)
@@ -84,7 +79,6 @@ func ReadFD(i int, q *Queue) *FD {
 }
 
 func WriteFD(i int, q *Queue) *FD {
-	initFDtable()
 	fd := new(FD)
 	fd.Queue = q
 	fd.FD = uint(i)
