@@ -4,11 +4,17 @@ import (
 	"os"
 )
 
+const (
+	IO_READ = iota
+	IO_WRITE
+)
+
 type IO struct {
 	Name  string
 	Queue *Queue
 	FD    uint
 	File  *os.File
+	Mode  uint // 01 read, 10 write
 }
 
 func ReadIO(i datatypes, q *Queue) *Tag {
@@ -44,6 +50,7 @@ func initFDtable() {
 	stdin.Name = "stdin"
 	stdin.FD = 0
 	stdin.File = os.Stdin
+	stdin.Mode = IO_READ
 
 	FDtable[0] = stdin
 
@@ -51,6 +58,7 @@ func initFDtable() {
 	stdout.Name = "stdout"
 	stdout.FD = 0
 	stdout.File = os.Stdout
+	stdout.Mode = IO_WRITE
 
 	FDtable[1] = stdout
 
@@ -58,6 +66,7 @@ func initFDtable() {
 	stderr.Name = "stderr"
 	stderr.FD = 0
 	stderr.File = os.Stderr
+	stderr.Mode = IO_WRITE
 
 	FDtable[2] = stderr
 }
@@ -114,6 +123,7 @@ func WriteFD(i int, q *Queue) *IO {
 
 func ReadFile(filename string, q *Queue) *IO {
 	fd := new(IO)
+	fd.Mode = IO_READ
 	fd.Queue = q
 	fd.File, _ = os.Open(filename)
 	fd.FD = uint(fd.File.Fd())
@@ -142,6 +152,7 @@ func ReadFile(filename string, q *Queue) *IO {
 
 func WriteFile(filename string, q *Queue) *IO {
 	fd := new(IO)
+	fd.Mode = IO_WRITE
 	fd.Queue = q
 	fd.File, _ = os.Create(filename)
 	fd.FD = uint(fd.File.Fd())
