@@ -10,7 +10,7 @@ const (
 )
 
 type IO struct {
-	Name  string
+	Name  T
 	Queue *Queue
 	FD    uint
 	File  *os.File
@@ -30,7 +30,7 @@ func initFDtable() {
 
 	stdout := new(IO)
 	stdout.Name = "stdout"
-	stdout.FD = 0
+	stdout.FD = 1
 	stdout.File = os.Stdout
 	stdout.Mode = IO_WRITE
 
@@ -38,7 +38,7 @@ func initFDtable() {
 
 	stderr := new(IO)
 	stderr.Name = "stderr"
-	stderr.FD = 0
+	stderr.FD = 2
 	stderr.File = os.Stderr
 	stderr.Mode = IO_WRITE
 
