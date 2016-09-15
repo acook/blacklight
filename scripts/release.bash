@@ -29,8 +29,8 @@ env GOOS=linux GOARCH=arm GOARM=7 go build -v -a -o "$bl_arm" "$BLROOT/src/"*.go
 warn " -- binary prefix: $blacklight"
 
 warn " -- macOS binary: $(basename $bl_macos)"
-warn " -- Windows binary: $(basename $bl_macos)"
-warn " -- Linux binary: $(basename $bl_macos)"
-warn " -- LinuxARM binary: $(basename $bl_macos)"
+warn " -- Windows binary: $(basename $bl_win)"
+warn " -- Linux binary: $(basename $bl_linux)"
+warn " -- LinuxARM binary: $(basename $bl_arm)"
 
 warn " -- done!"
