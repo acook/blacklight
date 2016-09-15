@@ -14,6 +14,7 @@ if [[ ! -x $blacklight ]]; then
 fi
 
 failures=0
+failed=""
 started_at=$(timer)
 
 for file in $examples; do
