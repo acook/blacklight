@@ -5,11 +5,16 @@ engines:
   govet:
     enabled: true
   golint:
-    enabled: true
+    checks:
+      enabled: true
+      GoLint/Comments/DocComments:
+        enabled: false
+      GoLint/Naming/MixedCaps:
+        enabled: false
 
 ratings:
   paths:
     - "**.go"
 
 exclude_paths:
-- test/
+  - test/
