@@ -4,6 +4,7 @@
 ![CircleCI](https://img.shields.io/circleci/build/github/acook/blacklight)
 [![Build status](https://ci.appveyor.com/api/projects/status/7h1e1sly5024l6im/branch/master?svg=true)](https://ci.appveyor.com/project/acook/blacklight/branch/master)
 [![Kanban on Trello](https://img.shields.io/badge/kanban-trello-026AA7.svg)](https://trello.com/b/vygKBL4j)
+[![Code Climate Issue Count](https://codeclimate.com/github/acook/blacklight/badges/issue_count.svg)](https://codeclimate.com/github/acook/blacklight)
 [![Join the chat at https://gitter.im/acook/blacklight](https://img.shields.io/gitter/room/acook/blacklight.js.svg)](https://gitter.im/acook/blacklight)
 
 > `blacklight` is a *programming language* which is concurrent, stack-based, and concatenative  (BLPL)
@@ -23,6 +24,9 @@ blacklight (BLVM) is awesome, here's a few reasons why:
 - an easy to use homoiconic Forth-like assembly language (BLPL)
 - runtime bytecode manipulation and generation
 - UTF-8 native datatypes
+- stack-oriented programming
+- concatenative programming
+- great for MapReducing, ETLing, and general data processing
 - multi-architecture and cross-platform (currently: x86_64, ARM, macos, linux, windows)
 - (in progress) highly optimized vector operations on supported CPUs
 - (in progress) simple FFI to Rust and C
