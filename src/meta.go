@@ -7,7 +7,7 @@ import (
 
 type Meta struct {
 	sync.Mutex
-	Id          int
+	ID          int
 	Items       []*Stack
 	ObjectStack *ObjectStack
 	SelfFlag    bool
@@ -15,7 +15,7 @@ type Meta struct {
 
 func NewMeta() *Meta {
 	m := &Meta{}
-	m.Id = getStackID()
+	m.ID = getStackID()
 	m.ObjectStack = NewObjectStack()
 	return m
 }
@@ -35,7 +35,7 @@ func (m Meta) Print() string {
 }
 
 func (m Meta) Refl() string {
-	str := "$" + strconv.Itoa(m.Id) + "#" + strconv.Itoa(m.Depth()) + "< "
+	str := "$" + strconv.Itoa(m.ID) + "#" + strconv.Itoa(m.Depth()) + "< "
 
 	for _, i := range m.Items {
 		str += i.Print() + " "

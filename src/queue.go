@@ -9,17 +9,17 @@ var queues uint64
 
 type Queue struct {
 	Items chan datatypes
-	Id    uint64
+	ID    uint64
 }
 
-func QueueId() uint64 {
+func QueueID() uint64 {
 	return atomic.AddUint64(&queues, 1)
 }
 
 func NewQueue() *Queue {
 	q := &Queue{}
 	q.Items = make(chan datatypes, 16)
-	q.Id = QueueId()
+	q.ID = QueueID()
 
 	return q
 }
@@ -64,7 +64,7 @@ PrintLoop:
 
 func (q Queue) Refl() string {
 	var s Stack
-	str := "{#" + fmt.Sprint(q.Id) + "# "
+	str := "{#" + fmt.Sprint(q.ID) + "# "
 
 PrintLoop:
 	for {

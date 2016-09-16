@@ -8,12 +8,12 @@ import (
 type ObjectStack struct {
 	sync.Mutex
 	Items []*Object
-	Id    int
+	ID    int
 }
 
 func NewObjectStack() *ObjectStack {
 	s := &ObjectStack{}
-	s.Id = getStackID()
+	s.ID = getStackID()
 	return s
 }
 
@@ -22,7 +22,7 @@ func (s *ObjectStack) Value() interface{} {
 }
 
 func (s *ObjectStack) Refl() string {
-	str := "O" + strconv.Itoa(s.Id) + "#" + strconv.Itoa(s.Depth()) + "< "
+	str := "O" + strconv.Itoa(s.ID) + "#" + strconv.Itoa(s.Depth()) + "< "
 
 	for _, i := range s.Items {
 		str += i.Refl() + " "

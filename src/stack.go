@@ -21,13 +21,13 @@ type Stack struct {
 	sync.Mutex
 	Items []datatypes
 	Type  string
-	Id    int
+	ID    int
 }
 
 func NewStack(t string) *Stack {
 	s := &Stack{}
 	s.Type = t
-	s.Id = getStackID()
+	s.ID = getStackID()
 	return s
 }
 
@@ -40,7 +40,7 @@ func (s Stack) Value() interface{} {
 }
 
 func (s Stack) Refl() string {
-	str := "<#" + s.Type + "#" + strconv.Itoa(s.Id) + "#" + strconv.Itoa(s.Depth()) + "# "
+	str := "<#" + s.Type + "#" + strconv.Itoa(s.ID) + "#" + strconv.Itoa(s.Depth()) + "# "
 
 	for _, i := range s.Items {
 		switch i.(type) {
@@ -49,13 +49,13 @@ func (s Stack) Refl() string {
 		case *Meta:
 			str += "$*<...> "
 		case *Stack:
-			if i.(*Stack).Id == s.Id {
+			if i.(*Stack).ID == s.ID {
 				str += "<...> "
 			} else {
 				str += i.Refl() + " "
 			}
 		case Stack:
-			panic("direct Stack reference: " + strconv.Itoa(i.(Stack).Id))
+			panic("direct Stack reference: " + strconv.Itoa(i.(Stack).ID))
 		case nil:
 			str += "??? "
 		default:
@@ -77,7 +77,7 @@ func (s Stack) Print() string {
 		case Meta, *Meta:
 			str += "$ "
 		case *Stack:
-			if i.(*Stack).Id == s.Id {
+			if i.(*Stack).ID == s.ID {
 				str += "... "
 			} else {
 				str += i.Print() + " "
