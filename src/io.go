@@ -17,7 +17,7 @@ type IO struct {
 	Mode  uint // 01 read, 10 write
 }
 
-var FDtable map[uint]*IO = make(map[uint]*IO)
+var FDtable = make(map[uint]*IO)
 
 func initFDtable() {
 	stdin := new(IO)
