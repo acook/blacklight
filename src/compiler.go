@@ -23,7 +23,7 @@ func (d *Debug) Rescue() {
 }
 
 func compile(tokens []string) []byte {
-	var debug *Debug = new(Debug)
+	var debug = new(Debug)
 	defer debug.Rescue()
 
 	var bc []byte
@@ -191,8 +191,8 @@ func compile(tokens []string) []byte {
 	return bc
 }
 
-var rev_wd_map map[string]uint64 = make(map[string]uint64)
-var wd_map map[uint64][]rune = make(map[uint64][]rune)
+var rev_wd_map = make(map[string]uint64)
+var wd_map = make(map[uint64][]rune)
 var wd_count uint64
 
 func wd_add(t []rune) uint64 {
