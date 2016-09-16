@@ -5,8 +5,8 @@ engines:
   govet:
     enabled: true
   golint:
+    enabled: true
     checks:
-      enabled: true
       GoLint/Comments/DocComments:
         enabled: false
       GoLint/Naming/MixedCaps:
