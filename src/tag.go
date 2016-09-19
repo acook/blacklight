@@ -66,3 +66,19 @@ func NewErr(label string, data datatypes) *Tag {
 	t.Data = data
 	return t
 }
+
+func blOr(t1 *Tag, t2 *Tag) *Tag {
+	if t1.Bool || t2.Bool {
+		return NewTrue("or")
+	} else {
+		return NewNil("or")
+	}
+}
+
+func blAnd(t1 *Tag, t2 *Tag) *Tag {
+	if t1.Bool && t2.Bool {
+		return NewTrue("and")
+	} else {
+		return NewNil("and")
+	}
+}

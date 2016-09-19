@@ -356,6 +356,18 @@ func bl_if(m *Meta) {
 	}
 }
 
+func bl_or(m *Meta) {
+	i1 := m.Current().Pop().(*Tag)
+	i2 := m.Current().Pop().(*Tag)
+	m.Current().Push(blOr(i1, i2))
+}
+
+func bl_and(m *Meta) {
+	i1 := m.Current().Pop().(*Tag)
+	i2 := m.Current().Pop().(*Tag)
+	m.Current().Push(blAnd(i1, i2))
+}
+
 func bl_is(m *Meta) {
 	NOPE("is")
 }

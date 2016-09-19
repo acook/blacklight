@@ -100,6 +100,8 @@ func prepare_op_table() {
 		// logic & loops
 		"either": bl_either,
 		"eq":     bl_eq,
+		"or":     bl_or,
+		"and":    bl_and,
 		"if":     bl_if,
 		"is":     bl_is,
 		"not":    bl_not,

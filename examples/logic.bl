@@ -8,3 +8,8 @@ if say
 [ 'not empty!' ]
 [ len 0 eq ]
 either say
+
+1 1
+[ 'both 1' ]
+[ 1 eq swap 1 eq and ]
+if say
