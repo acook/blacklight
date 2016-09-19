@@ -84,7 +84,7 @@ func (o Object) Value() interface{} {
 
 func (o Object) Labels() V {
 	var labels V
-	for label, _ := range o.Slots {
+	for label := range o.Slots {
 		labels = append(labels, label)
 	}
 	return labels
