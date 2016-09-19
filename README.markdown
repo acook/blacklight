@@ -1,8 +1,9 @@
 blacklight
 ==========
 
-[![Release Tag](https://img.shields.io/github/tag/acook/blacklight.svg?maxAge=2592000)](https://img.shields.io/github/tag/acook/blacklight.svg?maxAge=2592000)
+[![Release Tag](https://img.shields.io/github/tag/acook/blacklight.svg?maxAge=2592000)](https://github.com/acook/blacklight/releases)
 [![Build Status](https://travis-ci.org/acook/blacklight.svg)](https://travis-ci.org/acook/blacklight)
+[![Kanban on Trello](https://img.shields.io/badge/kanban-trello-026AA7.svg)](https://trello.com/b/vygKBL4j)
 [![Join the chat at https://gitter.im/acook/blacklight](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/acook/blacklight?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 > `blacklight` is a general-pupose **multithreading** concatenative stack-based programming language
