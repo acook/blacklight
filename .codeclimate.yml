@@ -2,6 +2,8 @@
 engines:
   fixme:
     enabled: true
+  shellcheck:
+    enabled: true
   govet:
     enabled: true
   golint:
@@ -15,6 +17,7 @@ engines:
 ratings:
   paths:
     - "**.go"
+    - "**.bash"
 
 exclude_paths:
   - test/
