@@ -30,11 +30,10 @@ func (q *Queue) Enqueue(item datatypes) {
 
 func (q *Queue) Dequeue() datatypes {
 	i, ok := <-q.Items
-	if ok {
-		return i
-	} else {
+	if !ok {
 		return NewNil("Queue Closed")
 	}
+	return i
 }
 
 func (q *Queue) Close() {

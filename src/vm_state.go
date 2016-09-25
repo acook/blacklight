@@ -47,11 +47,10 @@ func (vm *VMstate) infer() string {
 	vm.prepare_lookup()
 
 	v, ok := vm.all_map[vm.b]
-	if ok {
-		return v
-	} else {
+	if !ok {
 		return "unknown"
 	}
+	return v
 }
 
 func (vm *VMstate) prepare_lookup() {

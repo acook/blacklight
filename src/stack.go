@@ -119,12 +119,11 @@ func (s *Stack) Pop() datatypes {
 
 func (s *Stack) Peek() datatypes {
 	depth := s.Depth()
-	if depth > 0 {
-		return s.Items[depth-1]
-	} else {
+	if depth < 1 {
 		str := "Stack.Peek: " + s.Type + "-stack is empty"
 		panic(str)
 	}
+	return s.Items[depth-1]
 }
 
 func (s *Stack) Depth() int {
