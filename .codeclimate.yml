@@ -1,0 +1,23 @@
+---
+engines:
+  fixme:
+    enabled: true
+  shellcheck:
+    enabled: true
+  govet:
+    enabled: true
+  golint:
+    enabled: true
+    checks:
+      GoLint/Comments/DocComments:
+        enabled: false
+      GoLint/Naming/MixedCaps:
+        enabled: false
+
+ratings:
+  paths:
+    - "**.go"
+    - "**.bash"
+
+exclude_paths:
+  - test/
