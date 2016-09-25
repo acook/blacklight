@@ -1,0 +1,17 @@
+
+clone_folder: c:\gopath\src\github.com\acook\blacklight
+
+environment:
+  GOPATH: c:\gopath
+
+skip_commits:
+  message: "[skip ci]"
+
+install:
+  - echo %PATH%
+  - echo %GOPATH%
+  - go version
+  - go env
+
+build_script:
+  - scripts\ci.bash
