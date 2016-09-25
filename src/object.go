@@ -23,11 +23,10 @@ func (o *Object) Set(w W, i datatypes) {
 
 func (o *Object) Fetch(w W) datatypes {
 	i, found := o.Slots[w]
-	if found {
-		return i
-	} else {
+	if !found {
 		panic("Object.Fetch: slot `" + w.Print() + "` does not exist!")
 	}
+	return i
 }
 
 func (o *Object) Get(meta *Meta, w W) {

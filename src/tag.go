@@ -20,11 +20,10 @@ func (t Tag) Value() interface{} {
 }
 
 func (t Tag) Bytes() []byte {
-	if t.Kind == "nil" {
-		return nil
-	} else {
+	if t.Kind != "nil" {
 		panic("Tag.Bytes: Attempt to serialize non-nil Tag!")
 	}
+	return nil
 }
 
 func (t Tag) Bytecode() []byte {
@@ -70,15 +69,13 @@ func NewErr(label string, data datatypes) *Tag {
 func blOr(t1 *Tag, t2 *Tag) *Tag {
 	if t1.Bool || t2.Bool {
 		return NewTrue("or")
-	} else {
-		return NewNil("or")
 	}
+	return NewNil("or")
 }
 
 func blAnd(t1 *Tag, t2 *Tag) *Tag {
 	if t1.Bool && t2.Bool {
 		return NewTrue("and")
-	} else {
-		return NewNil("and")
 	}
+	return NewNil("and")
 }

@@ -71,11 +71,12 @@ func GetFDQ(fdt *Tag) *Queue {
 					if b == nil {
 						fd.File.Close()
 						return
-					} else {
-						l, _ := fd.File.Write(b)
-						if l < len(b) {
-							panic("WriteFile: Write Error!")
-						}
+					}
+
+					l, _ := fd.File.Write(b)
+
+					if l < len(b) {
+						panic("WriteFile: Write Error!")
 					}
 				}
 			} else if fd.Mode == IO_READ {
@@ -145,11 +146,12 @@ func WriteFile(filename T, q *Queue) *Tag {
 			if b == nil {
 				fd.File.Close()
 				return
-			} else {
-				l, _ := fd.File.Write(b)
-				if l < len(b) {
-					panic("WriteFile: Write Error!")
-				}
+			}
+
+			l, _ := fd.File.Write(b)
+
+			if l < len(b) {
+				panic("WriteFile: Write Error!")
 			}
 		}
 	}(fd, q)
