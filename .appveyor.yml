@@ -14,4 +14,4 @@ install:
   - go version
   - go env
 build_script:
-  - ps: scripts\ci.ps1
+  - powershell .\scripts\ci.ps1
