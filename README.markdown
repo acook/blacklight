@@ -1,5 +1,4 @@
-blacklight
-==========
+![blacklight logo](http://i.imgur.com/N81hd1M.png)
 
 [![Release Tag](https://img.shields.io/github/tag/acook/blacklight.svg?maxAge=2592000)](https://github.com/acook/blacklight/releases)
 [![Build Status](https://travis-ci.org/acook/blacklight.svg)](https://travis-ci.org/acook/blacklight)
