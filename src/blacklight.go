@@ -30,7 +30,6 @@ func main() {
 		code = []rune(os.Args[2])
 	} else {
 		usage("no filename argument")
-		exit(1)
 	}
 
 	prepare_op_table()
@@ -74,11 +73,13 @@ func cleanup() {
 }
 
 func usage(msg string) {
-	info := "## blacklight usage ##\nblacklight path/to/file.bl\nblacklight -e \"'hello world' say\"\n"
+	info := "## blacklight usage ##\nblacklight path/to/file.bl\nblacklight -e \"'hello world' say\""
 	if msg == "" {
 		print(info)
+		exit(0)
 	} else {
 		warn(msg, "\n", info)
+		exit(1)
 	}
 }
 
