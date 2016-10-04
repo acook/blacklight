@@ -7,6 +7,19 @@ type Tag struct {
 	Bool  bool
 }
 
+func (t Tag) Error() string {
+	out := t.Print()
+
+	switch t.Data.(type) {
+	case sequence:
+		out = out + "\n" + t.Data.(sequence).Print()
+	case *IO:
+		out = out + "<IO>"
+	}
+
+	return out
+}
+
 func (t Tag) Refl() string {
 	return t.Print()
 }

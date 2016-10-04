@@ -22,7 +22,7 @@ func (d *Debug) Rescue() {
 	}
 }
 
-func compile(tokens []string) []byte {
+func compile(tokens []string, filename string) ([]byte, error) {
 	var debug = new(Debug)
 	defer debug.Rescue()
 
@@ -177,7 +177,14 @@ func compile(tokens []string) []byte {
 			}
 
 		default:
-			panic("compiler: unrecognized operation: " + t)
+			var info sequence
+			info = new(V)
+			info = info.App(NewTag("ERR_FILE", "compiler.go"))
+			info = info.App(NewTag("ERR_LINE", "179"))
+			info = info.App(NewTag("BL_FILE", "?"))
+			info = info.App(NewTag("BL_LINE", "179"))
+			err := NewErr("compiler: unrecognized operation: "+t, info)
+			return nil, err
 		}
 	}
 
@@ -188,7 +195,7 @@ func compile(tokens []string) []byte {
 		panic("compiler: unclosed paren in V literal")
 	}
 
-	return bc
+	return bc, nil
 }
 
 var rev_wd_map = make(map[string]uint64)

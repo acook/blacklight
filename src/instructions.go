@@ -190,7 +190,7 @@ func co(m *Meta) {
 
 	code := loadFile(filename)
 	tokens := parse(code)
-	file_bc := compile(tokens)
+	file_bc, _ := compile(tokens, filename)
 
 	m.Current().Push(out)
 	m.Current().Push(in)
@@ -244,7 +244,7 @@ func do(m *Meta) {
 
 	code := loadFile(filename)
 	tokens := parse(code)
-	file_bc := compile(tokens)
+	file_bc, _ := compile(tokens, filename)
 
 	doBC(m, file_bc)
 }
@@ -254,7 +254,7 @@ func bload(m *Meta) {
 
 	code := loadFile(filename)
 	tokens := parse(code)
-	file_bc := compile(tokens)
+	file_bc, _ := compile(tokens, filename)
 	m.Current().Push(B(file_bc))
 }
 
@@ -653,7 +653,7 @@ func t_to_cv(m *Meta) {
 func t_to_b(m *Meta) {
 	code := []rune(string(m.Current().Pop().(T)))
 	tokens := parse(code)
-	ops := compile(tokens)
+	ops, _ := compile(tokens, "<t-to-b>")
 	b := B(ops)
 	m.Current().Push(b)
 }

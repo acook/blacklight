@@ -26,6 +26,7 @@ func main() {
 		fileName = os.Args[1]
 		code = loadFile(fileName)
 	} else if len(os.Args[1:]) == 2 {
+		fileName = "<cmdline>"
 		code = []rune(os.Args[2])
 	} else {
 		panic("no filename argument")
@@ -36,7 +37,12 @@ func main() {
 
 	tokens := parse(code)
 
-	ops := compile(tokens)
+	ops, err := compile(tokens, fileName)
+
+	if err != nil {
+		print(err.Error(), "\n")
+		os.Exit(1)
+	}
 
 	doVM(ops)
 }
