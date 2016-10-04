@@ -29,7 +29,8 @@ func main() {
 		fileName = "<cmdline>"
 		code = []rune(os.Args[2])
 	} else {
-		panic("no filename argument")
+		usage("no filename argument")
+		exit(1)
 	}
 
 	prepare_op_table()
@@ -40,8 +41,7 @@ func main() {
 	ops, err := compile(tokens, fileName)
 
 	if err != nil {
-		print(err.Error(), "\n")
-		os.Exit(1)
+		exitWithError(3, err)
 	}
 
 	doVM(ops)
@@ -71,4 +71,23 @@ func cleanup() {
 		warn("encountered an error and had to quit: ")
 		panic(err)
 	}
+}
+
+func usage(msg string) {
+	info := "## blacklight usage ##\nblacklight path/to/file.bl\nblacklight -e \"'hello world' say\"\n"
+	if msg == "" {
+		print(info)
+	} else {
+		warn(msg, "\n", info)
+	}
+}
+
+func exitWithError(code int, err error) {
+	warn(err.Error(), "\n")
+	exit(code)
+}
+
+func exit(code int) {
+	cleanup()
+	os.Exit(code)
 }
