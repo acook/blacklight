@@ -32,3 +32,8 @@ Documentation
 
 - The [blacklight Wiki](https://github.com/acook/blacklight/wiki) has documentation and links (work in progress).
 - The [examples directory](https://github.com/acook/blacklight/tree/master/examples) contains several demonstration scripts to get you started.
+
+BLPOC
+-----
+
+The current implementation of `blacklight` is a proof-of-concept. It's functional but intended primarily for proving out features, strategies, and specifications. Once The ABI is stable it will be reimplemented with optimization and compatibility in mind against a full test suite. As is, there is very little about `blacklight` that isn't subject to change to better reflect the results of research and experimentation. 
