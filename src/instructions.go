@@ -191,7 +191,11 @@ func co(m *Meta) {
 	source := NewSource(filename)
 	source.code = loadFile(filename)
 	source = parse(source)
-	file_bc, _ := compile(source)
+	file_bc, err := compile(source)
+
+	if err != nil {
+		exitWithError(3, err)
+	}
 
 	m.Current().Push(out)
 	m.Current().Push(in)

@@ -193,12 +193,13 @@ func compile(source *Source) ([]byte, error) {
 
 			var info sequence
 			info = new(V)
-			info = info.App(NewTag("ERR_FILE", "compiler.go"))
-			info = info.App(NewTag("ERR_LINE", "181"))
 			info = info.App(NewTag("BL_FILE", source.filename))
 			info = info.App(NewTag("BL_LINE", strconv.Itoa(bl_line)))
 			info = info.App(NewTag("BL_OFFSET", strconv.Itoa(bl_offset)))
 			info = info.App(NewTag("TOKEN_OFFSET", strconv.Itoa(i)))
+			info = info.App(NewTag("ERR_FILE", "compiler.go"))
+			info = info.App(NewTag("ERR_LINE", "181"))
+
 			err := NewErr("compiler: unrecognized operation: "+t, info)
 			return nil, err
 		}
