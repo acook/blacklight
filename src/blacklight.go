@@ -46,7 +46,7 @@ func main() {
 		}
 	*/
 
-	ops, err := compile(source.tokens, fileName)
+	ops, err := compile(source)
 
 	if err != nil {
 		exitWithError(3, err)

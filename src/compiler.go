@@ -11,6 +11,7 @@ import (
 type Debug struct {
 	token  string
 	offset int
+	source *Source
 }
 
 func (d *Debug) Rescue() {
@@ -22,8 +23,9 @@ func (d *Debug) Rescue() {
 	}
 }
 
-func compile(tokens []string, filename string) ([]byte, error) {
+func compile(source *Source) ([]byte, error) {
 	var debug = new(Debug)
+	debug.source = source
 	defer debug.Rescue()
 
 	var bc []byte
@@ -35,7 +37,7 @@ func compile(tokens []string, filename string) ([]byte, error) {
 	int_buf := make([]byte, 8)
 	cha_buf := make([]byte, 4)
 
-	for i, t := range tokens {
+	for i, t := range source.tokens {
 		debug.token = t
 		debug.offset = i
 
@@ -177,12 +179,26 @@ func compile(tokens []string, filename string) ([]byte, error) {
 			}
 
 		default:
+			bl_offset := source.sourcemap[i]
+
+			bl_line := 1
+			for ii, rr := range source.code {
+				if ii >= bl_offset {
+					break
+				}
+				if rr == rune('\n') {
+					bl_line = bl_line + 1
+				}
+			}
+
 			var info sequence
 			info = new(V)
 			info = info.App(NewTag("ERR_FILE", "compiler.go"))
-			info = info.App(NewTag("ERR_LINE", "179"))
-			info = info.App(NewTag("BL_FILE", filename))
-			info = info.App(NewTag("BL_LINE", "??"))
+			info = info.App(NewTag("ERR_LINE", "181"))
+			info = info.App(NewTag("BL_FILE", source.filename))
+			info = info.App(NewTag("BL_LINE", strconv.Itoa(bl_line)))
+			info = info.App(NewTag("BL_OFFSET", strconv.Itoa(bl_offset)))
+			info = info.App(NewTag("TOKEN_OFFSET", strconv.Itoa(i)))
 			err := NewErr("compiler: unrecognized operation: "+t, info)
 			return nil, err
 		}
