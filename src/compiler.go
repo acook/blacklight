@@ -181,8 +181,8 @@ func compile(tokens []string, filename string) ([]byte, error) {
 			info = new(V)
 			info = info.App(NewTag("ERR_FILE", "compiler.go"))
 			info = info.App(NewTag("ERR_LINE", "179"))
-			info = info.App(NewTag("BL_FILE", "?"))
-			info = info.App(NewTag("BL_LINE", "179"))
+			info = info.App(NewTag("BL_FILE", filename))
+			info = info.App(NewTag("BL_LINE", "??"))
 			err := NewErr("compiler: unrecognized operation: "+t, info)
 			return nil, err
 		}

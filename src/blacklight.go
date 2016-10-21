@@ -37,6 +37,13 @@ func main() {
 
 	tokens := parse(code)
 
+	/*
+		tokens, err := parse(code)
+		if err != nil {
+			exitWithError(2, err)
+		}
+	*/
+
 	ops, err := compile(tokens, fileName)
 
 	if err != nil {
