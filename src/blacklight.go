@@ -35,7 +35,9 @@ func main() {
 	prepare_op_table()
 	initFDtable()
 
-	tokens := parse(code)
+	source := NewSource(fileName)
+	source.code = code
+	source = parse(source)
 
 	/*
 		tokens, err := parse(code)
@@ -44,7 +46,7 @@ func main() {
 		}
 	*/
 
-	ops, err := compile(tokens, fileName)
+	ops, err := compile(source.tokens, fileName)
 
 	if err != nil {
 		exitWithError(3, err)
