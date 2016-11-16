@@ -658,8 +658,7 @@ func t_to_cv(m *Meta) {
 }
 
 func t_to_b(m *Meta) {
-	source := new(Source)
-	source.filename = "<t-to-b>"
+	source := NewSource("<t-to-b>")
 	source.code = []rune(string(m.Current().Pop().(T)))
 	source = parse(source)
 	ops, _ := compile(source)
