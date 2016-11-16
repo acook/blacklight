@@ -1,11 +1,10 @@
 ;; Simple native REPL
 
+q-new 0 fd fdq      ;; set up a read queue from stdin
 o-new               ;; an object to store our blocks
-q-new 0 read        ;; set up a read queue from stdin
-rot swap fd:        ;; save FD, but we won't use it later
-swap q:             ;; save read Q
-swap s-new stack:   ;; create a stack that we'll use to save state
-swap '' line:       ;; initialize the line slot
+swap      q:        ;; save read Q
+s-new stack:        ;; create a stack that we'll use to save state
+''     line:        ;; initialize the line slot
 
 [ ;; style our prompt here
   '>> ' print
