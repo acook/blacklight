@@ -24,7 +24,7 @@ func (o *Object) Set(w W, i datatypes) {
 func (o *Object) Fetch(w W) datatypes {
 	i, found := o.Slots[w]
 	if !found {
-		panic("Object.Fetch: slot `" + w.Print() + "` does not exist!")
+		panic("Object.Fetch: slot `" + w.Refl() + "` does not exist!")
 	}
 	return i
 }
@@ -38,10 +38,10 @@ func (o *Object) Get(meta *Meta, w W) {
 	if !ok {
 		print("\n")
 		print("error in Object.Get: ")
-		print("slot `", w.Print(), "` not found!\n")
-		print(" -- given: ", w.Print(), "\n")
-		print(" --   has: ", o.Labels().Print(), "\n")
-		panic("Object.Get: slot `" + w.Print() + "` does not exist!")
+		print("slot `", w.Refl(), "` not found!\n")
+		print(" -- given: ", w.Refl(), "\n")
+		print(" --   has: ", o.Labels().Refl(), "\n")
+		panic("Object.Get: slot `" + w.Refl() + "` does not exist!")
 	}
 }
 
@@ -63,18 +63,14 @@ func (o *Object) DeleGet(meta *Meta, w W) bool {
 	return found
 }
 
-func (o Object) Print() string {
+func (o Object) Refl() string {
 	str := "OBJ< "
 
 	for k, v := range o.Slots {
-		str += k.Print() + ":" + v.Print() + " "
+		str += k.Refl() + ":" + v.Refl() + " "
 	}
 
 	return str + ">"
-}
-
-func (o Object) Refl() string {
-	return o.Print()
 }
 
 func (o Object) Value() interface{} {

@@ -31,16 +31,6 @@ func (s *ObjectStack) Refl() string {
 	return str + " >"
 }
 
-func (s *ObjectStack) Print() string {
-	str := ""
-
-	for _, i := range s.Items {
-		str += i.Print() + " "
-	}
-
-	return str
-}
-
 func (s *ObjectStack) Push(o *Object) {
 	s.Items = append(s.Items, o)
 }

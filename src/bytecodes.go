@@ -72,7 +72,7 @@ func prepare_op_table() {
 		"wait": wait,
 
 		// debug
-		"say":   bl_println,
+		"say":   bl_say,
 		"print": bl_print,
 		"refl":  bl_refl,
 		"warn":  bl_warn,

@@ -219,8 +219,14 @@ func wait(m *Meta) {
 
 // DEBUG
 
-func bl_println(m *Meta) {
-	print(m.Current().Pop().Print(), "\n")
+func bl_say(m *Meta) {
+	i := m.Current().Pop()
+	switch i.(type) {
+	case T:
+		print(i.(T), "\n")
+	default:
+		print(i.Refl(), "\n")
+	}
 }
 
 func bl_refl(m *Meta) {
