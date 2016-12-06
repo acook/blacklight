@@ -219,7 +219,7 @@ func wait(m *Meta) {
 
 // DEBUG
 
-func bl_println(m *Meta) {
+func bl_say(m *Meta) {
 	i := m.Current().Pop()
 	switch i.(type) {
 	case T:
