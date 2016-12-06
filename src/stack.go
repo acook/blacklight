@@ -70,27 +70,6 @@ func (s Stack) Refl() string {
 	return str + ">"
 }
 
-func (s Stack) Print() string {
-	str := ""
-	for _, i := range s.Items {
-		switch i.(type) {
-		case Meta, *Meta:
-			str += "$ "
-		case *Stack:
-			if i.(*Stack).ID == s.ID {
-				str += "... "
-			} else {
-				str += i.Print() + " "
-			}
-		case nil:
-			str += "??? "
-		default:
-			str += i.Print() + " "
-		}
-	}
-	return str
-}
-
 func (s *Stack) Kind() string {
 	return s.Type
 }
