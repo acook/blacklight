@@ -8,11 +8,11 @@ type Tag struct {
 }
 
 func (t Tag) Error() string {
-	out := t.Print()
+	out := t.Refl()
 
 	switch t.Data.(type) {
 	case sequence:
-		out = out + "\n" + t.Data.(sequence).Print()
+		out = out + "\n" + t.Data.(sequence).Refl()
 	case *IO:
 		out = out + "<IO>"
 	}
@@ -21,10 +21,6 @@ func (t Tag) Error() string {
 }
 
 func (t Tag) Refl() string {
-	return t.Print()
-}
-
-func (t Tag) Print() string {
 	return t.Kind + "#" + t.Label
 }
 
