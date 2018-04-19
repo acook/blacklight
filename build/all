@@ -2,24 +2,30 @@
 
 set -o nounset
 
-say()  { echo "($THIS_EXE) - $1"; }
-warn() { echo "$*" >&2; }
-die()  { warn "$*"; exit 1; }
-nocd() { die "couldn't cd! $1"; }
+say "setting up..."
 
 THIS_DIR="$(dirname $0)"
 THIS_EXE="$(basename "$THIS_DIR")/$(basename "$0")"
 ROOT_DIR="$(readlink -f "$THIS_DIR/..")"
 COMPILER="ecc" # FIXME: lookup for ecc/gcc/clang
-COPTIONS="-static"
-MAINEXEC="$ROOT_DIR/src/redlight.c"
+COPTIONS="-v -static"
+MAINFILE="$ROOT_DIR/src/redlight.c"
 AOUTNAME="a.out"
 BIN_NAME="redlight"
-BIN_DIR="$THIS_DIR/out"
+BIN_ODIR="$THIS_DIR/out"
+BIN_PATH="$BIN_ODIR/$BIN_NAME"
 STRIPOPT="strip"
 
 # FIXME: replace with a lookup
 PATH="$PATH:$HOME/Applications/ellcc/bin"
+
+ts()   { date "+%Y.%M.%d %T"; }
+say()  { echo " -- ($THIS_EXE @ $(ts)) : $1"; }
+ok()   { say "done!"; exit 0; }
+warn() { echo "$*" >&2; }
+die()  { warn "$*"; exit 1; }
+nocd() { die "couldn't cd! $1"; }
+run()  { say "$1 command: \`$2\`"; eval "$2"; }
 
 cd "$THIS_DIR" || nocd "$THIS_DIR"
 
@@ -28,16 +34,21 @@ cd "$THIS_DIR" || nocd "$THIS_DIR"
 cd "$ROOT_DIR" || nocd "$ROOT_DIR"
 
 say "compiling..."
+say "compilation command: \`$COMPILER $MAINFILE $COPTIONS\`"
 
-$COMPILER $MAINEXEC $COPTIONS
+$COMPILER $MAINFILE $COPTIONS
+
+say "moving..."
+
+mkdir -p -v "$BIN_ODIR"
+mv -v "$AOUTNAME" "$BIN_PATH"
 
 say "stripping..."
 
-$STRIPOPT "$AOUTNAME"
+run "strip" "$STRIPOPT '$BIN_PATH'"
+stat -c "%n %s %A %y" "$BIN_PATH"
+file -b "$BIN_PATH"
 
-say "done!"
+say "excutable located in $BIN_PATH"
 
-mv "$AOUTNAME" "$BIN_DIR/$BIN_NAME"
-
-say "$BIN_DIR/$BIN_NAME"
-
+ok
