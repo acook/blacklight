@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+set -o nounset
+
+say()  { echo "($THIS_EXE) - $1"; }
+warn() { echo "$*" >&2; }
+die()  { warn "$*"; exit 1; }
+nocd() { die "couldn't cd! $1"; }
+
+THIS_DIR="$(dirname $0)"
+THIS_EXE="$(basename "$THIS_DIR")/$(basename "$0")"
+ROOT_DIR="$(readlink -f "$THIS_DIR/..")"
+COMPILER="ecc" # FIXME: lookup for ecc/gcc/clang
+COPTIONS="-static"
+MAINEXEC="$ROOT_DIR/src/redlight.c"
+AOUTNAME="a.out"
+BIN_NAME="redlight"
+BIN_DIR="$THIS_DIR/out"
+STRIPOPT="strip"
+
+# FIXME: replace with a lookup
+PATH="$PATH:$HOME/Applications/ellcc/bin"
+
+cd "$THIS_DIR" || nocd "$THIS_DIR"
+
+# include functions libraries here
+
+cd "$ROOT_DIR" || nocd "$ROOT_DIR"
+
+say "compiling..."
+
+$COMPILER $MAINEXEC $COPTIONS
+
+say "stripping..."
+
+$STRIPOPT "$AOUTNAME"
+
+say "done!"
+
+mv "$AOUTNAME" "$BIN_DIR/$BIN_NAME"
+
+say "$BIN_DIR/$BIN_NAME"
+
