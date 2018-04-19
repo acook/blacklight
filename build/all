@@ -2,10 +2,13 @@
 
 set -o nounset
 
-say "setting up..."
+echo " -- ($(basename "$BASH_SOURCE") @ $(date "+%T")) setting up..."
 
-THIS_DIR="$(dirname $0)"
-THIS_EXE="$(basename "$THIS_DIR")/$(basename "$0")"
+EXECNAME="$(basename "$0")"
+THISPATH="$(readlink -f "$BASH_SOURCE")"
+THISNAME="$(basename "$THISPATH")"
+THIS_DIR="$(dirname "$THISPATH")"
+THIS_EXE="$(basename "$THIS_DIR")/$THISNAME"
 ROOT_DIR="$(readlink -f "$THIS_DIR/..")"
 MAINFILE="$ROOT_DIR/src/redlight.c"
 AOUTNAME="a.out"
@@ -22,12 +25,11 @@ ALLOCLIB="-L $(jemalloc-config --libdir) -Wl,-rpath,$(jemalloc-config --libdir) 
 COPTIONS="-o $AOUTNAME -v -static $ALLOCLIB"
 STRIPOPT="strip"
 
-
 ts()   { date "+%Y.%M.%d %T"; }
-say()  { echo " -- ($THIS_EXE @ $(ts)) : $1"; }
-ok()   { say "done!"; exit 0; }
-warn() { echo "$*" >&2; }
-die()  { warn "$*"; exit 1; }
+say()  { echo -ne " -- ($THIS_EXE @ $(ts)) : $1\n"; }
+warn() { say "$@" >&2; }
+ok()   { say "(ok) $@"; exit 0; }
+die()  { warn "(die) $@"; exit 1; }
 nocd() { die "couldn't cd! $1"; }
 run()  { say "$1 command: \`$2\`"; eval "$2"; }
 
@@ -55,4 +57,6 @@ file -b "$BIN_PATH"
 
 say "excutable located in $BIN_PATH"
 
-ok
+if [[ $EXECNAME == $THISNAME ]]; then
+  ok
+fi

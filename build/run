@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+cd "$(dirname "$0")"
+source ./all
+
+echo
+echo " -- (run) running..."
+echo
+
+./out/redlight "$@"
