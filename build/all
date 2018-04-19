@@ -7,17 +7,21 @@ say "setting up..."
 THIS_DIR="$(dirname $0)"
 THIS_EXE="$(basename "$THIS_DIR")/$(basename "$0")"
 ROOT_DIR="$(readlink -f "$THIS_DIR/..")"
-COMPILER="ecc" # FIXME: lookup for ecc/gcc/clang
-COPTIONS="-v -static"
 MAINFILE="$ROOT_DIR/src/redlight.c"
 AOUTNAME="a.out"
 BIN_NAME="redlight"
 BIN_ODIR="$THIS_DIR/out"
 BIN_PATH="$BIN_ODIR/$BIN_NAME"
-STRIPOPT="strip"
 
 # FIXME: replace with a lookup
-PATH="$PATH:$HOME/Applications/ellcc/bin"
+PATH="$PATH:$HOME/Applications/ellcc/bin:$ROOT_DIR/ext/jemalloc/bin"
+
+# tooling
+COMPILER="ecc" # FIXME: lookup for ecc/gcc/clang
+ALLOCLIB="-L $(jemalloc-config --libdir) -Wl,-rpath,$(jemalloc-config --libdir) -ljemalloc $(jemalloc-config --libs)"
+COPTIONS="-o $AOUTNAME -v -static $ALLOCLIB"
+STRIPOPT="strip"
+
 
 ts()   { date "+%Y.%M.%d %T"; }
 say()  { echo " -- ($THIS_EXE @ $(ts)) : $1"; }
