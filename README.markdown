@@ -22,7 +22,7 @@ Support for the following platforms is desired but untested at this time:
 Building
 --------
 
-The `build/all` script expects all dependencies (including `ecc`) to be located under `./ext/`.
+The `build/all` script expects all dependencies to be located under `./ext/`.
 
 ## Debian / Ubuntu
 If you are on a distro which uses `apt` and Debian-like package names you can run `build/deps` to download and compile all prerequisites.
@@ -30,8 +30,8 @@ If you are on a distro which uses `apt` and Debian-like package names you can ru
 Then run the `build/all` script.
 
 ## Windows
-You can download WinGW ELLCC from its older versions subdirectory.
-The `build/all` script has not been tested on Windows.
+You can download a build of ELLCC for MinGW from its older versions subdirectory.
+The `build/*` scripts have not been tested on Windows.
 
 To build, make sure you have `ecc` in your system PATH and run:
 `ecc -static src/redlight.c`
@@ -39,10 +39,11 @@ To build, make sure you have `ecc` in your system PATH and run:
 ## Other
 The `build/all` script should work on any system with `bash`, `ecc`, `jemalloc-config`, and the relevant dependencies in `./ext`.
 
-In addition, it automatically adds `./ext/local/bin` to the PATH so `make install` or `ln -s` tools there.
+In order to allow for isolated builds, the `build/all` script automatically adds `./ext/ellcc/bin` and `./ext/local/bin` to the PATH.
+If you are building your own dependencies set their install prefix to `./ext/local` or add symlinks as needed.
 
 ## GCC / Clang
-`redlight` has been tested with `gcc` and LLVM's `clang`.
+`redlight` has also been tested with `gcc` and LLVM's `clang` with `glibc` but this is not officially supported.
 If you have compilation errors ensure you are compiling in gnu11/C11 mode.
 
 Static Analysis
