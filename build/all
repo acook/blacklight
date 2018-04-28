@@ -17,7 +17,9 @@ BIN_ODIR="$THIS_DIR/out"
 BIN_PATH="$BIN_ODIR/$BIN_NAME"
 
 # FIXME: replace with a lookup
-PATH="$PATH:$HOME/Applications/ellcc/bin:$ROOT_DIR/ext/jemalloc/bin"
+PATH="$HOME/Applications/ellcc/bin:$ROOT_DIR/ext/jemalloc/bin:/usr/bin:/usr/local/bin:/bin"
+# jemalloc's make relclean resets the executableness of this script
+chmod +x "$ROOT_DIR/ext/jemalloc/bin/jemalloc-config"
 
 # tooling
 COMPILER="ecc" # FIXME: lookup for ecc/gcc/clang
@@ -25,11 +27,15 @@ ALLOCLIB="-L $(jemalloc-config --libdir) -Wl,-rpath,$(jemalloc-config --libdir) 
 COPTIONS="-o $AOUTNAME -v -static $ALLOCLIB"
 STRIPOPT="strip"
 
-ts()   { date "+%Y.%M.%d %T"; }
+# vars used by other commands
+export CC="$COMPILER"
+export CLINKER="$COMPILER"
+
+ts()   { date "+%Y.%m.%d %T"; }
 say()  { echo -ne " -- ($THIS_EXE @ $(ts)) : $1\n"; }
 warn() { say "$@" >&2; }
-ok()   { say "(ok) $@"; exit 0; }
-die()  { warn "(die) $@"; exit 1; }
+ok()   { say "(ok) $*"; exit 0; }
+die()  { warn "(die) $*"; exit 1; }
 nocd() { die "couldn't cd! $1"; }
 run()  { say "$1 command: \`$2\`"; eval "$2"; }
 
@@ -39,10 +45,30 @@ cd "$THIS_DIR" || nocd "$THIS_DIR"
 
 cd "$ROOT_DIR" || nocd "$ROOT_DIR"
 
-say "compiling..."
+say "compiling prerequisites..."
+cd "$ROOT_DIR/ext" || nocd "$ROOT_DIR"
+say "compiling jemalloc..."
+cd "jemalloc" || nocd "$ROOT_DIR"
+
+# FIXME: Need to define installation prefix!!
+#make relclean
+#echo -ne "ac_cv_func_secure_getenv=no\nac_cv_func_issetugid=no\n" > config.cache
+#./autogen.sh -C
+#make
+
+say "compiling redlight..."
+cd "$ROOT_DIR" || nocd "$ROOT_DIR"
 say "compilation command: \`$COMPILER $MAINFILE $COPTIONS\`"
 
 $COMPILER $MAINFILE $COPTIONS
+COMPEXIT=$?
+
+if [[ $COMPEXIT -ne 0 ]]; then
+  say "compilation failed!"
+  say "launching bash prompt in build environment..."
+  bash --norc --noprofile
+  die "compilation failed with code $COMPEXIT!"
+fi
 
 say "moving..."
 

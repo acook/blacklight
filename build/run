@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
-cd "$(dirname "$0")"
+THIS_DIR="$(dirname "$0")"
+cd "$THIS_DIR"
 source ./all
 
 echo
 echo " -- (run) running..."
 echo
 
+cd "$THIS_DIR"
 ./out/redlight "$@"
