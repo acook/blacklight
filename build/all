@@ -10,13 +10,16 @@ THISNAME="$(basename "$THISPATH")"
 THIS_DIR="$(dirname "$THISPATH")"
 THIS_EXE="$(basename "$THIS_DIR")/$THISNAME"
 ROOT_DIR="$(readlink -f "$THIS_DIR/..")"
+EXTD_DIR="$(readlink -f "$ROOT_DIR/ext")"
+LOCALDIR="$(readlink -f "$EXTD_DIR/local")"
+
 MAINFILE="$ROOT_DIR/src/redlight.c"
 AOUTNAME="a.out"
 BIN_NAME="redlight"
 BIN_ODIR="$THIS_DIR/out"
 BIN_PATH="$BIN_ODIR/$BIN_NAME"
 
-PATH="$HOME/ext/ellcc/bin:$ROOT_DIR/ext/local/bin:/usr/bin:/usr/local/bin:/bin"
+PATH="$EXTD_DIR/ellcc/bin:$LOCALDIR/bin:/usr/bin:/usr/local/bin:/bin"
 
 # tooling
 COMPILER="ecc" # FIXME: allow other compilers
@@ -41,11 +44,6 @@ cd "$THIS_DIR" || nocd "$THIS_DIR"
 # include functions libraries here
 
 cd "$ROOT_DIR" || nocd "$ROOT_DIR"
-
-say "compiling prerequisites..."
-cd "$ROOT_DIR/ext" || nocd "$ROOT_DIR"
-say "compiling jemalloc..."
-cd "jemalloc" || nocd "$ROOT_DIR"
 
 say "compiling redlight..."
 cd "$ROOT_DIR" || nocd "$ROOT_DIR"
