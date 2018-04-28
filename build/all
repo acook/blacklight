@@ -16,13 +16,10 @@ BIN_NAME="redlight"
 BIN_ODIR="$THIS_DIR/out"
 BIN_PATH="$BIN_ODIR/$BIN_NAME"
 
-# FIXME: replace with a lookup
-PATH="$HOME/Applications/ellcc/bin:$ROOT_DIR/ext/jemalloc/bin:/usr/bin:/usr/local/bin:/bin"
-# jemalloc's make relclean resets the executableness of this script
-chmod +x "$ROOT_DIR/ext/jemalloc/bin/jemalloc-config"
+PATH="$HOME/ext/ellcc/bin:$ROOT_DIR/ext/local/bin:/usr/bin:/usr/local/bin:/bin"
 
 # tooling
-COMPILER="ecc" # FIXME: lookup for ecc/gcc/clang
+COMPILER="ecc" # FIXME: allow other compilers
 ALLOCLIB="-L $(jemalloc-config --libdir) -Wl,-rpath,$(jemalloc-config --libdir) -ljemalloc $(jemalloc-config --libs)"
 COPTIONS="-o $AOUTNAME -v -static $ALLOCLIB"
 STRIPOPT="strip"
@@ -50,17 +47,11 @@ cd "$ROOT_DIR/ext" || nocd "$ROOT_DIR"
 say "compiling jemalloc..."
 cd "jemalloc" || nocd "$ROOT_DIR"
 
-# FIXME: Need to define installation prefix!!
-#make relclean
-#echo -ne "ac_cv_func_secure_getenv=no\nac_cv_func_issetugid=no\n" > config.cache
-#./autogen.sh -C
-#make
-
 say "compiling redlight..."
 cd "$ROOT_DIR" || nocd "$ROOT_DIR"
-say "compilation command: \`$COMPILER $MAINFILE $COPTIONS\`"
+say "compilation command: \`$COMPILER \"$MAINFILE\" $COPTIONS\`"
 
-$COMPILER $MAINFILE $COPTIONS
+$COMPILER "$MAINFILE" $COPTIONS
 COMPEXIT=$?
 
 if [[ $COMPEXIT -ne 0 ]]; then
@@ -83,6 +74,6 @@ file -b "$BIN_PATH"
 
 say "excutable located in $BIN_PATH"
 
-if [[ $EXECNAME == $THISNAME ]]; then
-  ok
+if [[ "$EXECNAME" == "$THISNAME" ]]; then
+  ok "compilation successful!"
 fi
