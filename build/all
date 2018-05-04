@@ -53,9 +53,11 @@ $COMPILER "$MAINFILE" $COPTIONS
 COMPEXIT=$?
 
 if [[ $COMPEXIT -ne 0 ]]; then
-  say "compilation failed!"
-  say "launching bash prompt in build environment..."
-  bash --norc --noprofile
+  if [[ $CI != true ]]; then
+    say "compilation failed!"
+    say "launching bash prompt in build environment..."
+    bash --norc --noprofile
+  fi
   die "compilation failed with code $COMPEXIT!"
 fi
 
