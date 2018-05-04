@@ -8,8 +8,6 @@ clone_depth: 5
 cache: 
   - c:\src\deps
 
-environment:
-
 install:
   - set ELLCC=ellcc-x86_64-w64-mingw32-0.1.28
   - mkdir c:\src\deps
