@@ -13,8 +13,8 @@ install:
   - mkdir c:\src\deps
   - cd c:\src\deps
   - curl -O http://ellcc.org/releases/older-releases/%ELLCC%.tgz
-  - 7z x -y %ELLCC%.tgz
-  - 7z x -y -spe %ELLCC%.tar
+  - 7z x -y -aos %ELLCC%.tgz
+  - 7z x -y -aos %ELLCC%.tar & exit 0
   - mklink /D c:\src\deps c:\src\blacklight\ext
 
 build_script:
