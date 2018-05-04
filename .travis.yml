@@ -1,0 +1,11 @@
+language: c
+compiler: ecc
+install: build/deps
+script: build/run
+notifications:
+  webhooks:
+    urls:
+    - secure: jgD3Dnx84OWSmZDLGbS3ZRMlGRf4AdAlZLOal/BrDkKKE+EAIbQdP4c3xXATRg1FBZx5GYmCutiFImm0Xy3fios/tidRohOgmhhKnlaX0MpPEPy+mmmalZjCiLw4ydNBVwFUhyCCzb0M/8gM9meO/mxSYLu4UJ5+2ZOihtbdqsVHwUbNQ+rN/oajhEko7l3k2/3Su8EkT9PNXlXw96Tvwga9PWnJF8GY8GHbr6pm3cPt2BDb6o4U/4YamHB0FN/iLjx7g685XbczYvivqUMoNw9Tnp5xU2l1HgmGVWvr+vzeaoQjAtkUUe46oGizR9wfEdJBXMk99gr8LLLGRR3bKDf7CnUOuDyHa22Y9Vok8PW+NZBlqnrp3PNvM8C8RUwF9gQ+9EL0Op+9wmD2AJzCJ4sP2N6xPsQNdwwkyKHp97l9N8V1fcOpflk5+oUBxTgIWiNjuj9l0lQuOnbeFV/Xfcb8U6rkXZRzNbmbI5PtxeuUDV/6Nrep3NTQVJNVqFEaL1BkbH3Ct/jdlFP2m97m9zjo7P8ZIngZyjcHf1ADbBIEJXBHuyjk26kqUBntHgn/92pZOyLoc8IXNXibWGQb5r/tUwpGwbQf5oHXfLrILVIjvbiwvwq3Xtlgr8kIeHNvM45soJZ6gImmLaXAZdSGm8VkTdQScO68Jx4SoVPOSRw=
+    on_success: change
+    on_failure: always
+    on_start: never
