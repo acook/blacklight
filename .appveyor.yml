@@ -2,7 +2,7 @@ skip_branch_with_pr: true
 skip_commits:
   message: "[skip ci]"
 
-clone_folder: %APPVEYOR_BUILD_FOLDER%\blacklight
+clone_folder: "%APPVEYOR_BUILD_FOLDER%\blacklight"
 clone_depth: 5
 
 cache: 
@@ -20,4 +20,4 @@ install:
   - mklink /D %APPVEYOR_BUILD_FOLDER%\deps %APPVEYOR_BUILD_FOLDER%\blacklight\ext
 
 build_script:
-  - bash: %APPVEYOR_BUILD_FOLDER%/blacklight/build/all
+  - bash: "%APPVEYOR_BUILD_FOLDER%/blacklight/build/all"
