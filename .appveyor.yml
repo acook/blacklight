@@ -16,7 +16,7 @@ install:
   - 7z x -y -aos %ELLCC%.tgz
   - 7z x -y -aos %ELLCC%.tar & exit 0
   - rmdir /S /Q c:\src\blacklight\ext
-  - mklink /D c:\src\deps c:\src\blacklight\ext
+  - mklink /j c:\src\blacklight\ext c:\src\deps 
 
 build_script:
   - bash: c:\src\blacklight\build\all
