@@ -12,9 +12,10 @@ install:
   - set ELLCC=ellcc-x86_64-w64-mingw32-0.1.28
   - mkdir c:\src\deps
   - cd c:\src\deps
-  - curl -O http://ellcc.org/releases/older-releases/%ELLCC%.tgz
+  - if NOT exist "c:\src\deps\%ELLCC%.tgz" ( curl -O http://ellcc.org/releases/older-releases/%ELLCC%.tgz )
   - 7z x -y -aos %ELLCC%.tgz
   - 7z x -y -aos %ELLCC%.tar & exit 0
+  - rmdir /S /Q c:\src\blacklight\ext
   - mklink /D c:\src\deps c:\src\blacklight\ext
 
 build_script:
