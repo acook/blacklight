@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
 
-THIS_DIR="$(dirname "$0")"
-cd "$THIS_DIR"
-source ./all
+source "$(dirname ${BASH_SOURCE[0]})/lib/_shared.bash"
+include "bl_env"
 
-echo
-echo " -- (run) running..."
-echo
+load ./build/all
 
-cd "$THIS_DIR"
-./out/redlight "$@"
+run_or_die $BL_BIN_NAME $BL_BIN_PATH "$@"

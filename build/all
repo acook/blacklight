@@ -1,55 +1,13 @@
 #!/usr/bin/env bash
 
-set -o nounset
+source "$(dirname ${BASH_SOURCE[0]})/lib/_shared.bash"
 
-echo " -- ($(basename "$BASH_SOURCE") @ $(date "+%T")) setting up..."
-
-EXECNAME="$(basename "$0")"
-THISPATH="$(readlink -f "$BASH_SOURCE")"
-THISNAME="$(basename "$THISPATH")"
-THIS_DIR="$(dirname "$THISPATH")"
-THIS_EXE="$(basename "$THIS_DIR")/$THISNAME"
-ROOT_DIR="$(readlink -f "$THIS_DIR/..")"
-EXTD_DIR="$(readlink -f "$ROOT_DIR/ext")"
-LOCALDIR="$(readlink -f "$EXTD_DIR/local")"
-
-MAINFILE="$ROOT_DIR/src/redlight.c"
-AOUTNAME="a.out"
-BIN_NAME="redlight"
-BIN_ODIR="$THIS_DIR/out"
-BIN_PATH="$BIN_ODIR/$BIN_NAME"
-
-PATH="$EXTD_DIR/ellcc/bin:$LOCALDIR/bin:/usr/bin:/usr/local/bin:/bin"
-
-# tooling
-COMPILER="ecc" # FIXME: allow other compilers
-ALLOCLIB="-L $(jemalloc-config --libdir) -Wl,-rpath,$(jemalloc-config --libdir) -ljemalloc $(jemalloc-config --libs)"
-COPTIONS="-o $AOUTNAME -v -static $ALLOCLIB"
-STRIPOPT="strip"
-
-# vars used by other commands
-export CC="$COMPILER"
-export CLINKER="$COMPILER"
-
-ts()   { date "+%Y.%m.%d %T"; }
-say()  { echo -ne " -- ($THIS_EXE @ $(ts)) : $1\n"; }
-warn() { say "$@" >&2; }
-ok()   { say "(ok) $*"; exit 0; }
-die()  { warn "(die) $*"; exit 1; }
-nocd() { die "couldn't cd! $1"; }
-run()  { say "$1 command: \`$2\`"; eval "$2"; }
-
-cd "$THIS_DIR" || nocd "$THIS_DIR"
-
-# include functions libraries here
-
-cd "$ROOT_DIR" || nocd "$ROOT_DIR"
+include "bl_env"
 
 say "compiling redlight..."
-cd "$ROOT_DIR" || nocd "$ROOT_DIR"
-say "compilation command: \`$COMPILER \"$MAINFILE\" $COPTIONS\`"
+#say "compilation command: \`$BL_CC \"$BL_MAIN_PATH\" $BL_CCOPTS\`"
 
-$COMPILER "$MAINFILE" $COPTIONS
+run_or_die compile $BL_CC "$BL_MAIN_PATH" $BL_CCOPTS
 COMPEXIT=$?
 
 if [[ $COMPEXIT -ne 0 ]]; then
@@ -58,22 +16,22 @@ if [[ $COMPEXIT -ne 0 ]]; then
     say "launching bash prompt in build environment..."
     bash --norc --noprofile
   fi
-  die "compilation failed with code $COMPEXIT!"
+  die_status $COMPEXIT "compilation failed!"
 fi
 
 say "moving..."
 
-mkdir -p -v "$BIN_ODIR"
-mv -v "$AOUTNAME" "$BIN_PATH"
+mkdir -p -v "$BL_BIN_DIR"
+mv -v "$BL_OUT_NAME" "$BL_BIN_PATH"
 
 say "stripping..."
 
-run "strip" "$STRIPOPT '$BIN_PATH'"
-stat -c "%n %s %A %y" "$BIN_PATH"
-file -b "$BIN_PATH"
+run "strip" "$BL_STRIP '$BL_BIN_PATH'"
+stat -c "%n %s %A %y" "$BL_BIN_PATH"
+file -b "$BL_BIN_PATH"
 
-say "excutable located in $BIN_PATH"
+say "excutable located at $BL_BIN_PATH"
 
-if [[ "$EXECNAME" == "$THISNAME" ]]; then
+if scriptsame; then
   ok "compilation successful!"
 fi
