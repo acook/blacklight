@@ -3,7 +3,6 @@
 source "$(dirname ${BASH_SOURCE[0]})/lib/_shared.bash"
 include "bl_env"
 
-mkdir -v -p "$BL_LOCAL_PATH/bin"
 safe_cd "$BL_EXT_PATH"
 
 say "obtaining system prerequisites..."

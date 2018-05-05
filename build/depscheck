@@ -1,37 +1,17 @@
 #!/usr/bin/env bash
 
-set -o nounset
+source "$(dirname ${BASH_SOURCE[0]})/lib/_shared.bash"
+include "bl_env"
 
-echo " -- ($(basename "$BASH_SOURCE") @ $(date "+%T")) setting up..."
+mkdir -v -p "$BL_LOCAL_PATH/bin"
+safe_cd "$BL_EXT_PATH"
 
-EXECNAME="$(basename "$0")"
-THISPATH="$(readlink -f "$BASH_SOURCE")"
-THISNAME="$(basename "$THISPATH")"
-THIS_DIR="$(dirname "$THISPATH")"
-THIS_EXE="$(basename "$THIS_DIR")/$THISNAME"
-ROOT_DIR="$(readlink -f "$THIS_DIR/..")"
-EXTD_DIR="$(readlink -f "$ROOT_DIR/ext")"
-LOCALDIR="$(readlink -f "$EXTD_DIR/local")"
+say "obtaining system prerequisites..."
+run "apt install" sudo apt -y install cppcheck splint python-pip
 
-ts()   { date "+%Y.%m.%d %T"; }
-say()  { echo -ne " -- ($THIS_EXE @ $(ts)) : $1\n"; }
-warn() { say "$@" >&2; }
-ok()   { say "(ok) $*"; exit 0; }
-die()  { warn "(die) $*"; exit 1; }
-nocd() { die "couldn't cd! $1"; }
-run()  { say "$1 command: \`$2\`"; eval "$2"; }
-
-cd "$ROOT_DIR" || nocd "$ROOT_DIR"
-
-mkdir -v -p "$LOCALDIR/bin"
-cd "$EXTD_DIR" || nocd "$EXTD_DIR"
-
-say "installing deps from apt..."
-sudo apt -y install cppcheck splint python-pip
-
-say "installing deps from pip..."
-sudo pip install --upgrade pip
-sudo pip install flawfinder
+say "obtaining python prerequisites..."
+run "pip update" sudo pip install --upgrade pip
+run "pip install" sudo pip install flawfinder
 
 say "obtaining infer..."
 warn "TODO"
