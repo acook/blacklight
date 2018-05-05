@@ -36,21 +36,30 @@ array_contains () {
   return 1
 }
 
-# script-related functions
+# SCRIPT FUNCTIONS
+
+# usage: displayname <path>
+# takes a path and generates "last_folder/filename" string
 displayname() {
   basename -z $(dirname $(readlink -m "$1"))
   echo -ne "/"
   basename "$1"
 }
+# formats the current script name
 scriptname() { displayname "$SCRIPT_CURRENT_PATH"; }
-scriptcaller() { readlink -e "$(caller | cut -d " " -f2-)"; } # this can't be nested
+# determine the currently executing script via caller
+# can't be nested in other functions
+scriptcaller() { readlink -e "$(caller | cut -d " " -f2-)"; }
+# for conditionals, determines if caller is the same as the main parent script
 scriptsame() { [[ $SCRIPT_MAIN_PATH == "$(readlink -e $(caller | cut -d " " -f2-))" ]]; }
+# used internally to set the current script global
 _set_scriptcurrent() { 
   local fallback=${BASH_SOURCE[2]}
   local script=${1:-$fallback}
 
   SCRIPT_CURRENT_PATH=$(readlink -m "$script"); 
 }
+# source a script only once
 include() { 
   local fullpath="$SCRIPT_SHARED_DIR/_$1.bash"
   if [[ ! -f $fullpath ]]; then
@@ -63,6 +72,7 @@ include() {
     _set_scriptcurrent
   fi
 }
+# source a script once or more
 load() { 
   if [[ ! -f $1 ]]; then
     die "unable to load \`$1\`: file not found"
@@ -82,19 +92,26 @@ trace() { # for debugging bash functions
   echo BASH
 }
 
-# output-related functions
+# DISPLAY FUNCTIONS
 say()  { echo -ne " -- ($(scriptname) @ $(ts)) : $*\n"; }
 warn() { say "$*" >&2; }
+# usage: sayenv <VARNAME>
 sayenv() { say "$1=$(eval "echo -ne \$$1")"; }
 
-# exit-related functions
+# EXIT STATUS FUNCTIONS
 ok()   { say "(ok) $*"; exit 0; }
 die()  { warn "(die) $*"; exit 1; }
+# usage: die_status <status> [message]
 die_status() { warn "(died with status code $1) ${*:2}"; exit $1; }
 
-# wrapper functions
+# WRAPPER FUNCTIONS
+
+# if cd fails then we should exit
 safe_cd() { cd $1 || die "couldn't cd! $1"; }
+# used for conditionals to determine presence of a command or executable
 command_exists() { command -v $1 > /dev/null 2>&1; }
+# usage: run "title" <command> [args]
+# display command to run, confirm it exists, run it, output a warning on failure
 run() { 
   say "running $1 command: \`${@:2}\`"
   if command_exists $2; then
@@ -103,16 +120,22 @@ run() {
     warn "command \`$2\` not found"
   fi
 }
+# usage: run_or_die "title" <command> [args]
+# as run, but die if command missing or exits with an error
 run_or_die() {
   say "running $1 command: \`${@:2}\`"
   command_exists $2 || die "command \`$2\` not found"
   eval "${@:2}" || die_status $? "$2 command"
 }
 
-function realpath() {
+# UTILITY FUNCTIONS
+
+# usage: realpath <path>
+# attempts to resolve all symlinks until the origin path is discovered
+# circular symlinks will keep it looping forever
+realpath() {
   p="$1"
   # loop until the file is no longer a symlink (or doesn't exist)
-  # circular symlinks will keep it looping forever
   while [[ -h $p ]]; do 
     d="$( cd -P "$( dirname "$p" )" && pwd )"
     p="$(readlink -e "$p")"
@@ -123,7 +146,10 @@ function realpath() {
   echo "$( cd -P "$(dirname "$p")" && pwd )"
 }
 
-function elapsed() {
+# usage: elapsed <start_time> <end_time>
+# takes two unix timestamps with nanoseconds
+# returns the difference in human-readable format
+elapsed() {
   started_at=$1
   ended_at=$2
 
