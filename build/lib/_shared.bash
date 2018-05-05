@@ -84,7 +84,7 @@ trace() { # for debugging bash functions
 
 # output-related functions
 say()  { echo -ne " -- ($(scriptname) @ $(ts)) : $*\n"; }
-warn() { echo -ne " -- ($(scriptname) @ $(ts)) : $*\n" >&2; }
+warn() { say "$*" >&2; }
 sayenv() { say "$1=$(eval "echo -ne \$$1")"; }
 
 # exit-related functions
@@ -94,18 +94,20 @@ die_status() { warn "(died with status code $1) ${*:2}"; exit $1; }
 
 # wrapper functions
 safe_cd() { cd $1 || die "couldn't cd! $1"; }
+command_exists() { command -v $1 > /dev/null 2>&1; }
 run()     { 
-  say "running $1 command: \`$2\`"
-  [[ -f $1 ]] || warn "command \`$2\` not found"
-  eval "${@:2}"
-  say "$1 command exited with status code $?"
+  say "running $1 command: \`${@:2}\`"
+  if command_exists $2; then
+    eval "${@:2}" || warn "$1 command exited with status code $?"
+  else
+    warn "command \`$2\` not found"
+  fi
 }
 run_or_die() {
   say "running $1 command: \`${@:2}\`"
-  [[ -f $1 ]] || die "command \`${@:2}\` not found"
-  eval "${@:2}" || die_status $? "${*:2} command"
+  command_exists $2 || die "command \`$2\` not found"
+  eval "${@:2}" || die_status $? "$2 command"
 }
-command_exists() { hash $1 2> /dev/null; }
 
 function realpath() {
   p="$1"

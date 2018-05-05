@@ -2,14 +2,14 @@
 
 source "$(dirname ${BASH_SOURCE[0]})/_shared.bash"
 
-export BL_ROOT_PATH="$(readlink -f "$SCRIPT_SHARED_DIR/../..")"
-export BL_EXT_PATH="$(readlink -f "$BL_ROOT_PATH/ext")"
+export BL_ROOT_PATH="$(readlink -e "$SCRIPT_SHARED_DIR/../..")" || die "unable to set env var"
+export BL_EXT_PATH="$(readlink -e "$BL_ROOT_PATH/ext")" || die "unable to set env var"
 export BL_LOCAL_PATH="$BL_EXT_PATH/local"
 
 export BL_MAIN_PATH="$BL_ROOT_PATH/src/redlight.c"
 export BL_OUT_NAME="a.out"
 export BL_BIN_NAME="redlight"
-export BL_BIN_DIR="$SCRIPT_SHARED_DIR/out"
+export BL_BIN_DIR="$(readlink -f "$SCRIPT_SHARED_DIR/../out")"
 export BL_BIN_PATH="$BL_BIN_DIR/$BL_BIN_NAME"
 
 # set PATH
@@ -25,7 +25,7 @@ fi
 
 # tooling
 export BL_CC="ecc" # FIXME: allow other compilers
-export BL_CCOPTS="-o $BL_OUT_NAME -v -static $BL_ALLOC"
+export BL_CCOPTS="-o $BL_OUT_NAME -static $BL_ALLOC"
 export BL_STRIP="strip"
 
 # vars used by other commands

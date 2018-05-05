@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 
 source "$(dirname ${BASH_SOURCE[0]})/lib/_shared.bash"
-
 include "bl_env"
-
-say "compiling redlight..."
-#say "compilation command: \`$BL_CC \"$BL_MAIN_PATH\" $BL_CCOPTS\`"
 
 run_or_die compile $BL_CC "$BL_MAIN_PATH" $BL_CCOPTS
 COMPEXIT=$?
@@ -20,13 +16,10 @@ if [[ $COMPEXIT -ne 0 ]]; then
 fi
 
 say "moving..."
-
 mkdir -p -v "$BL_BIN_DIR"
 mv -v "$BL_OUT_NAME" "$BL_BIN_PATH"
 
-say "stripping..."
-
-run "strip" "$BL_STRIP '$BL_BIN_PATH'"
+run "strip" "$BL_STRIP" "$BL_BIN_PATH"
 stat -c "%n %s %A %y" "$BL_BIN_PATH"
 file -b "$BL_BIN_PATH"
 
