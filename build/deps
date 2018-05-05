@@ -1,54 +1,30 @@
 #!/usr/bin/env bash
 
-set -o nounset
+source "$(dirname ${BASH_SOURCE[0]})/lib/_shared.bash"
+include "bl_env"
 
-echo " -- ($(basename "$BASH_SOURCE") @ $(date "+%T")) setting up..."
-
-EXECNAME="$(basename "$0")"
-THISPATH="$(readlink -f "$BASH_SOURCE")"
-THISNAME="$(basename "$THISPATH")"
-THIS_DIR="$(dirname "$THISPATH")"
-THIS_EXE="$(basename "$THIS_DIR")/$THISNAME"
-ROOT_DIR="$(readlink -f "$THIS_DIR/..")"
-EXTD_DIR="$(readlink -f "$ROOT_DIR/ext")"
-LOCALDIR="$(readlink -f "$EXTD_DIR/local")"
-
-ts()   { date "+%Y.%m.%d %T"; }
-say()  { echo -ne " -- ($THIS_EXE @ $(ts)) : $1\n"; }
-warn() { say "$@" >&2; }
-ok()   { say "(ok) $*"; exit 0; }
-die()  { warn "(die) $*"; exit 1; }
-nocd() { die "couldn't cd! $1"; }
-run()  { say "$1 command: \`$2\`"; eval "$2"; }
-
-cd "$ROOT_DIR" || nocd "$ROOT_DIR"
-
-mkdir -v -p "$LOCALDIR/bin"
-cd "$EXTD_DIR" || nocd "$EXTD_DIR"
+mkdir -v -p "$BL_LOCAL_PATH/bin"
+safe_cd "$BL_EXT_PATH"
 
 say "installing deps from apt..."
-sudo apt -y install git curl autoconf
+run "apt" sudo apt -y install git curl autoconf
 
 say "obtaining ELLCC..."
 ELLCC_FILE=ellcc-x86_64-linux-2017-08-23.bz2
-curl -O "http://ellcc.org/releases/latest/$ELLCC_FILE"
-tar xvjf "$ELLCC_FILE"
-rm -v "$ELLCC_FILE"
-
-export PATH="$EXTD_DIR/ellcc/bin:$LOCALDIR/bin:$PATH"
-export CC="ecc"
-export CLINKER="ecc"
+run "download" curl -O "http://ellcc.org/releases/latest/$ELLCC_FILE"
+run "extract" tar xvjf "$ELLCC_FILE"
+run "cleanup" rm -v "$ELLCC_FILE"
 
 say "obtaining jemalloc..."
-git clone https://github.com/jemalloc/jemalloc.git
+run "clone" git clone https://github.com/jemalloc/jemalloc.git
 
 say "building jemalloc..."
-cd "$EXTD_DIR/jemalloc" || nocd "$EXTD_DIR/jemalloc"
-make relclean
+safe_cd "$BL_EXT_PATH/jemalloc"
+run "cleanup" make relclean
 echo -ne "ac_cv_func_secure_getenv=no\nac_cv_func_issetugid=no\n" > config.cache
-./autogen.sh -C --prefix "$LOCALDIR"
-make
-make install
-cd "$EXTD_DIR" || nocd "$EXTD_DIR"
+run "automake" ./autogen.sh -C --prefix "$BL_LOCAL_PATH"
+run "make" make
+run "install" make install
+safe_cd "$BL_EXT_PATH"
 
 ok "everything should be good to go!"

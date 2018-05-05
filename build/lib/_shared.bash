@@ -95,7 +95,7 @@ die_status() { warn "(died with status code $1) ${*:2}"; exit $1; }
 # wrapper functions
 safe_cd() { cd $1 || die "couldn't cd! $1"; }
 command_exists() { command -v $1 > /dev/null 2>&1; }
-run()     { 
+run() { 
   say "running $1 command: \`${@:2}\`"
   if command_exists $2; then
     eval "${@:2}" || warn "$1 command exited with status code $?"
