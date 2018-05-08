@@ -1,7 +1,8 @@
 [![blacklight logo](http://i.imgur.com/N81hd1M.png)](https://github.com/acook/blacklight#readme)
 
 [![Release Tag](https://img.shields.io/github/tag/acook/blacklight.svg?maxAge=2592000)](https://github.com/acook/blacklight/releases)
-[![Build Status](https://travis-ci.org/acook/blacklight.svg)](https://travis-ci.org/acook/blacklight)
+[![Build Status](https://travis-ci.org/acook/blacklight.svg?branch=master)](https://travis-ci.org/acook/blacklight)
+[![Build status](https://ci.appveyor.com/api/projects/status/7h1e1sly5024l6im/branch/master?svg=true)](https://ci.appveyor.com/project/acook/blacklight/branch/master)
 [![Kanban on Trello](https://img.shields.io/badge/kanban-trello-026AA7.svg)](https://trello.com/b/vygKBL4j)
 [![Join the chat at https://gitter.im/acook/blacklight](https://img.shields.io/gitter/room/acook/blacklight.js.svg)](https://gitter.im/acook/blacklight)
 
@@ -23,8 +24,8 @@ blacklight (BLVM) is awesome, here's a few reasons why:
 - runtime bytecode manipulation and generation
 - UTF-8 native datatypes
 - multi-architecture and cross-platform (currently: x86_64, ARM, macos, linux, windows)
-- (planned) highly optimized vector operations on supported CPUs
-- (planned) simple FFI to Rust and C
+- (in progress) highly optimized vector operations on supported CPUs
+- (in progress) simple FFI to Rust and C
 - (planned) security contexts and permissions
 
 Documentation
