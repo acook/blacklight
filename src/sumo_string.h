@@ -82,14 +82,14 @@ static sumo sumocat_str(sumo dest, const char* src) {
     ((sumo_header*)dest2)->len = len;
     return dest2;
   }
-  return dest;
+  return dest; // unable to cat due to insufficient size
 }
 
 static char* sumo_to_cstr(sumo s) {
   size_t len = sumolen(s);
   char* str = calloc(len + 1, 1);
   memcpy(str, s + sizeof(sumo_header), len);
-  str[len] = 0x00;
+  str[len] = 0x00; // null-terminate string
   return str;
 }
 
