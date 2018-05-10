@@ -67,38 +67,6 @@ static size_t sumocpy(sumo dest, sumo src, size_t len) {
   return len;
 }
 
-static sumo sumocat(sumo dest, sumo src) {
-  size_t end = sumo_sizeof(dest);
-  size_t len = sumolen(src) + sumolen(dest);
-  sumo dest2 = sumo_resize(dest, len);
-  if (dest2)  {
-    memcpy(dest + end, src + sizeof(sumo_header), sumolen(src));
-    ((sumo_header*)dest)->len = len;
-    return dest2;
-  }
-  return dest;  // unable to cat due to insufficient allocation
-}
-
-static sumo sumocat_str(sumo dest, const char* src) {
-  size_t len = strlen(src);
-  sumo dest2 = sumo_resize(dest, sumolen(dest) + len);
-  if (dest2) {
-    memcpy(dest2 + sizeof(sumo_header), src, len);
-    dest2[len] = 0x00;
-    ((sumo_header*)dest2)->len = len;
-    return dest2;
-  }
-  return dest;  // unable to cat due to insufficient allocation
-}
-
-static char* sumo_to_cstr(sumo s) {
-  size_t len = sumolen(s);
-  char* str = calloc(len + 1, 1);
-  memcpy(str, s + sizeof(sumo_header), len);
-  str[len] = 0x00;  // null-terminate string
-  return str;
-}
-
 static cursor sumo_cursor_new(sumo s) {
   return s + sizeof(sumo_header);
 }
@@ -112,4 +80,45 @@ static cursor sumo_cursor_mv(sumo s, cursor c, size_t change) {
 
 static size_t sumo_cursor_len(sumo s, cursor c) {
   return (sumolen(s) + sizeof(sumo_header)) - (c - s);
+}
+
+static size_t sumo_cursor_pos(sumo s, cursor c) {
+  return c - sumo_cursor_new(s);
+}
+
+static sumo sumocat(sumo dest, sumo src) {
+  size_t end = sumo_sizeof(dest);
+  size_t len = sumolen(src) + sumolen(dest);
+
+  sumo dest2 = sumo_grow(dest, len);
+  if (dest2)  {
+    memcpy(dest + end, src + sizeof(sumo_header), sumolen(src));
+    ((sumo_header*)dest)->len = len;
+    return dest2;
+  }
+
+  return dest;  // unable to cat due to insufficient allocation
+}
+
+static sumo sumocat_str(sumo dest, const char* src) {
+  size_t clen = strlen(src);
+  size_t new_len = clen + sumolen(dest);
+
+  sumo dest2 = sumo_grow(dest, new_len);
+  if (dest2) {
+    memcpy(sumo_cursor_new(dest2), src, clen);
+    ((sumo_header*)dest2)->len = new_len;
+    return dest2;
+  }
+
+  return dest;  // unable to cat due to insufficient allocation
+}
+
+static char* sumo_to_cstr(sumo s) {
+  cursor c = sumo_cursor_new(s);
+  size_t len = sumo_cursor_len(s, c);
+  char* str = malloc(len + 1);
+  memcpy(str, c, len);
+  str[len] = 0x00;  // null-terminate string
+  return str;
 }
