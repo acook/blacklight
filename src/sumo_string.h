@@ -12,8 +12,13 @@ typedef struct {
 } sumo_header;
 
 static sumo sumo_new() {
-  sumo s = calloc(sizeof(sumo_header), 1);
-  //sumo s = aligned_alloc(sizeof(sumo_header), sizeof(sumo_header));
+#ifdef JEMALLOC_C_
+  sumo s = aligned_alloc(sizeof(sumo_header), sizeof(sumo_header));
+#else
+  // The version of Musl that comes with the old Windows build of ELLCC
+  // doesn't expose aligned_alloc or memalign so we fall back to malloc
+  sumo s = malloc(sizeof(sumo_header));
+#endif
   sumo_header *h = (void*)s;
   h->len = 0;
   h->cap = 0;
