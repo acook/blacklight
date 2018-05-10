@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include "./bl_math.h"
 
 typedef uint8_t byte;
 typedef byte* sumo;
