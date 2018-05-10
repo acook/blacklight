@@ -48,7 +48,7 @@ static sumo sumo_resize(sumo s, size_t len) {
 }
 
 static sumo sumo_grow(sumo s, size_t len) {
-  if (sumocap(s) =< len) {
+  if (sumocap(s) <= len) {
     return sumo_resize(s, len);
   }
   return s;  // resize unneccessary because requested is less than actual
