@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "../ext/utf8.h/utf8.h"
-#include "./sumo_string.h"
+#include "./core/sumo_string.h"
 
 typedef uint64_t bl_uint;
 static void printhex(void *ptr, bl_uint len) {
