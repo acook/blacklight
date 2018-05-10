@@ -103,3 +103,7 @@ static cursor sumo_cursor_mv(sumo s, cursor c, size_t change) {
   }
   return c; // unable to move cursor to desired position
 }
+
+static size_t sumo_cursor_len(sumo s, cursor c) {
+  return (sumolen(s) + sizeof(sumo_header)) - (c - s);
+}
