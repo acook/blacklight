@@ -38,14 +38,20 @@ static size_t sumo_sizeof(sumo s) {
 }
 
 static sumo sumo_resize(sumo s, size_t len) {
-  if (sumocap(s) - len) {
-    sumo s2 = realloc(s, len + sizeof(sumo_header));
-    if (s2) {
-      ((sumo_header*)s2)->cap = len;
-      return s2;
-    }
+  // FIXME: use rallocx to do aligned_realloc when jemalloc available
+  sumo s2 = realloc(s, len + sizeof(sumo_header));
+  if (s2) {
+    ((sumo_header*)s2)->cap = len;
+    return s2;
   }
-  return s;
+  return s;  // unable to cat due to insufficient allocation
+}
+
+static sumo sumo_grow(sumo s, size_t len) {
+  if (sumocap(s) =< len) {
+    return sumo_resize(s, len);
+  }
+  return s;  // resize unneccessary because requested is less than actual
 }
 
 static void sumocpy_unsafe(sumo dest, sumo src, size_t len) {
