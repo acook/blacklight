@@ -38,10 +38,16 @@ int main(int argc, char *argv[]) {
   puts("sumo hex:");
   printhex(s, sumo_sizeof(s));
   puts("sumo contents:");
-  cursor c = sumo_cursor_new(s); // positions cursor at first user location
+  cursor c = sumo_cursor_new(s);  // positions cursor at first user location
   fwrite(c, sumolen(s), 1, stdout);
   puts("\n");
 
+  sumo s2 = sumo_new();
+  s2 = sumocat_str(s2, "zzzyyyxxxwww");
+  s = sumocat(s, s2);
+  s = sumocat(s, s2);
+
+  c = sumo_cursor_new(s);  // MUST reacquire cursor in case sumo has been reallocated/moved
   c = sumo_cursor_mv(s, c, 10);
   printf("sumo cursor len: %llu\n", sumo_cursor_len(s, c));
   printf("sumo cursor contents at index %llu:\n", sumo_cursor_pos(s, c));

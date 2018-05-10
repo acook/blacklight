@@ -87,13 +87,13 @@ static size_t sumo_cursor_pos(sumo s, cursor c) {
 }
 
 static sumo sumocat(sumo dest, sumo src) {
-  size_t end = sumo_sizeof(dest);
+  size_t end = sumocap(dest);
   size_t len = sumolen(src) + sumolen(dest);
 
   sumo dest2 = sumo_grow(dest, len);
   if (dest2)  {
-    memcpy(dest + end, src + sizeof(sumo_header), sumolen(src));
-    ((sumo_header*)dest)->len = len;
+    memcpy(sumo_cursor_new(dest2) + end, sumo_cursor_new(src), sumolen(src));
+    ((sumo_header*)dest2)->len = len;
     return dest2;
   }
 
