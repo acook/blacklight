@@ -76,7 +76,7 @@ static sumo sumocat(sumo dest, sumo src) {
 static sumo sumocat_str(sumo dest, const char* src) {
   size_t len = strlen(src);
   sumo dest2 = sumo_resize(dest, sumolen(dest) + len);
-  if (sumocap(dest) >= (len + sumolen(dest))) {
+  if (dest2) {
     memcpy(dest2 + sizeof(sumo_header), src, len);
     dest2[len] = 0x00;
     ((sumo_header*)dest2)->len = len;
