@@ -93,6 +93,13 @@ static char* sumo_to_cstr(sumo s) {
   return str;
 }
 
-static cursor sumo_cursor(sumo s) {
+static cursor sumo_cursor_new(sumo s) {
   return s + sizeof(sumo_header);
+}
+
+static cursor sumo_cursor_mv(sumo s, cursor c, size_t change) {
+  if (((c + change) > (sumo_cursor_new(s))) && ((c + change) < (s + sumo_sizeof(s)))) {
+    return c + change;
+  }
+  return c; // unable to move cursor to desired position
 }

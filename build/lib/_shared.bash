@@ -125,7 +125,7 @@ run() {
 run_or_die() {
   say "running $1 command: \`${@:2}\`"
   command_exists $2 || die "command \`$2\` not found"
-  eval "${@:2}" || die_status $? "$2 command"
+  $2 "${@:3}" || die_status $? "$2 command"
 }
 
 # UTILITY FUNCTIONS

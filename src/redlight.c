@@ -21,7 +21,7 @@ int main() {
   puts("sumo hex:");
   printhex(s, sumo_sizeof(s));
   puts("sumo contents:");
-  fwrite(sumo_cursor(s), sumolen(s), 1, stdout);
+  fwrite(sumo_cursor_new(s), sumolen(s), 1, stdout);
   
   puts("\n");
 
