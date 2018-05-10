@@ -1,36 +1,11 @@
 #!/usr/bin/env bash
 
-set -o nounset
+source "$(dirname ${BASH_SOURCE[0]})/lib/_shared.bash"
+include "bl_env"
 
-echo " -- ($(basename "$BASH_SOURCE") @ $(date "+%T")) setting up..."
+run "cppcheck" cppcheck --enable=all "$BL_MAIN_PATH"
+run "flawfinder" flawfinder --allowlink "$BL_MAIN_PATH"
+run "splint" splint +posix-lib "$BL_MAIN_PATH"
 
-EXECNAME="$(basename "$0")"
-THISPATH="$(readlink -f "$BASH_SOURCE")"
-THISNAME="$(basename "$THISPATH")"
-THIS_DIR="$(dirname "$THISPATH")"
-THIS_EXE="$(basename "$THIS_DIR")/$THISNAME"
-ROOT_DIR="$(readlink -f "$THIS_DIR/..")"
-MAINFILE="$ROOT_DIR/src/redlight.c"
-
-ts()   { date "+%Y.%m.%d %T"; }
-say()  { echo -ne " -- ($THIS_EXE @ $(ts)) : $1\n"; }
-warn() { say "$@" >&2; }
-ok()   { say "(ok) $*"; exit 0; }
-die()  { warn "(die) $*"; exit 1; }
-nocd() { die "couldn't cd! $1"; }
-run()  { say "$1 command: \`$2\`"; eval "$2"; }
-
-cd "$ROOT_DIR" || nocd "$ROOT_DIR"
-
-say "checking with cppcheck..."
-cppcheck --enable=all "$MAINFILE"
-
-say "checking with flawfinder..."
-flawfinder "$MAINFILE"
-
-say "checking with infer..."
 warn "infer not configured yet"
-#ext/infer/bin/infer $MAINFILE
-
-say "checking with splint..."
-splint +posix-lib "$MAINFILE"
+#run "infer" ext/infer/bin/infer $BL_MAIN_PATH
