@@ -6,3 +6,5 @@ include "bl_env"
 load ./build/all
 
 run_or_die $BL_BIN_NAME "$BL_BIN_PATH" "$@"
+
+ok "command run successfully"
