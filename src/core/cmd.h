@@ -1,3 +1,5 @@
+#pragma once
+
 #include <stdio.h>
 #include "../../ext/utf8.h/utf8.h"
 
