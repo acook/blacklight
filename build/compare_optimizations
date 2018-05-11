@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+if [[ -z $2 ]]; then
+  echo "usage: $0 O1 O2"
+  exit 1
+fi
+
+for arg in $@; do
+  echo 'int;' | /usr/bin/clang -xc -"$arg" - -o /dev/null -\#\#\# > "$arg""_orig.tmp" 2>&1
+  llvm-as-3.5 < /dev/null | opt-3.5 -"$arg" -disable-output -debug-pass=Arguments >> "$arg""_orig.tmp" 2>&1
+  foo=$(cat "$arg""_orig.tmp"); echo -e ${foo// /\\n} > "$arg"".tmp"
+done
+
+colordiff -u $1.tmp $2.tmp
