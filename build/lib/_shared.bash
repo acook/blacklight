@@ -112,12 +112,16 @@ safe_cd() { cd $1 || die "couldn't cd! $1"; }
 command_exists() { command -v $1 > /dev/null 2>&1; }
 # usage: run "title" <command> [args]
 # display command to run, confirm it exists, run it, output a warning on failure
-run() { 
+run() {
   say "running $1 command: \`${@:2}\`"
   if command_exists $2; then
-    eval "${@:2}" || warn "$1 command exited with status code $?"
+    "${@:2}"
+    ret=$?
+    [[ $ret ]] || warn "$1 command exited with status code $?"
+    return $ret
   else
     warn "command \`$2\` not found"
+    return 255
   fi
 }
 # usage: run_or_die "title" <command> [args]
