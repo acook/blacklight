@@ -78,7 +78,11 @@ if [[ $failures -eq 0 ]]; then
 
   msg="$successes/$(($successes + $failures)) tests succeeded!"
   echo "$msg" >> $log
-  ok "$msg"
+  if scriptsame; then
+    ok "$msg"
+  else
+    say "$msg"
+  fi
 else
   colorbg black ; colorfg red3
   if command_exists figlet; then
@@ -97,5 +101,9 @@ else
   exit="$(($failures<255?$failures:255))"
   msg="$failures/$(($successes + $failures)) tests failed!"
   echo "$msg" >> $log
-  die_status $exit "$msg"
+  if scriptsame; then
+    die_status $exit "$msg"
+  else
+    say "$msg"
+  fi
 fi
