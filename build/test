@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+source "$(dirname ${BASH_SOURCE[0]})/lib/_shared.bash"
+include "bl_env"
+
+safe_cd "$BL_TEST_DIR"
+
+tmp="/tmp/blacklight_build_test"
+log="$tmp/test_$(ts_file).log"
+
+mkdir -v -p "$tmp"
+
+let failures=0
+let successes=0
+
+say "running tests..."
+
+say "beginning test run..." > $log
+
+for testfile in ./*_test.c; do
+  name="$(basename $testfile)"
+  exec="$tmp/$(basename -s "_test.c" $testfile).exe"
+
+  say "compiling and running $name..."
+
+  echo -ne "\e[43mcompiling...\e[K"
+  run_or_die "compile $name" $BL_CC $testfile -static -Wno-everything $BL_ALLOC -o $exec >> $log 2>&1
+  echo -ne "\e[0G\e[0m\e[K"
+
+  echo -ne "\e[31;40m\e[K"
+  run "$name" $exec >> $log
+  ret=$?
+  echo -ne "\e[0m\e[K"
+
+  if [[ $ret -eq 0 ]]; then
+    let successes++
+    echo -ne "\e[42m\e[K"
+    say "(passed) $name" | tee -a $log
+  else
+    let failures++
+    echo -ne "\e[41m\e[K"
+    say "(FAILED) $name" | tee -a $log
+  fi
+  echo -ne "\e[0m\e[K"
+done
+
+if [[ $failures -eq 0 ]]; then
+  ok "\e[32mall $successes tests passed!\e[0m" | tee -a $log
+else
+  say "\e[32m$successes tests passed\e[0m" | tee -a $log
+  say "\e[31m$failures tests failed\e[0m" | tee -a $log
+  die "some tests failed!" | tee -a $log
+fi
