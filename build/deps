@@ -26,6 +26,6 @@ run "install" make install
 
 say "obtaining utf.h..."
 safe_cd "$BL_EXT_PATH"
-run_or_die git clone --depth=5 https://github.com/sheredom/utf8.h.git
+run_or_die "clone" git clone --depth=5 https://github.com/sheredom/utf8.h.git
 
 ok "everything should be good to go!"
