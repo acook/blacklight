@@ -13,18 +13,24 @@ typedef struct {
   uint32_t cap;
 } sumo_header;
 
-static sumo sumo_new() {
+static inline sumo sumo_new_prealloc(size_t cap) {
+  size_t real_cap = cap + sizeof(sumo_header);  // make space for header
 #ifdef JEMALLOC_C_
-  sumo s = aligned_alloc(sizeof(sumo_header), sizeof(sumo_header));
+  sumo s = aligned_alloc(real_cap, sizeof(sumo_header));
 #else
   // The version of Musl that comes with the old Windows build of ELLCC
   // doesn't expose aligned_alloc or memalign so we fall back to malloc
-  sumo s = malloc(sizeof(sumo_header));
+  sumo s = malloc(real_cap);
 #endif
+  if (!s) return NULL; // unable to allocate memory
   sumo_header *h = (void*)s;
   h->len = 0;
-  h->cap = 0;
+  h->cap = cap;
   return s;
+}
+
+static sumo sumo_new() {
+  return sumo_new_prealloc(0);
 }
 
 static size_t sumolen(sumo s){
