@@ -51,7 +51,7 @@ scriptname() { displayname "$SCRIPT_CURRENT_PATH"; }
 # can't be nested in other functions
 scriptcaller() { readlink -e "$(caller | cut -d " " -f2-)"; }
 # for conditionals, determines if caller is the same as the main parent script
-scriptsame() { [[ $SCRIPT_MAIN_PATH == "$(readlink -e $(caller | cut -d " " -f2-))" ]]; }
+scriptsame() { [[ $SCRIPT_MAIN_PATH == $SCRIPT_CURRENT_PATH ]]; }
 # used internally to set the current script global
 _set_scriptcurrent() {
   local fallback=${BASH_SOURCE[2]}
