@@ -11,6 +11,7 @@ export BL_OUT_NAME="a.out"
 export BL_BIN_NAME="redlight"
 export BL_BIN_DIR="$(readlink -f "$SCRIPT_SHARED_DIR/../out")"
 export BL_BIN_PATH="$BL_BIN_DIR/$BL_BIN_NAME"
+export BL_TEST_DIR="$BL_ROOT_PATH/test"
 
 # set PATH
 export PATH="$BL_EXT_PATH/ellcc/bin:$BL_LOCAL_PATH/bin:/usr/bin:/usr/local/bin:/bin"
