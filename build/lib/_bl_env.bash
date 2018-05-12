@@ -26,7 +26,7 @@ fi
 
 # tooling
 export BL_CC="ecc" # FIXME: allow other compilers
-export BL_CCOPTS="-o $BL_OUT_NAME -static $BL_ALLOC"
+export BL_CCOPTS="-static $BL_ALLOC"
 export BL_STRIP="strip"
 
 # vars used by other commands
