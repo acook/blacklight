@@ -23,7 +23,7 @@ say "running tests..."
 
 say "beginning test run..." > $log
 
-if [[ -z ${1+unset} ]]; then
+if [[ -z ${1+unset} ]] || [[ $1 == $BASH_SOURCE ]]; then
   pattern='./*_test.c'
   single=false
   ccwarn="-Wno-everything"
