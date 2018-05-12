@@ -82,6 +82,7 @@ if [[ $failures -eq 0 ]]; then
     ok "$msg"
   else
     say "$msg"
+    return 0
   fi
 else
   colorbg black ; colorfg red3
@@ -105,5 +106,6 @@ else
     die_status $exit "$msg"
   else
     say "$msg"
+    return $exit
   fi
 fi
