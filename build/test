@@ -23,7 +23,17 @@ say "running tests..."
 
 say "beginning test run..." > $log
 
-for testfile in ./*_test.c; do
+if [[ -z ${1+unset} ]]; then
+  pattern='./*_test.c'
+  single=false
+  ccwarn="-Wno-everything"
+else
+  pattern="./$1_test.c"
+  single=true
+  ccwarn="-Weverything"
+fi
+
+for testfile in $pattern; do
   name="$(basename $testfile)"
   exec="$tmp/$(basename -s "_test.c" $testfile).exe"
 
@@ -33,19 +43,36 @@ for testfile in ./*_test.c; do
   echo -n "compiling $name..." ; ansieol ; echo
   colorreset ; colorbg black ; colorfg orangered ; ansieol
 
-  run "compile $name" $BL_CC $testfile -static -Wno-everything $BL_ALLOC -o $exec >> $log
-  ret=$?
+  if [[ $single == true ]]; then
+    run "compile $name" $BL_CC $testfile $BL_CCOPTS $ccwarn -o $exec >> $log 2>&1
+    EXITSTATUS=$?
+  else
+    run "compile $name" $BL_CC $testfile $BL_CCOPTS $ccwarn -o $exec >> $log
+    EXITSTATUS=$?
+  fi
 
-  if [[ $ret -eq 0 ]]; then
+  # only try to run the resulting executable if the compilation step exited without error
+  if [[ $EXITSTATUS -eq 0 ]]; then
     cleanup ; colorbg yellow ; colorfg black
     echo -n "running $name..." ; ansieol ; echo
     colorreset ; colorbg black ; colorfg orangered ; ansieol
 
     run "$name" $exec >> $log
-    ret=$?
+    EXITSTATUS=$?
   fi
 
-  if [[ $ret -eq 0 ]]; then
+  # when running a single test, output the contents of the log
+  if [[ $single == true ]]; then
+    cleanup ; colorreset ; ansieol
+    colorbg orangered ; colorfg black ; ansieol
+    say "(log output) $name"
+    colorbg black ; colorfg orangered ; ansieol
+
+    cat $log | tail -n +2
+  fi
+
+  # display pass/fail depending on the exit status
+  if [[ $EXITSTATUS -eq 0 ]]; then
     let successes++
 
     cleanup ; colorbg green3 ; ansieol
