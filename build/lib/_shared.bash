@@ -73,13 +73,27 @@ include() {
   fi
 }
 # source a script once or more
-load() {
+load_nonfatal() {
   if [[ ! -f $1 ]]; then
-    die "unable to load \`$1\`: file not found"
+    warn "load: file \`$1\` not found"
+    return 255
   fi
+
   _set_scriptcurrent "$1"
-  source "$1" || die "error loading \`$1\`";
+  source "$1"
+  EXITSTATUS=$?
   _set_scriptcurrent
+
+  if [[ $EXITSTATUS -ne 0 ]]; then
+    warn "load: \`$1\` gave exit status $EXITSTATUS"
+    return $EXITSTATUS
+  fi
+}
+load() {
+  load_nonfatal "$1"
+  EXITSTATUS=$?
+  _set_scriptcurrent
+  [[ $EXITSTATUS -eq 0 ]] || die_status $? "error loading \`$1\`"
 }
 
 trace() { # for debugging bash functions
