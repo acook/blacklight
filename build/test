@@ -31,7 +31,7 @@ for testfile in ./*_test.c; do
 
   colorbg yellow ; colorfg black
   echo -n "compiling $name..." ; ansieol ; echo
-  colorreset ; colorbg black ; colorfg red ; ansieol
+  colorreset ; colorbg black ; colorfg orangered ; ansieol
 
   run "compile $name" $BL_CC $testfile -static -Wno-everything $BL_ALLOC -o $exec >> $log
   ret=$?
@@ -39,7 +39,7 @@ for testfile in ./*_test.c; do
   if [[ $ret -eq 0 ]]; then
     cleanup ; colorbg yellow ; colorfg black
     echo -n "running $name..." ; ansieol ; echo
-    colorreset ; colorbg black ; colorfg red ; ansieol
+    colorreset ; colorbg black ; colorfg orangered ; ansieol
 
     run "$name" $exec >> $log
     ret=$?
@@ -48,13 +48,13 @@ for testfile in ./*_test.c; do
   if [[ $ret -eq 0 ]]; then
     let successes++
 
-    cleanup ; colorbg green ; ansieol
+    cleanup ; colorbg green3 ; ansieol
     say "(succeeded) $name" | tee -a $log
   else
     let failures++
     # a blank black line to terminate the output and give it a bit of space
     colorreset ; colorbg black ; ansieol ; echo
-    colorbg red ; ansieol
+    colorbg red3 ; ansieol
     say "(FAILED) $name" | tee -a $log
   fi
 
@@ -62,7 +62,7 @@ for testfile in ./*_test.c; do
 done
 
 if [[ $failures -eq 0 ]]; then
-  colorbg black ; colorfg green
+  colorbg black ; colorfg green3
   if command_exists figlet; then
     bigsay " $successes/$(($successes + $failures))  tests  succeeded!"
   else
@@ -78,7 +78,7 @@ if [[ $failures -eq 0 ]]; then
 
   ok "$successes/$(($successes + $failures)) tests succeeded!" | tee -a $log
 else
-  colorbg black ; colorfg red
+  colorbg black ; colorfg red3
   if command_exists figlet; then
     bigsay " $failures/$(($successes + $failures))  tests  failed!"
   else

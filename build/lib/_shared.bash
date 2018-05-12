@@ -103,7 +103,15 @@ colorfg() {
   ("red") color=31 ;;
   ("green") color=32 ;;
   ("yellow") color=33 ;;
-  ("violet") color=35 ;;
+  ("blue") color=34 ;;
+  ("magenta") color=35 ;;
+  ("cyan") color=36 ;;
+  ("white") color=37 ;;
+
+  ("green3") color="38;5;34" ;;
+  ("red3") color="38;5;160" ;;
+  ("orangered") color="38;5;202" ;;
+  ("violet") color="38;5;128" ;;
   (*) color="0" ;;
   esac
   echo -ne "\e[$color""m"
@@ -114,7 +122,15 @@ colorbg() {
   ("red") color=41 ;;
   ("green") color=42 ;;
   ("yellow") color=43 ;;
-  ("violet") color=45 ;;
+  ("blue") color=44 ;;
+  ("magenta") color=45 ;;
+  ("cyan") color=46 ;;
+  ("white") color=47 ;;
+
+  ("green3") color="48;5;34" ;;
+  ("red3") color="48;5;160" ;;
+  ("orangered") color="48;5;202" ;;
+  ("violet") color="48;5;128" ;;
   (*) color="0" ;;
   esac
   echo -ne "\e[$color""m"
