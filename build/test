@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# the seemly unnecessary ansieol's work around a bug in some terminals
+# that don't draw the background color to the end of the line on newline
+# I don't bother trying to fix the banners and other blocks with the same issue
 
 source "$(dirname ${BASH_SOURCE[0]})/lib/_shared.bash"
 include "bl_env"
@@ -13,6 +16,9 @@ mkdir -v -p "$tmp"
 let failures=0
 let successes=0
 
+# assume no output, so clean up the previous line
+cleanup() { ansiup 1 ; ansigoto 0 ; colorreset ; ansieol ; }
+
 say "running tests..."
 
 say "beginning test run..." > $log
@@ -23,36 +29,68 @@ for testfile in ./*_test.c; do
 
   say "compiling and running $name..."
 
-  echo -ne "\e[30;43mcompiling...\e[K\n\e[0;40m\e[K"
+  colorbg yellow ; colorfg black
+  echo -n "compiling $name..." ; ansieol ; echo
+  colorreset ; colorbg black ; colorfg red ; ansieol
+
   run "compile $name" $BL_CC $testfile -static -Wno-everything $BL_ALLOC -o $exec >> $log
   ret=$?
 
   if [[ $ret -eq 0 ]]; then
-    # assume no output, so clean up the line
-    echo -ne "\e[1A\e[0G\e[0m\e[K"
+    cleanup ; colorbg yellow ; colorfg black
+    echo -n "running $name..." ; ansieol ; echo
+    colorreset ; colorbg black ; colorfg red ; ansieol
 
-    echo -ne "\e[31;40m\e[K"
     run "$name" $exec >> $log
     ret=$?
-    echo -ne "\e[0m\e[K"
   fi
 
   if [[ $ret -eq 0 ]]; then
     let successes++
-    echo -ne "\e[42m\e[K"
-    say "(passed) $name" | tee -a $log
+
+    cleanup ; colorbg green ; ansieol
+    say "(succeeded) $name" | tee -a $log
   else
     let failures++
-    echo -ne "\e[0;40m\e[K\n" # a blank black line to terminate the output and give it a bit of space
-    echo -ne "\e[41m\e[K"     # draw the next line with a red background
+    # a blank black line to terminate the output and give it a bit of space
+    colorreset ; colorbg black ; ansieol ; echo
+    colorbg red ; ansieol
     say "(FAILED) $name" | tee -a $log
   fi
 
-  echo -ne "\e[0m\e[K"
+  colorreset ; ansieol
 done
 
 if [[ $failures -eq 0 ]]; then
-  ok "all $successes/$(($successes + $failures)) tests passed!" | tee -a $log
+  colorbg black ; colorfg green
+  if command_exists figlet; then
+    bigsay " $successes/$(($successes + $failures))  tests  succeeded!"
+  else
+    ansiup 1
+    echo "
+
+  .-----.--.--.----.----.-----.-----.-----.
+  |__ --|  |  |  __|  __|  -__|__ --|__ --|
+  |_____|_____|____|____|_____|_____|_____|
+"
+  fi
+  colorreset ; ansieol
+
+  ok "$successes/$(($successes + $failures)) tests succeeded!" | tee -a $log
 else
+  colorbg black ; colorfg red
+  if command_exists figlet; then
+    bigsay " $failures/$(($successes + $failures))  tests  failed!"
+  else
+    ansiup 1
+    echo "
+    ___         __ __
+  .'  _|.---.-.|__|  |
+  |   _||  _  ||  |  |
+  |__|  |___._||__|__|
+"
+  fi
+  colorreset ; ansieol
+
   die "$failures/$(($successes + $failures)) tests failed!" | tee -a $log
 fi

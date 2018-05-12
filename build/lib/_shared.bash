@@ -97,6 +97,40 @@ say()  { echo -ne " -- ($(scriptname) @ $(ts)) : $*\n"; }
 warn() { say "$*" >&2; }
 # usage: sayenv <VARNAME>
 sayenv() { say "$1=$(eval "echo -ne \$$1")"; }
+colorfg() {
+  case "$1" in
+  ("black") color=30 ;;
+  ("red") color=31 ;;
+  ("green") color=32 ;;
+  ("yellow") color=33 ;;
+  ("violet") color=35 ;;
+  (*) color="0" ;;
+  esac
+  echo -ne "\e[$color""m"
+}
+colorbg() {
+  case "$1" in
+  ("black") color=40 ;;
+  ("red") color=41 ;;
+  ("green") color=42 ;;
+  ("yellow") color=43 ;;
+  ("violet") color=45 ;;
+  (*) color="0" ;;
+  esac
+  echo -ne "\e[$color""m"
+}
+colorreset() {
+  echo -ne "\e[0m"
+}
+ansigoto() {
+  echo -ne "\e[$1""G"
+}
+ansieol() {
+  echo -ne "\e[K"
+}
+ansiup() {
+  echo -ne "\e[$1""A"
+}
 
 # EXIT STATUS FUNCTIONS
 ok()   { say "\e[32m(ok) $*\e[0m"; exit 0; }

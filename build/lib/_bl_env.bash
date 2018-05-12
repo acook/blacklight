@@ -33,6 +33,47 @@ export BL_STRIP="strip"
 export CC="$BL_CC"
 export CLINKER="$BL_CC"
 
+# random functions
+bigsay() {
+  if command_exists figlet; then
+    if [[ -f $BL_EXT_PATH/figlet/chunky.flf ]]; then
+      font="-f chunky -d $BL_EXT_PATH/figlet"
+    else
+      font=""
+    fi
+    figlet -t $font "$*"
+  else
+    echo "$*"
+  fi
+}
+banner() {
+  if command_exists figlet; then
+    if [[ -f $BL_EXT_PATH/figlet/chunky.flf ]]; then
+      font="-f chunky -d $BL_EXT_PATH/figlet"
+    else
+      font=""
+    fi
+    figlet -t -c $font "$*"
+  else
+    echo "$*"
+  fi
+}
+bl_banner() {
+  colorreset ; colorbg black ; colorfg violet
+  if command_exists figlet; then
+    banner "blacklight"
+  else
+    echo "
+ __     __              __     __ __         __     __
+|  |--.|  |.---.-.----.|  |--.|  |__|.-----.|  |--.|  |_
+|  _  ||  ||  _  |  __||    < |  |  ||  _  ||     ||   _|
+|_____||__||___._|____||__|__||__|__||___  ||__|__||____|
+                                     |_____|"
+  fi
+  colorreset ; echo
+}
+
+bl_banner
 
 # Make sure we're in the right directory
 safe_cd $BL_ROOT_PATH
