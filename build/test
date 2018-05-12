@@ -88,8 +88,10 @@ for testfile in $pattern; do
   colorreset ; ansieol
 done
 
+# display test run summary
+colorbg black
 if [[ $failures -eq 0 ]]; then
-  colorbg black ; colorfg green3
+  colorfg green3
   if command_exists figlet; then
     bigsay " $successes/$(($successes + $failures))  tests  succeeded!"
   else
@@ -101,18 +103,10 @@ if [[ $failures -eq 0 ]]; then
   |_____|_____|____|____|_____|_____|_____|
 "
   fi
-  colorreset ; ansieol
-
+  EXITSTATUS=0
   msg="$successes/$(($successes + $failures)) tests succeeded!"
-  echo "$msg" >> $log
-  if scriptsame; then
-    ok "$msg"
-  else
-    say "$msg"
-    return 0
-  fi
 else
-  colorbg black ; colorfg red3
+  colorfg red3
   if command_exists figlet; then
     bigsay " $failures/$(($successes + $failures))  tests  failed!"
   else
@@ -124,15 +118,10 @@ else
   |__|  |___._||__|__|
 "
   fi
-  colorreset ; ansieol
-
-  exit="$(($failures<255?$failures:255))"
+  EXITSTATUS="$(($failures<255?$failures:255))" # exit status must be between 0 and 255
   msg="$failures/$(($successes + $failures)) tests failed!"
-  echo "$msg" >> $log
-  if scriptsame; then
-    die_status $exit "$msg"
-  else
-    say "$msg"
-    return $exit
-  fi
 fi
+
+colorreset ; ansieol
+echo "$msg" >> $log
+quit_status $EXITSTATUS $msg
