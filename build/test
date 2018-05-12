@@ -23,14 +23,19 @@ for testfile in ./*_test.c; do
 
   say "compiling and running $name..."
 
-  echo -ne "\e[43mcompiling...\e[K"
-  run_or_die "compile $name" $BL_CC $testfile -static -Wno-everything $BL_ALLOC -o $exec >> $log 2>&1
-  echo -ne "\e[0G\e[0m\e[K"
-
-  echo -ne "\e[31;40m\e[K"
-  run "$name" $exec >> $log
+  echo -ne "\e[30;43mcompiling...\e[K\n\e[0;40m\e[K"
+  run "compile $name" $BL_CC $testfile -static -Wno-everything $BL_ALLOC -o $exec >> $log
   ret=$?
-  echo -ne "\e[0m\e[K"
+
+  if [[ $ret -eq 0 ]]; then
+    # assume no output, so clean up the line
+    echo -ne "\e[1A\e[0G\e[0m\e[K"
+
+    echo -ne "\e[31;40m\e[K"
+    run "$name" $exec >> $log
+    ret=$?
+    echo -ne "\e[0m\e[K"
+  fi
 
   if [[ $ret -eq 0 ]]; then
     let successes++
@@ -38,9 +43,11 @@ for testfile in ./*_test.c; do
     say "(passed) $name" | tee -a $log
   else
     let failures++
-    echo -ne "\e[41m\e[K"
+    echo -ne "\e[0;40m\e[K\n" # a blank black line to terminate the output and give it a bit of space
+    echo -ne "\e[41m\e[K"     # draw the next line with a red background
     say "(FAILED) $name" | tee -a $log
   fi
+
   echo -ne "\e[0m\e[K"
 done
 
