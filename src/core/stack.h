@@ -31,16 +31,15 @@ static stack stack_fit(stack s, bl_size fit) {
   if (new_size > h->ss) {
     stack new_s = realloc(s, new_size);
     if (new_s == NULL) {
-      printf("unable to allocate %u bytes\n", new_size);
+      return s;  // unable to reallocate
     } else {
-      printf("realloc'd %u bytes\n", new_size);
-      s = new_s;
-      h = (void *)s;  // reacquire header address in case it moved
+      h = (void *)new_s;  // reacquire header address in case it moved
+      h->ss = new_size;
+      return new_s;
     }
-    h->ss = new_size;
   }
 
-  return s;
+  return s; // no resize needed
 }
 
 // requires that the stack already has enough space
