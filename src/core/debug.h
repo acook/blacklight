@@ -2,7 +2,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "./datum.h"
 #include "./stack.h"
+#include "./opcode.h"
 
 static void p(char* str, size_t len) {
   printf(" - : ");
@@ -41,4 +43,15 @@ static void stack_reflect(stack s) {
   printf("stack size: %u\n", h->ss);
   printf("stack top: %u\n", h->sp);
   printhex(s, h->sp);
+}
+
+static void datum_reflect(datum d) {
+  if (d.t == Number) {
+    printf("number value - %lu\n", d.data);
+  } else if (d.t == Text || d.t == (Text ^ Ref)) {
+    printf("text contents - %s\n", text_from_datum(d));
+  } else {
+    printf("unknown type %x - ", d.t);
+    printhex(&d, sizeof(datum));
+  }
 }
