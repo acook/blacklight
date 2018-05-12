@@ -1,4 +1,5 @@
 #include "../src/core/stack.h"
+#include "../src/core/debug.h"
 
 int main(void) {
   puts(" - init");

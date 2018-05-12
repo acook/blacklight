@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "./stack.h"
 
 static void p(char* str, size_t len) {
   printf(" - : ");
@@ -32,4 +33,12 @@ static void printhex(void *ptr, size_t len) {
 static void warn(char* message) {
   fwrite(message, strlen(message), 1, stderr);
   fwrite("\n", 1, 1, stderr);
+}
+
+static void stack_reflect(stack s) {
+  stack_header *h = (void *)s;
+  printf("stack*: %p\n", (void *)s);
+  printf("stack size: %u\n", h->ss);
+  printf("stack top: %u\n", h->sp);
+  printhex(s, h->sp);
 }

@@ -2,7 +2,6 @@
 
 #include <stdlib.h>
 #include <stdint.h>
-#include "./debug.h"
 #include "./datum.h"
 
 typedef struct {
@@ -67,12 +66,4 @@ static inline datum stack_pop(stack s) {
   h->sp = h->sp - sizeof(datum);
   datum *loc = (void *)(s + h->sp);
   return *loc;
-}
-
-static void stack_reflect(stack s) {
-  stack_header *h = (void *)s;
-  printf("stack*: %p\n", (void *)s);
-  printf("stack size: %u\n", h->ss);
-  printf("stack top: %u\n", h->sp);
-  printhex(s, h->sp);
 }
