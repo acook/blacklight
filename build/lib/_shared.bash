@@ -99,10 +99,10 @@ warn() { say "$*" >&2; }
 sayenv() { say "$1=$(eval "echo -ne \$$1")"; }
 
 # EXIT STATUS FUNCTIONS
-ok()   { say "(ok) $*"; exit 0; }
-die()  { warn "(die) $*"; exit 1; }
+ok()   { say "\e[32m(ok) $*\e[0m"; exit 0; }
+die()  { warn "\e[31m(die) $*\e[0m"; exit 1; }
 # usage: die_status <status> [message]
-die_status() { warn "(died with status code $1) ${*:2}"; exit $1; }
+die_status() { warn "\e[31m(died with status code $1) ${*:2}\e[0m"; exit $1; }
 
 # WRAPPER FUNCTIONS
 
