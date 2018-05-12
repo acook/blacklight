@@ -12,4 +12,6 @@ run_or_die "download" curl -L -O "https://github.com/Snaipe/Criterion/releases/d
 run_or_die "extract" tar xvjf "$CRITERION_FILE" --strip 1
 run "cleanup" rm -v "$CRITERION_FILE"
 
-ok "run build/test to run tests!"
+if scriptsame; then
+  ok "run build/test to run tests!"
+fi
