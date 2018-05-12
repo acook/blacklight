@@ -53,14 +53,14 @@ scriptcaller() { readlink -e "$(caller | cut -d " " -f2-)"; }
 # for conditionals, determines if caller is the same as the main parent script
 scriptsame() { [[ $SCRIPT_MAIN_PATH == "$(readlink -e $(caller | cut -d " " -f2-))" ]]; }
 # used internally to set the current script global
-_set_scriptcurrent() { 
+_set_scriptcurrent() {
   local fallback=${BASH_SOURCE[2]}
   local script=${1:-$fallback}
 
-  SCRIPT_CURRENT_PATH=$(readlink -m "$script"); 
+  SCRIPT_CURRENT_PATH=$(readlink -m "$script");
 }
 # source a script only once
-include() { 
+include() {
   local fullpath="$SCRIPT_SHARED_DIR/_$1.bash"
   if [[ ! -f $fullpath ]]; then
     die "unable to include \`$fullpath\`: file not found"
@@ -73,12 +73,12 @@ include() {
   fi
 }
 # source a script once or more
-load() { 
+load() {
   if [[ ! -f $1 ]]; then
     die "unable to load \`$1\`: file not found"
   fi
   _set_scriptcurrent "$1"
-  source "$1" || die "error loading \`$1\`"; 
+  source "$1" || die "error loading \`$1\`";
   _set_scriptcurrent
 }
 
@@ -136,12 +136,12 @@ run_or_die() {
 realpath() {
   p="$1"
   # loop until the file is no longer a symlink (or doesn't exist)
-  while [[ -h $p ]]; do 
+  while [[ -h $p ]]; do
     d="$( cd -P "$( dirname "$p" )" && pwd )"
     p="$(readlink -e "$p")"
     # if $p was a relative symlink
     # we need to resolve it relative to the path where the symlink file was located
-    [[ $p != /* ]] && p="$d/$p" 
+    [[ $p != /* ]] && p="$d/$p"
   done
   echo "$( cd -P "$(dirname "$p")" && pwd )"
 }
