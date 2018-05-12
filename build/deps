@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-source "$(dirname ${BASH_SOURCE[0]})/lib/_shared.bash"
+source "$(dirname "$BASH_SOURCE")/lib/_shared.bash"
 include "bl_env"
 
-safe_cd $BL_ROOT_PATH
+safe_cd "$BL_ROOT_PATH"
 say "doing build/deps..."
 load ./build/depsbuild
-safe_cd $BL_ROOT_PATH
+safe_cd "$BL_ROOT_PATH"
 say "doing build/depstest..."
 load ./build/depstest
 

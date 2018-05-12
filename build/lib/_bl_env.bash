@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source "$(dirname ${BASH_SOURCE[0]})/_shared.bash"
+source "$(dirname "$BASH_SOURCE")/_shared.bash"
 
 export BL_ROOT_PATH="$(readlink -e "$SCRIPT_SHARED_DIR/../..")" || die "unable to set env var"
 export BL_EXT_PATH="$(readlink -e "$BL_ROOT_PATH/ext")" || die "unable to set env var"
@@ -76,7 +76,7 @@ bl_banner() {
 bl_banner
 
 # Make sure we're in the right directory
-safe_cd $BL_ROOT_PATH
+safe_cd "$BL_ROOT_PATH"
 
 if scriptsame; then
   printenv | grep "^BL_*"

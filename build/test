@@ -3,7 +3,7 @@
 # that don't draw the background color to the end of the line on newline
 # I don't bother trying to fix the banners and other blocks with the same issue
 
-source "$(dirname ${BASH_SOURCE[0]})/lib/_shared.bash"
+source "$(dirname "$BASH_SOURCE")/lib/_shared.bash"
 include "bl_env"
 
 safe_cd "$BL_TEST_DIR"

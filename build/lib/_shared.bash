@@ -9,10 +9,10 @@ else
   return 0
 fi
 
-echo " -- ($(basename $(dirname $(readlink -m "${BASH_SOURCE[-1]}")))/$(basename "${BASH_SOURCE[-1]}") @ $(date "+%Y-%m-%d %T")) : setting up..." >&2
+echo " -- ($(basename "$(dirname "$(readlink -m "${BASH_SOURCE[-1]}")")")/$(basename "${BASH_SOURCE[-1]}") @ $(date "+%Y-%m-%d %T")) : setting up..." >&2
 
-SCRIPT_SHARED_PATH="$(readlink -e "$BASH_SOURCE")"
-SCRIPT_SHARED_NAME="$(basename "$SCRIPT_SHARED_PATH")"
+export SCRIPT_SHARED_PATH="$(readlink -e "$BASH_SOURCE")"
+export SCRIPT_SHARED_NAME="$(basename "$SCRIPT_SHARED_PATH")"
 export SCRIPT_SHARED_DIR="$(dirname "$SCRIPT_SHARED_PATH")"
 export SCRIPT_ORIG_PWD="$(pwd -P)"
 
@@ -41,7 +41,7 @@ array_contains () {
 # usage: displayname <path>
 # takes a path and generates "last_folder/filename" string
 displayname() {
-  basename -z $(dirname $(readlink -m "$1"))
+  basename -z "$(dirname "$(readlink -m "$1")")"
   echo -ne "/"
   basename "$1"
 }
@@ -51,7 +51,7 @@ scriptname() { displayname "$SCRIPT_CURRENT_PATH"; }
 # can't be nested in other functions
 scriptcaller() { readlink -e "$(caller | cut -d " " -f2-)"; }
 # for conditionals, determines if caller is the same as the main parent script
-scriptsame() { [[ $SCRIPT_MAIN_PATH == $SCRIPT_CURRENT_PATH ]]; }
+scriptsame() { [[ $SCRIPT_MAIN_PATH == "$SCRIPT_CURRENT_PATH" ]]; }
 # used internally to set the current script global
 _set_scriptcurrent() {
   local fallback=${BASH_SOURCE[2]}
@@ -65,7 +65,7 @@ include() {
   if [[ ! -f $fullpath ]]; then
     die "unable to include \`$fullpath\`: file not found"
   fi
-  if [[ ! " ${_BASH_SHARED_LIB[@]} " =~ " ${1} " ]]; then
+  if [[ ! " ${_BASH_SHARED_LIB[@]} " == *" ${1} "* ]]; then
     _BASH_SHARED_LIB+=("$1")
     _set_scriptcurrent "$fullpath"
     source "$fullpath" || die "error including $fullpath"
@@ -166,28 +166,36 @@ ansiup() {
 ok()   { say "\e[32m(ok) $*\e[0m"; exit 0; }
 die()  { warn "\e[31m(die) $*\e[0m"; exit 1; }
 # usage: die_status <status> [message]
-die_status() { warn "\e[31m(died with status code $1) ${*:2}\e[0m"; exit $1; }
+die_status() { warn "\e[31m(died with status code $1) ${*:2}\e[0m"; exit "$1"; }
 # usage quit_status <status> [message]
 quit_status() {
   if scriptsame; then
-    [[ $1 -eq 0 ]] && ok "${*:2}" || die_status "$@"
+    if [[ $1 -eq 0 ]]; then
+      ok "${*:2}"
+    else
+      die_status "$@"
+    fi
   else
-    [[ $1 -eq 0 ]] && say "${*:2}" || warn "${*:2}"
-    return $1
+    if [[ $1 -eq 0 ]]; then
+      say "${*:2}"
+    else
+      warn "${*:2}"
+    fi
+    return "$1"
   fi
 }
 
 # WRAPPER FUNCTIONS
 
 # if cd fails then we should exit
-safe_cd() { cd $1 || die "couldn't cd! $1"; }
+safe_cd() { cd "$1" || die "couldn't cd! $1"; }
 # used for conditionals to determine presence of a command or executable
-command_exists() { command -v $1 > /dev/null 2>&1; }
+command_exists() { command -v "$1" > /dev/null 2>&1; }
 # usage: run "title" <command> [args]
 # display command to run, confirm it exists, run it, output a warning on failure
 run() {
-  say "running $1 command: \`${@:2}\`"
-  if command_exists $2; then
+  say "running $1 command: \`${*:2}\`"
+  if command_exists "$2"; then
     "${@:2}"
     ret=$?
     [[ $ret ]] || warn "$1 command exited with status code $?"
@@ -200,8 +208,8 @@ run() {
 # usage: run_or_die "title" <command> [args]
 # as run, but die if command missing or exits with an error
 run_or_die() {
-  say "running $1 command: \`${@:2}\`"
-  command_exists $2 || die "command \`$2\` not found"
+  say "running $1 command: \`${*:2}\`"
+  command_exists "$2" || die "command \`$2\` not found"
   $2 "${@:3}" || die_status $? "$2 command"
 }
 
@@ -220,7 +228,7 @@ realpath() {
     # we need to resolve it relative to the path where the symlink file was located
     [[ $p != /* ]] && p="$d/$p"
   done
-  echo "$( cd -P "$(dirname "$p")" && pwd )"
+  cd -P "$(dirname "$p")" && pwd
 }
 
 # usage: elapsed <start_time> <end_time>
@@ -239,7 +247,7 @@ elapsed() {
     dm=$(echo "$dt3/60" | bc)
     ds=$(echo "$dt3-60*$dm" | bc)
 
-    printf " -- time elapsed: %d:%02d:%02d:%02.4f\n" $dd $dh $dm $ds
+    printf " -- time elapsed: %d:%02d:%02d:%02.4f\n" "$dd" "$dh" "$dm" "$ds"
   else
     warn "START: $started_at"
     warn "END: $ended_at"

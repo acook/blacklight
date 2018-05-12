@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
-source "$(dirname ${BASH_SOURCE[0]})/lib/_shared.bash"
+source "$(dirname "$BASH_SOURCE")/lib/_shared.bash"
 include "bl_env"
 
-run_or_die compile $BL_CC "$BL_MAIN_PATH" $BL_CCOPTS -Weverything -o $BL_OUT_NAME
+# shellcheck disable=SC2086
+run_or_die compile "$BL_CC" "$BL_MAIN_PATH" $BL_CCOPTS -Weverything -o "$BL_OUT_NAME"
 
 say "moving..."
 mkdir -p -v "$BL_BIN_DIR"
