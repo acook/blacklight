@@ -18,4 +18,10 @@ warn "TODO"
 say "building infer..."
 warn "TODO"
 
+say "obtaining very important ASCII art files..."
+run "install figlet" sudo apt -y install figlet
+mkdir -v -p figlet
+safe_cd figlet
+run_or_die "download font" curl -L -O "ftp://ftp.figlet.org/pub/figlet/fonts/contributed/chunky.flf"
+
 ok "everything should be good to go!"
