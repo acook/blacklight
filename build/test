@@ -52,9 +52,7 @@ for testfile in ./*_test.c; do
 done
 
 if [[ $failures -eq 0 ]]; then
-  ok "\e[32mall $successes tests passed!\e[0m" | tee -a $log
+  ok "all $successes/$(($successes + $failures)) tests passed!" | tee -a $log
 else
-  say "\e[32m$successes tests passed\e[0m" | tee -a $log
-  say "\e[31m$failures tests failed\e[0m" | tee -a $log
-  die "some tests failed!" | tee -a $log
+  die "$failures/$(($successes + $failures)) tests failed!" | tee -a $log
 fi
