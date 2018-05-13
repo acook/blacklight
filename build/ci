@@ -4,11 +4,11 @@ source "$(dirname "$BASH_SOURCE")/lib/_shared.bash"
 include "bl_env"
 
 safe_cd "$BL_ROOT_PATH"
-say "doing build/deps..."
-load ./build/depsbuild
+say "doing build/test..."
+load ./build/test
 safe_cd "$BL_ROOT_PATH"
-say "doing build/depstest..."
-load ./build/depstest
+say "doing build/run..."
+load ./build/run
 
 if scriptsame; then
   ok "CI validation completed successfully!"

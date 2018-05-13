@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+# the seemly unnecessary ansieol's work around a bug in some terminals
+# that don't draw the background color to the end of the line on newline
+# I don't bother trying to fix the banners and other blocks with the same issue
+
+source "$(dirname "$BASH_SOURCE")/lib/_shared.bash"
+include "bl_env"
+
+safe_cd "$BL_TEST_DIR"
+
+tmp="/tmp/blacklight_build_test"
+log="$tmp/test_$(ts_file).log"
+
+mkdir -v -p "$tmp"
+
+let failures=0
+let successes=0
+
+# assume no output, so clean up the previous line
+cleanup() { ansiup 1 ; ansigoto 0 ; colorreset ; ansieol ; }
+
+say "running tests..."
+
+say "beginning test run..." > $log
+
+if [[ -z ${1+unset} ]] || [[ $1 == $BASH_SOURCE ]]; then
+  pattern='./*_test.c'
+  single=false
+  ccwarn="-Wno-everything"
+else
+  pattern="./$1_test.c"
+  single=true
+  ccwarn="-Weverything"
+fi
+
+for testfile in $pattern; do
+  name="$(basename $testfile)"
+  exec="$tmp/$(basename -s "_test.c" $testfile).exe"
+
+  say "compiling and running $name..."
+
+  colorbg yellow ; colorfg black
+  echo -n "compiling $name..." ; ansieol ; echo
+  colorreset ; colorbg black ; colorfg orangered ; ansieol
+
+  if [[ $single == true ]]; then
+    run "compile $name" $BL_CC $testfile $BL_CCOPTS $ccwarn -o $exec >> $log 2>&1
+    EXITSTATUS=$?
+  else
+    run "compile $name" $BL_CC $testfile $BL_CCOPTS $ccwarn -o $exec >> $log
+    EXITSTATUS=$?
+  fi
+
+  # only try to run the resulting executable if the compilation step exited without error
+  if [[ $EXITSTATUS -eq 0 ]]; then
+    cleanup ; colorbg yellow ; colorfg black
+    echo -n "running $name..." ; ansieol ; echo
+    colorreset ; colorbg black ; colorfg orangered ; ansieol
+
+    run "$name" $exec >> $log
+    EXITSTATUS=$?
+  fi
+
+  # when running a single test, output the contents of the log
+  if [[ $single == true ]]; then
+    cleanup ; colorreset ; ansieol
+    colorbg orangered ; colorfg black ; ansieol
+    say "(log output) $name"
+    colorbg black ; colorfg orangered ; ansieol
+
+    cat $log | tail -n +2
+  fi
+
+  # display pass/fail depending on the exit status
+  if [[ $EXITSTATUS -eq 0 ]]; then
+    let successes++
+
+    cleanup ; colorbg green3 ; ansieol
+    say "(succeeded) $name" | tee -a $log
+  else
+    let failures++
+    # a blank black line to terminate the output and give it a bit of space
+    colorreset ; colorbg black ; ansieol ; echo
+    colorbg red3 ; ansieol
+    say "(FAILED) $name" | tee -a $log
+  fi
+
+  colorreset ; ansieol
+done
+
+# display test run summary
+colorbg black
+if [[ $failures -eq 0 ]]; then
+  colorfg green3
+  if command_exists figlet; then
+    bigsay " $successes/$(($successes + $failures))  tests  succeeded!"
+  else
+    ansiup 1
+    echo "
+
+  .-----.--.--.----.----.-----.-----.-----.
+  |__ --|  |  |  __|  __|  -__|__ --|__ --|
+  |_____|_____|____|____|_____|_____|_____|
+"
+  fi
+  EXITSTATUS=0
+  msg="$successes/$(($successes + $failures)) tests succeeded!"
+else
+  colorfg red3
+  if command_exists figlet; then
+    bigsay " $failures/$(($successes + $failures))  tests  failed!"
+  else
+    ansiup 1
+    echo "
+    ___         __ __
+  .'  _|.---.-.|__|  |
+  |   _||  _  ||  |  |
+  |__|  |___._||__|__|
+"
+  fi
+  EXITSTATUS="$(($failures<255?$failures:255))" # exit status must be between 0 and 255
+  msg="$failures/$(($successes + $failures)) tests failed!"
+fi
+
+colorreset ; ansieol
+echo "$msg" >> $log
+quit_status $EXITSTATUS $msg

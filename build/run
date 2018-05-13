@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
-source "$(dirname ${BASH_SOURCE[0]})/lib/_shared.bash"
+source "$(dirname "$BASH_SOURCE")/lib/_shared.bash"
 include "bl_env"
 
 load ./build/all
 
 run_or_die $BL_BIN_NAME "$BL_BIN_PATH" "$@"
+
+if scriptsame; then
+  ok "$BL_BIN_NAME executed successfully!"
+fi

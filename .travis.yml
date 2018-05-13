@@ -1,7 +1,7 @@
 language: c
 compiler: ecc
 install: build/deps
-script: build/run
+script: build/ci
 notifications:
   webhooks:
     urls:

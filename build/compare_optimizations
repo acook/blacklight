@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+if [[ -z $2 ]]; then
+  echo "usage: $0 O1 O2"
+  exit 1
+fi
+
+source "$(dirname "$BASH_SOURCE")/lib/_shared.bash"
+
+tmp="/tmp/_cmpopts_"
+orig="_orig.tmp"
+nl=".tmp"
+
+for arg in "$@"; do
+  echo 'int;' | /usr/bin/clang -xc -"$arg" - -o /dev/null "-###" > "$tmp$arg$orig" 2>&1
+  llvm-as-3.5 < /dev/null | opt-3.5 -"$arg" -disable-output -debug-pass=Arguments >> "$tmp$arg$orig" 2>&1
+  word=$(cat "$tmp$arg$orig"); echo -e "${word// /\\n}" > "$tmp$arg$nl"
+done
+
+if command_exists colordiff; then
+  "colordiff" -s "$tmp$1$nl" "$tmp$2$nl"
+else
+  "diff" --suppress-common-lines "$tmp$1$nl" "$tmp$2$nl"
+fi

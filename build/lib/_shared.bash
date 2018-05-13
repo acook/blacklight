@@ -9,10 +9,10 @@ else
   return 0
 fi
 
-echo " -- ($(basename $(dirname $(readlink -m "${BASH_SOURCE[-1]}")))/$(basename "${BASH_SOURCE[-1]}") @ $(date "+%Y-%m-%d %T")) : setting up..." >&2
+echo " -- ($(basename "$(dirname "$(readlink -m "${BASH_SOURCE[-1]}")")")/$(basename "${BASH_SOURCE[-1]}") @ $(date "+%Y-%m-%d %T")) : setting up..." >&2
 
-SCRIPT_SHARED_PATH="$(readlink -e "$BASH_SOURCE")"
-SCRIPT_SHARED_NAME="$(basename "$SCRIPT_SHARED_PATH")"
+export SCRIPT_SHARED_PATH="$(readlink -e "$BASH_SOURCE")"
+export SCRIPT_SHARED_NAME="$(basename "$SCRIPT_SHARED_PATH")"
 export SCRIPT_SHARED_DIR="$(dirname "$SCRIPT_SHARED_PATH")"
 export SCRIPT_ORIG_PWD="$(pwd -P)"
 
@@ -41,7 +41,7 @@ array_contains () {
 # usage: displayname <path>
 # takes a path and generates "last_folder/filename" string
 displayname() {
-  basename -z $(dirname $(readlink -m "$1"))
+  basename -z "$(dirname "$(readlink -m "$1")")"
   echo -ne "/"
   basename "$1"
 }
@@ -51,21 +51,21 @@ scriptname() { displayname "$SCRIPT_CURRENT_PATH"; }
 # can't be nested in other functions
 scriptcaller() { readlink -e "$(caller | cut -d " " -f2-)"; }
 # for conditionals, determines if caller is the same as the main parent script
-scriptsame() { [[ $SCRIPT_MAIN_PATH == "$(readlink -e $(caller | cut -d " " -f2-))" ]]; }
+scriptsame() { [[ $SCRIPT_MAIN_PATH == "$SCRIPT_CURRENT_PATH" ]]; }
 # used internally to set the current script global
-_set_scriptcurrent() { 
+_set_scriptcurrent() {
   local fallback=${BASH_SOURCE[2]}
   local script=${1:-$fallback}
 
-  SCRIPT_CURRENT_PATH=$(readlink -m "$script"); 
+  SCRIPT_CURRENT_PATH=$(readlink -m "$script");
 }
 # source a script only once
-include() { 
+include() {
   local fullpath="$SCRIPT_SHARED_DIR/_$1.bash"
   if [[ ! -f $fullpath ]]; then
     die "unable to include \`$fullpath\`: file not found"
   fi
-  if [[ ! " ${_BASH_SHARED_LIB[@]} " =~ " ${1} " ]]; then
+  if [[ ! " ${_BASH_SHARED_LIB[@]} " == *" ${1} "* ]]; then
     _BASH_SHARED_LIB+=("$1")
     _set_scriptcurrent "$fullpath"
     source "$fullpath" || die "error including $fullpath"
@@ -73,13 +73,27 @@ include() {
   fi
 }
 # source a script once or more
-load() { 
+load_nonfatal() {
   if [[ ! -f $1 ]]; then
-    die "unable to load \`$1\`: file not found"
+    warn "load: file \`$1\` not found"
+    return 255
   fi
+
   _set_scriptcurrent "$1"
-  source "$1" || die "error loading \`$1\`"; 
+  source "$1"
+  EXITSTATUS=$?
   _set_scriptcurrent
+
+  if [[ $EXITSTATUS -ne 0 ]]; then
+    warn "load: \`$1\` gave exit status $EXITSTATUS"
+    return $EXITSTATUS
+  fi
+}
+load() {
+  load_nonfatal "$1"
+  EXITSTATUS=$?
+  _set_scriptcurrent
+  [[ $EXITSTATUS -eq 0 ]] || die_status $? "error loading \`$1\`"
 }
 
 trace() { # for debugging bash functions
@@ -97,34 +111,105 @@ say()  { echo -ne " -- ($(scriptname) @ $(ts)) : $*\n"; }
 warn() { say "$*" >&2; }
 # usage: sayenv <VARNAME>
 sayenv() { say "$1=$(eval "echo -ne \$$1")"; }
+colorfg() {
+  case "$1" in
+  ("black") color=30 ;;
+  ("red") color=31 ;;
+  ("green") color=32 ;;
+  ("yellow") color=33 ;;
+  ("blue") color=34 ;;
+  ("magenta") color=35 ;;
+  ("cyan") color=36 ;;
+  ("white") color=37 ;;
+
+  ("green3") color="38;5;34" ;;
+  ("red3") color="38;5;160" ;;
+  ("orangered") color="38;5;202" ;;
+  ("violet") color="38;5;128" ;;
+  (*) color="0" ;;
+  esac
+  echo -ne "\e[$color""m"
+}
+colorbg() {
+  case "$1" in
+  ("black") color=40 ;;
+  ("red") color=41 ;;
+  ("green") color=42 ;;
+  ("yellow") color=43 ;;
+  ("blue") color=44 ;;
+  ("magenta") color=45 ;;
+  ("cyan") color=46 ;;
+  ("white") color=47 ;;
+
+  ("green3") color="48;5;34" ;;
+  ("red3") color="48;5;160" ;;
+  ("orangered") color="48;5;202" ;;
+  ("violet") color="48;5;128" ;;
+  (*) color="0" ;;
+  esac
+  echo -ne "\e[$color""m"
+}
+colorreset() {
+  echo -ne "\e[0m"
+}
+ansigoto() {
+  echo -ne "\e[$1""G"
+}
+ansieol() {
+  echo -ne "\e[K"
+}
+ansiup() {
+  echo -ne "\e[$1""A"
+}
 
 # EXIT STATUS FUNCTIONS
-ok()   { say "(ok) $*"; exit 0; }
-die()  { warn "(die) $*"; exit 1; }
+ok()   { say "\e[32m(ok) $*\e[0m"; exit 0; }
+die()  { warn "\e[31m(die) $*\e[0m"; exit 1; }
 # usage: die_status <status> [message]
-die_status() { warn "(died with status code $1) ${*:2}"; exit $1; }
+die_status() { warn "\e[31m(died with status code $1) ${*:2}\e[0m"; exit "$1"; }
+# usage quit_status <status> [message]
+quit_status() {
+  if scriptsame; then
+    if [[ $1 -eq 0 ]]; then
+      ok "${*:2}"
+    else
+      die_status "$@"
+    fi
+  else
+    if [[ $1 -eq 0 ]]; then
+      say "${*:2}"
+    else
+      warn "${*:2}"
+    fi
+    return "$1"
+  fi
+}
 
 # WRAPPER FUNCTIONS
 
 # if cd fails then we should exit
-safe_cd() { cd $1 || die "couldn't cd! $1"; }
+safe_cd() { cd "$1" || die "couldn't cd! $1"; }
 # used for conditionals to determine presence of a command or executable
-command_exists() { command -v $1 > /dev/null 2>&1; }
+command_exists() { command -v "$1" > /dev/null 2>&1; }
 # usage: run "title" <command> [args]
 # display command to run, confirm it exists, run it, output a warning on failure
-run() { 
-  say "running $1 command: \`${@:2}\`"
-  if command_exists $2; then
-    eval "${@:2}" || warn "$1 command exited with status code $?"
+run() {
+  say "running $1 command: \`${*:2}\`"
+  if command_exists "$2"; then
+    "${@:2}"
+    ret=$?
+    [[ $ret ]] || warn "$1 command exited with status code $?"
+    return $ret
   else
     warn "command \`$2\` not found"
+    return 255
   fi
 }
 # usage: run_or_die "title" <command> [args]
 # as run, but die if command missing or exits with an error
 run_or_die() {
-  say "running $1 command: \`${@:2}\`"
-  command_exists $2 || die "command \`$2\` not found"
+  say "running $1 command: \`${*:2}\`"
+  command_exists "$2" || die "command \`$2\` not found"
   $2 "${@:3}" || die_status $? "$2 command"
 }
 
@@ -136,14 +221,14 @@ run_or_die() {
 realpath() {
   p="$1"
   # loop until the file is no longer a symlink (or doesn't exist)
-  while [[ -h $p ]]; do 
+  while [[ -h $p ]]; do
     d="$( cd -P "$( dirname "$p" )" && pwd )"
     p="$(readlink -e "$p")"
     # if $p was a relative symlink
     # we need to resolve it relative to the path where the symlink file was located
-    [[ $p != /* ]] && p="$d/$p" 
+    [[ $p != /* ]] && p="$d/$p"
   done
-  echo "$( cd -P "$(dirname "$p")" && pwd )"
+  cd -P "$(dirname "$p")" && pwd
 }
 
 # usage: elapsed <start_time> <end_time>
@@ -162,7 +247,7 @@ elapsed() {
     dm=$(echo "$dt3/60" | bc)
     ds=$(echo "$dt3-60*$dm" | bc)
 
-    printf " -- time elapsed: %d:%02d:%02d:%02.4f\n" $dd $dh $dm $ds
+    printf " -- time elapsed: %d:%02d:%02d:%02.4f\n" "$dd" "$dh" "$dm" "$ds"
   else
     warn "START: $started_at"
     warn "END: $ended_at"
