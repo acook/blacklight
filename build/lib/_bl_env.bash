@@ -24,6 +24,8 @@ else
   export PATH=""
 fi
 
+export BL_LINKER="ld.lld"
+
 export PATH="$PATH:$BL_LOCAL_PATH/bin:/usr/bin:/usr/local/bin:/bin"
 export BL_STRIP="strip"
 
@@ -37,7 +39,7 @@ fi
 
 # vars used by other commands
 export CC="$BL_CC"
-export CLINKER="$BL_CC"
+export CLINKER="$BL_LINKER"
 
 # random functions
 bigsay() {

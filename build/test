@@ -44,7 +44,7 @@ for testfile in $pattern; do
   colorreset ; colorbg black ; colorfg orangered ; ansieol
 
   if [[ $single == true ]]; then
-    run "compile $name" $BL_CC $testfile $BL_CCOPTS $ccwarn -o $exec >> $log 2>&1
+    run "compile $name" $BL_CC $testfile $BL_ALLOC -lcriterion $ccwarn -o $exec >> $log 2>&1
     EXITSTATUS=$?
   else
     run "compile $name" $BL_CC $testfile $BL_CCOPTS $ccwarn -o $exec >> $log
