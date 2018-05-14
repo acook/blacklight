@@ -130,3 +130,19 @@ static char* sumo_to_cstr(sumo s) {
   str[len] = 0x00;  // null-terminate string
   return str;
 }
+
+static char* sumo_cstrify(sumo s) {
+  sumo_header *h = (void*)s;
+  cursor c = sumo_cursor_new(s);
+  size_t len = sumolen(s);
+  if (!c[len] || !c[len-1]) {
+    return c;
+  } else {
+    if (sumocap(s) == len) {
+      s = sumo_grow(s, len + 1 );
+      c = sumo_cursor_new(s);
+    }
+    c[len] = 0x00;
+    return c;
+  }
+}
