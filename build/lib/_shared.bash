@@ -188,7 +188,10 @@ quit_status() {
 # WRAPPER FUNCTIONS
 
 # if cd fails then we should exit
-safe_cd() { cd "$1" || die "couldn't cd! $1"; }
+safe_cd() {
+  say "entering directory \`$1\`"
+  cd "$1" || die "safe_cd: couldn't change directory to \`$1\`";
+}
 # used for conditionals to determine presence of a command or executable
 command_exists() { command -v "$1" > /dev/null 2>&1; }
 # usage: run "title" <command> [args]
