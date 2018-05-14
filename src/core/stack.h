@@ -1,7 +1,7 @@
 #pragma once
 
-#include <stdlib.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include "./datum.h"
 
 typedef struct {
@@ -38,7 +38,7 @@ static stack stack_fit(stack s, bl_size fit) {
     }
   }
 
-  return s; // no resize needed
+  return s;  // no resize needed
 }
 
 // requires that the stack already has enough space
