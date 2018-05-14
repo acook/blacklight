@@ -69,6 +69,7 @@ for testfile in $pattern; do
     colorbg black ; colorfg orangered ; ansieol
 
     cat $log | tail -n +2
+    echo
   fi
 
   # display pass/fail depending on the exit status
