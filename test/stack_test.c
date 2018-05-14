@@ -1,8 +1,10 @@
+#include <stdio.h>
 #include "../src/core/stack.h"
 #include "../src/core/text.h"
 #include "../src/core/debug.h"
+#include "../ext/local/include/criterion/criterion.h"
 
-int main(void) {
+Test(stack, all) {
   puts(" - init");
   // initialize
   stack s = stack_new();
@@ -77,5 +79,7 @@ int main(void) {
 
   utf8 u2 = {'w', 'h', 'a', 't'};
 
-  return 0;
+  cr_assert(0);
+
+  //return 0;
 }
