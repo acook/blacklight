@@ -125,15 +125,10 @@ static char* sumo_to_cstr(sumo s) {
 static char* sumo_as_cstr(sumo s) {
   sumo_header* h = (void*)s;
   cursor c = sumo_cursor_new(s);
-  size_t len = sumolen(s);
-  if (!c[len] || !c[len-1]) {
-    return c;
-  } else {
-    if (sumocap(s) == len) {
-      s = sumo_grow(s, len + 1 );
-      c = sumo_cursor_new(s);
-    }
-    c[len] = 0x00;
-    return c;
-  }
+  bl_size len = sumolen(s);
+  if (!c[len - 1]) return c;  // there's already a null-terminator
+  s = sumo_grow(s, len + 1);
+  c = sumo_cursor_new(s);
+  c[len] = 0x00;  // null-terminate string
+  return c;
 }
