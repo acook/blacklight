@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+source "$(dirname "$BASH_SOURCE")/lib/_shared.bash"
+include "bl_env"
+
+say "starting bash console in build environment..."
+bash --noprofile --norc
