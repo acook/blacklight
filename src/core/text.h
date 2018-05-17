@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdio.h>
 #include "./stack.h"
 #include "./opcode.h"
 
