@@ -1,11 +1,11 @@
 #pragma once
 
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 #include <string.h>
+#include "./datum.h"
 
-typedef uint8_t byte;
 typedef byte* sumo;
 typedef byte* cursor;
 typedef struct {
