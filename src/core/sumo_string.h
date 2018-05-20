@@ -132,3 +132,12 @@ static char* sumo_as_cstr(sumo s) {
   c[len] = 0x00;  // null-terminate string
   return c;
 }
+
+static datum sumo_alloc(sumo s, bl_size start, bl_size len) {
+  cursor c = sumo_cursor_new(s);
+  c = sumo_cursor_mv(s, c, start);
+  datum *d = (void*)c;
+  d->ptr = c + sizeof(datum);
+  d->len = len;
+  return *d;
+}
