@@ -126,7 +126,7 @@ colorfg() {
   ("red3") color="38;5;160" ;;
   ("orangered") color="38;5;202" ;;
   ("violet") color="38;5;128" ;;
-  (*) color="0" ;;
+  (*) color="38;5;$1" ;;
   esac
   echo -ne "\e[$color""m"
 }
@@ -145,7 +145,7 @@ colorbg() {
   ("red3") color="48;5;160" ;;
   ("orangered") color="48;5;202" ;;
   ("violet") color="48;5;128" ;;
-  (*) color="0" ;;
+  (*) color="48;5;$1" ;;
   esac
   echo -ne "\e[$color""m"
 }

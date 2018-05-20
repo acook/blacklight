@@ -60,6 +60,8 @@ banner() {
 }
 bl_banner() {
   colorreset ; colorbg black ; colorfg violet
+  ansieol ; echo ; ansieol ; echo ; ansieol ; echo ; ansieol ; echo ; ansieol ; echo
+  ansiup 5
   if command_exists figlet; then
     banner "blacklight"
   else
@@ -76,7 +78,7 @@ bl_banner() {
 bl_banner
 
 # Make sure we're in the right directory
-safe_cd "$BL_ROOT_PATH"
+safe_cd "$BL_ROOT_PATH" > /dev/null
 
 if scriptsame; then
   printenv | grep "^BL_*"
