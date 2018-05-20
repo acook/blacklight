@@ -12,8 +12,23 @@ safe_cd Criterion
 run "cleanup" rm -rf build
 mkdir -v -p build
 safe_cd build
-run_or_die "configure" cmake -D CMAKE_C_COMPILER=ecc -D CMAKE_CXX_COMPILER=ecc++ -D CMAKE_INSTALL_PREFIX:PATH="$BL_LOCAL_PATH" ..
-run_or_die "compile" cmake -D CMAKE_C_COMPILER=ecc -D CMAKE_CXX_COMPILER=ecc++ -D CMAKE_INSTALL_PREFIX:PATH="$BL_LOCAL_PATH" --build .
+
+echo -e 'set(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_PROCESSOR x86_64)
+set(TRIPLE x86_64-pc-linux-gnu)
+set(CMAKE_C_COMPILER_TARGET ${TRIPLE})
+set(CMAKE_CXX_COMPILER_TARGET ${TRIPLE})
+
+set(CMAKE_C_COMPILER ecc)
+set(CMAKE_CXX_COMPILER ecc++)
+set(CMAKE_LINKER ecc)
+set(CMAKE_AR ecc-ar)
+
+set(NN_DISABLE_GETADDRINFO_A ON)
+set(LINKER_HAS_EXCLUDE_LIBS OFF)
+' > ecc.cmake
+run_or_die "configure" cmake -D CMAKE_TOOLCHAIN_FILE="$PWD/ecc.cmake" -D CMAKE_INSTALL_PREFIX:PATH="$BL_LOCAL_PATH" ..
+run_or_die "compile"   cmake -D CMAKE_TOOLCHAIN_FILE="$PWD/ecc.cmake" -D CMAKE_INSTALL_PREFIX:PATH="$BL_LOCAL_PATH" --build .
 run "install" make install
 
 if scriptsame; then
