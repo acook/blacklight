@@ -26,17 +26,31 @@ func main() {
 		fileName = os.Args[1]
 		code = loadFile(fileName)
 	} else if len(os.Args[1:]) == 2 {
+		fileName = "<cmdline>"
 		code = []rune(os.Args[2])
 	} else {
-		panic("no filename argument")
+		usage("no filename argument")
 	}
 
 	prepare_op_table()
 	initFDtable()
 
-	tokens := parse(code)
+	source := NewSource(fileName)
+	source.code = code
+	source = parse(source)
 
-	ops := compile(tokens)
+	/*
+		tokens, err := parse(code)
+		if err != nil {
+			exitWithError(2, err)
+		}
+	*/
+
+	ops, err := compile(source)
+
+	if err != nil {
+		exitWithError(3, err)
+	}
 
 	doVM(ops)
 }
@@ -65,4 +79,25 @@ func cleanup() {
 		warn("encountered an error and had to quit: ")
 		panic(err)
 	}
+}
+
+func usage(msg string) {
+	info := "## blacklight usage ##\nblacklight path/to/file.bl\nblacklight -e \"'hello world' say\""
+	if msg == "" {
+		print(info)
+		exit(0)
+	} else {
+		warn(msg, "\n", info)
+		exit(1)
+	}
+}
+
+func exitWithError(code int, err error) {
+	warn(err.Error(), "\n")
+	exit(code)
+}
+
+func exit(code int) {
+	cleanup()
+	os.Exit(code)
 }

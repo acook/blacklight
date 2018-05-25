@@ -7,11 +7,20 @@ type Tag struct {
 	Bool  bool
 }
 
-func (t Tag) Refl() string {
-	return t.Print()
+func (t Tag) Error() string {
+	out := t.Refl()
+
+	switch t.Data.(type) {
+	case sequence:
+		out = out + "\n" + t.Data.(sequence).Refl()
+	case *IO:
+		out = out + "<IO>"
+	}
+
+	return out
 }
 
-func (t Tag) Print() string {
+func (t Tag) Refl() string {
 	return t.Kind + "#" + t.Label
 }
 

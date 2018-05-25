@@ -4,14 +4,14 @@ import (
 	"unicode"
 )
 
-func parse(code []rune) []string {
+func parse(source *Source) *Source {
 	var tokens []string
 	tokens = append(tokens, "")
 	l := 0
 	comment, str := false, false
 	var last_glyph rune
 
-	for _, b := range code {
+	for i, b := range source.code {
 		glyph := b
 
 		switch {
@@ -39,6 +39,7 @@ func parse(code []rune) []string {
 			t := tokens[l]
 			h := tokens[:l]
 			tokens = append(h, (t + string(glyph)))
+			source.sourcemap[len(tokens)-1] = i
 		case glyph == '(':
 			fallthrough
 		case glyph == ')':
@@ -63,7 +64,8 @@ func parse(code []rune) []string {
 		tokens = tokens[:l]
 	}
 
-	return tokens
+	source.tokens = tokens
+	return source
 }
 
 func tk(glyph rune, tokens []string) []string {

@@ -11,6 +11,7 @@ import (
 type Debug struct {
 	token  string
 	offset int
+	source *Source
 }
 
 func (d *Debug) Rescue() {
@@ -22,8 +23,9 @@ func (d *Debug) Rescue() {
 	}
 }
 
-func compile(tokens []string) []byte {
+func compile(source *Source) ([]byte, error) {
 	var debug = new(Debug)
+	debug.source = source
 	defer debug.Rescue()
 
 	var bc []byte
@@ -35,7 +37,7 @@ func compile(tokens []string) []byte {
 	int_buf := make([]byte, 8)
 	cha_buf := make([]byte, 4)
 
-	for i, t := range tokens {
+	for i, t := range source.tokens {
 		debug.token = t
 		debug.offset = i
 
@@ -177,7 +179,7 @@ func compile(tokens []string) []byte {
 			}
 
 		default:
-			panic("compiler: unrecognized operation: " + t)
+			return nil, compilation_error(source, i, t)
 		}
 	}
 
@@ -188,7 +190,43 @@ func compile(tokens []string) []byte {
 		panic("compiler: unclosed paren in V literal")
 	}
 
-	return bc
+	return bc, nil
+}
+
+func compilation_error(source *Source, token_offset int, t string) error {
+	bl_byte_offset := source.sourcemap[token_offset]
+
+	bl_line := 1
+	bl_line_col := 1
+	for ii, rr := range source.code {
+		if ii >= bl_byte_offset {
+			// bl_line_col will be at the end of the token at this point
+			// so subtract the length of the token to get the beginning
+			// len will be 1 longer than we want, so add 1 to it
+			bl_line_col = 1 + bl_line_col - len(source.tokens[token_offset])
+			break
+		}
+		bl_line_col = bl_line_col + 1
+		if rr == rune('\n') {
+			bl_line = bl_line + 1
+			bl_line_col = 1
+		}
+	}
+
+	gofile, goline := GoDebug(-13)
+
+	var info sequence
+	info = new(V)
+	info = info.App(NewTag("BL_FILE", source.filename))
+	info = info.App(NewTag("BL_LINE", strconv.Itoa(bl_line)))
+	info = info.App(NewTag("BL_LINE_COL", strconv.Itoa(bl_line_col)))
+	info = info.App(NewTag("BL_BYTE_OFFSET", strconv.Itoa(bl_byte_offset)))
+	info = info.App(NewTag("TOKEN_OFFSET", strconv.Itoa(token_offset)))
+	info = info.App(NewTag("GO_FILE", gofile))
+	info = info.App(NewTag("GO_LINE", goline))
+
+	err := NewErr("compiler: unrecognized operation: "+t, info)
+	return err
 }
 
 var rev_wd_map = make(map[string]uint64)
