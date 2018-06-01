@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+source "$(dirname "$BASH_SOURCE")/lib/_shared.bash" 2> /dev/null
+
+say "starting bash console in build environment..."
+bash --rcfile "$(dirname "$BASH_SOURCE")/lib/_bl_profile.bash"

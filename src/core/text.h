@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdio.h>
 #include "./stack.h"
 #include "./opcode.h"
 
@@ -19,7 +20,7 @@ static stack new_text_literal(stack s, utf8 u, bl_size len) {
     printf("header size %d\n", h);
     bl_size o;
     for (o = 0; o <= len; o++) {
-      d.b[o + h] = u[o];
+      ((datumarray)d).b[o + h] = u[o];
     }
   } else {
     printf("text len (%d) too large, putting into ref\n", len);
@@ -31,7 +32,7 @@ static stack new_text_literal(stack s, utf8 u, bl_size len) {
 
 static inline utf8 text_from_datum(datum d) {
   if (d.t == Text) {
-    return &d.b[sizeof(opcode) + sizeof(opcode)];
+    return &((datumarray)d).b[sizeof(opcode) + sizeof(opcode)];
   } else if (d.t == (Text ^ Ref)) {
     return (utf8)d.ptr;
   } else {

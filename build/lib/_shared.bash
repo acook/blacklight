@@ -126,7 +126,7 @@ colorfg() {
   ("red3") color="38;5;160" ;;
   ("orangered") color="38;5;202" ;;
   ("violet") color="38;5;128" ;;
-  (*) color="0" ;;
+  (*) color="38;5;$1" ;;
   esac
   echo -ne "\e[$color""m"
 }
@@ -145,7 +145,7 @@ colorbg() {
   ("red3") color="48;5;160" ;;
   ("orangered") color="48;5;202" ;;
   ("violet") color="48;5;128" ;;
-  (*) color="0" ;;
+  (*) color="48;5;$1" ;;
   esac
   echo -ne "\e[$color""m"
 }
@@ -188,7 +188,10 @@ quit_status() {
 # WRAPPER FUNCTIONS
 
 # if cd fails then we should exit
-safe_cd() { cd "$1" || die "couldn't cd! $1"; }
+safe_cd() {
+  say "entering directory \`$1\`"
+  cd "$1" || die "safe_cd: couldn't change directory to \`$1\`";
+}
 # used for conditionals to determine presence of a command or executable
 command_exists() { command -v "$1" > /dev/null 2>&1; }
 # usage: run "title" <command> [args]

@@ -13,7 +13,17 @@ run_or_die "download" curl -O "http://ellcc.org/releases/latest/$ELLCC_FILE"
 run_or_die "extract" tar xjf "$ELLCC_FILE"
 run "cleanup" rm -v "$ELLCC_FILE"
 
+say "patching ELLCC ELFs with current location of interpreter..."
+safe_cd "$BL_EXT_PATH/ellcc/bin"
+LIBC_SO="$BL_EXT_PATH/ellcc/libecc/lib/x86_64-linux/libc.so"
+for elf in *; do
+  if [[ -x $elf ]] && [[ ! -L $elf ]] && "file" $elf | "grep" -s -q "/rich/"; then
+    run_or_die "patch \`$elf\`" patchelf --set-interpreter "$LIBC_SO" $elf
+  fi
+done
+
 say "obtaining jemalloc..."
+safe_cd "$BL_EXT_PATH"
 run_or_die "clone" git clone --depth=5 https://github.com/jemalloc/jemalloc.git
 
 say "building jemalloc..."

@@ -62,13 +62,14 @@ for testfile in $pattern; do
   fi
 
   # when running a single test, output the contents of the log
-  if [[ $single == true ]]; then
+  if [[ $single == true ]] && [[ $(wc -l <$log) -gt 3 ]]; then
     cleanup ; colorreset ; ansieol
     colorbg orangered ; colorfg black ; ansieol
     say "(log output) $name"
     colorbg black ; colorfg orangered ; ansieol
 
     cat $log | tail -n +2
+    echo
   fi
 
   # display pass/fail depending on the exit status
