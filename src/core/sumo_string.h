@@ -129,6 +129,7 @@ static sumo sumocat_str(sumo dest, const char* src) {
   return dest;  // unable to cat due to insufficient allocation
 }
 
+// copy the sumo to a null-terminated unaligned cstring
 static char* sumo_to_cstr(sumo s) {
   cursor c = sumo_cursor_new(s);
   bl_size len = sumo_cursor_len(s, c);
@@ -149,6 +150,7 @@ static char* sumo_as_cstr(sumo s) {
   return c;
 }
 
+// return a reference datum to a location inside an existing sumo
 static datum sumo_alloc(sumo s, bl_size start, bl_size len) {
   cursor c = sumo_cursor_new(s);
   c = sumo_cursor_mv(s, c, start);
