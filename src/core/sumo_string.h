@@ -41,6 +41,10 @@ static size_t sumocap(sumo s) {
   return ((sumo_header*)s)->cap;
 }
 
+statis size_t sumoavail(sumo s) {
+  return sumocap(s) - sumolen(s);
+}
+
 static size_t sumo_sizeof(sumo s) {
   return sumocap(s) + sizeof(sumo_header);
 }
