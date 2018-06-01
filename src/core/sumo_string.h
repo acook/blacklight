@@ -13,15 +13,30 @@ typedef struct {
   uint32_t cap;
 } sumo_header;
 
-static inline sumo sumo_new_prealloc(bl_size cap) {
-  bl_size real_cap = cap + sizeof(sumo_header);  // make space for header
+// allocate memory aligned to the same size as the sumo_header
+static inline void* halloc(bl_size cap) {
 #ifdef JEMALLOC_C_
-  sumo s = aligned_alloc(real_cap, sizeof(sumo_header));
+  return aligned_alloc(real_cap, sizeof(sumo_header));
 #else
   // The version of Musl that comes with the old Windows build of ELLCC
   // doesn't expose aligned_alloc or memalign so we fall back to malloc
-  sumo s = malloc(real_cap);
+  return malloc(real_cap);
 #endif
+}
+
+// reallocate memory aligned to the same size as the sumo_header
+static inline void* hrealloc(void* ptr, bl_size cap) {
+#ifdef JEMALLOC_C_
+  // use rallocx to do aligned_realloc when jemalloc available
+  return rallocx(ptr, cap, MALLOCX_ALIGN(sizeof(sumo_header)));
+#else
+  return realloc(ptr, cap);
+#endif
+}
+
+static inline sumo sumo_new_prealloc(bl_size cap) {
+  bl_size real_cap = cap + sizeof(sumo_header);  // make space for header
+  sumo s = halloc(real_cap);
   if (!s) return NULL;  // unable to allocate memory
   sumo_header* h = (void*)s;
   h->len = 0;
@@ -40,8 +55,7 @@ static size_t sumoavail(sumo s) { return sumocap(s) - sumolen(s); }
 static bl_size sumo_sizeof(sumo s) { return sumocap(s) + sizeof(sumo_header); }
 
 static sumo sumo_resize(sumo s, bl_size len) {
-  // FIXME: use rallocx to do aligned_realloc when jemalloc available
-  sumo s2 = realloc(s, len + sizeof(sumo_header));
+  sumo s2 = hrealloc(s, len + sizeof(sumo_header));
   if (s2) {
     ((sumo_header*)s2)->cap = len;
     return s2;
