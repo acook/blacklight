@@ -150,13 +150,24 @@ static char* sumo_as_cstr(sumo s) {
   return c;
 }
 
-// return a new datum located inside an existing sumo
-static datum sumo_alloc(sumo s, bl_size start, bl_size len) {
+// return a new reference datum located inside an existing sumo
+static datum sumo_alloc_rdatum(sumo s, bl_size start, bl_size len) {
   cursor c = sumo_cursor_new(s);
   c = sumo_cursor_mv(s, c, start);
-  if (sumo_cursor_len(s,c) < len) return NULL; // unable to allocate due to insufficient available size
+  if (sumo_cursor_len(s,c) < (sizeof(datum) + len)) return NULL; // unable to allocate due to insufficient available size
   datum* d = (void*)c;
   d->ptr = c + sizeof(datum);
   d->len = len;
+  return *d;
+}
+
+// return a new scalar datum located inside an existing sumo
+static datum sumo_alloc_sdatum(sumo s, bl_size start) {
+  cursor c = sumo_cursor_new(s);
+  c = sumo_cursor_mv(s, c, start);
+  if (sumo_cursor_len(s,c) < sizeof(datum)) return NULL; // unable to allocate due to insufficient available size
+  datum* d = (void*)c;
+  d->data = 0x00;
+  d->len = 0x00;
   return *d;
 }
