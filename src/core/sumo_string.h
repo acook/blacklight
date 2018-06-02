@@ -16,11 +16,11 @@ typedef struct {
 // allocate memory aligned to the same size as the sumo_header
 static inline void* halloc(bl_size cap) {
 #ifdef JEMALLOC_C_
-  return aligned_alloc(real_cap, sizeof(sumo_header));
+  return aligned_alloc(cap, sizeof(sumo_header));
 #else
   // The version of Musl that comes with the old Windows build of ELLCC
   // doesn't expose aligned_alloc or memalign so we fall back to malloc
-  return malloc(real_cap);
+  return malloc(cap);
 #endif
 }
 
