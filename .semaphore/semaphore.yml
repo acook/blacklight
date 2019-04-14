@@ -1,0 +1,18 @@
+version: v1.0
+name: blacklight
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: "Suite: Build & Test"
+    task:
+      jobs:
+      - name: Run CI Script
+        commands:
+          - checkout
+          - pwd
+          - ls -1
+          - source /opt/change-go-version.sh
+          - change-go-version 1.10
+          - scripts/ci.bash
