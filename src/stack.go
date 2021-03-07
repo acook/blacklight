@@ -38,6 +38,10 @@ func (s *Stack) Value() interface{} {
 func (s *Stack) Refl() string {
 	str := s.ReflHeader()
 
+	if s.Depth() > 0 {
+		str += " "
+	}
+
 	for _, i := range s.Items {
 		switch i.(type) {
 		case *Meta:
@@ -55,11 +59,11 @@ func (s *Stack) Refl() string {
 		}
 	}
 
-	if str[len(str)-1] == " "[0] {
-		str = str[:len(str)-1]
+	if str[len(str)-1] != " "[0] && s.Depth() > 0 {
+		str += " "
 	}
 
-	return str + " >"
+	return str + ">"
 }
 
 func (s *Stack) ReflHeader() string {
@@ -74,7 +78,7 @@ func (s *Stack) ReflHeader() string {
 		str += s.Type
 	}
 
-	str += fmt.Sprint(s.ID) + "#" + strconv.Itoa(s.Depth()) + "< "
+	str += fmt.Sprint(s.ID) + "#" + strconv.Itoa(s.Depth()) + "<"
 
 	return str
 }
