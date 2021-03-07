@@ -12,6 +12,8 @@ go build -o "$blacklight" "$BLROOT/src/"*.go
 if [[ -x $blacklight ]]; then
   warn " -- binary built: $(basename $blacklight)"
   echo "$blacklight"
+  file "$blacklight"
+  ls -sh "$blacklight"
 else
   warn " -- something went wrong!"
   warn " -- binary not found at: \"$blacklight\""
