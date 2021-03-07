@@ -64,13 +64,13 @@ func (o *Object) DeleGet(meta *Meta, w W) bool {
 }
 
 func (o Object) Refl() string {
-	str := "OBJ< "
+	str := "O[ "
 
 	for k, v := range o.Slots {
 		str += k.Refl() + ":" + v.Refl() + " "
 	}
 
-	return str + ">"
+	return str + "]"
 }
 
 func (o Object) Value() interface{} {
