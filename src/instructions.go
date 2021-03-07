@@ -234,6 +234,11 @@ func wait(m *Meta) {
 	threads.Wait()
 }
 
+func done(m *Meta) {
+	// exit thread
+	NOPE("done")
+}
+
 // DEBUG
 
 func bl_say(m *Meta) {

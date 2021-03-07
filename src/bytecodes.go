@@ -73,6 +73,7 @@ func prepare_op_table() {
 		"co":   co,
 		"work": work,
 		"wait": wait,
+		"done": done,
 
 		// debug
 		"say":   bl_say,
