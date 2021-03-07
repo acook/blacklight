@@ -40,7 +40,7 @@ func (s Stack) Value() interface{} {
 }
 
 func (s Stack) Refl() string {
-	str := "<#" + s.Type + "#" + strconv.Itoa(s.ID) + "#" + strconv.Itoa(s.Depth()) + "# "
+	str := s.ReflHeader()
 
 	for _, i := range s.Items {
 		switch i.(type) {
@@ -50,7 +50,7 @@ func (s Stack) Refl() string {
 			str += "$*<...> "
 		case *Stack:
 			if i.(*Stack).ID == s.ID {
-				str += "<...> "
+				str += s.ReflHeader() + "...> "
 			} else {
 				str += i.Refl() + " "
 			}
@@ -67,7 +67,24 @@ func (s Stack) Refl() string {
 		str = str[:len(str)-1]
 	}
 
-	return str + ">"
+	return str + " >"
+}
+
+func (s *Stack) ReflHeader() string {
+	str := ""
+
+	switch s.Type {
+	case "user":
+		str += "S"
+	case "system":
+		str += "@"
+	default:
+		str += s.Type
+	}
+
+	str += strconv.Itoa(s.ID) + "#" + strconv.Itoa(s.Depth()) + "< "
+
+	return str
 }
 
 func (s *Stack) Kind() string {
