@@ -1,27 +1,23 @@
 package main
 
 import (
-	//"fmt"
+	"fmt"
 	"strconv"
 	"sync"
+	"sync/atomic"
 )
 
-var Stacks int
-var StacksSync sync.Mutex
+var stacks uint64
 
-func getStackID() int {
-	StacksSync.Lock()
-	defer StacksSync.Unlock()
-	id := Stacks
-	Stacks++
-	return id
+func getStackID() uint64 {
+	return atomic.AddUint64(&stacks, 1)
 }
 
 type Stack struct {
 	sync.Mutex
 	Items []datatypes
 	Type  string
-	ID    int
+	ID    uint64
 }
 
 func NewStack(t string) *Stack {
@@ -55,7 +51,7 @@ func (s Stack) Refl() string {
 				str += i.Refl() + " "
 			}
 		case Stack:
-			panic("direct Stack reference: " + strconv.Itoa(i.(Stack).ID))
+			panic("direct Stack reference: " + fmt.Sprint(i.(Stack).ID))
 		case nil:
 			str += "??? "
 		default:
@@ -82,7 +78,7 @@ func (s *Stack) ReflHeader() string {
 		str += s.Type
 	}
 
-	str += strconv.Itoa(s.ID) + "#" + strconv.Itoa(s.Depth()) + "< "
+	str += fmt.Sprint(s.ID) + "#" + strconv.Itoa(s.Depth()) + "< "
 
 	return str
 }
