@@ -96,6 +96,18 @@ func endvector(vm *VMstate) {
 // opword instructions
 // signature: (m *Meta) void
 
+// PROGRAM
+
+func bl_exit(m *Meta) {
+	code := m.Current().Peek()
+	switch code.(type) {
+	case N:
+		exit(int(code.Value().(int64)))
+	default:
+		exit(0)
+	}
+}
+
 // META OPS
 
 func push_current(m *Meta) {

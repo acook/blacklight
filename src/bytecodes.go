@@ -46,6 +46,9 @@ func prepare_op_table() {
 
 	var op_fn_map = map[string]func(*Meta){
 
+		// program
+		"exit": bl_exit,
+
 		// meta
 		"@":      push_current,
 		"^":      push_last,
