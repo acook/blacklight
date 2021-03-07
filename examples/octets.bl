@@ -13,11 +13,13 @@
 ;; to demonstrate this pattern, we'll create a Q with some Cs
 q-new 0xE4 enq 0xB8 enq 0x96 enq
 
+;; create an empty T to append to
 ''
 
 swap deq rot swap app
 swap deq rot swap app
 swap deq rot swap app
 
+;; take the first R from the T and match it against a known R literal
 0 ato \世 eq
 say
