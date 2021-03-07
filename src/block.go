@@ -82,7 +82,7 @@ func (b B) Disassemble() V {
 		vm.b = vm.bc[vm.o]
 
 		if vm.b == 0x00 { // bare null bytes are always an error
-			vm.m.Current().Push(NewNil("???"))
+			vm.m.Current().Push(NewNil("NULL: null byte in block disassembly"))
 		} else if vm.b < total_ops { // Opwords
 			vm.m.Current().Push(OP(vm.b))
 		} else if vm.b == 0xF1 { // Word
