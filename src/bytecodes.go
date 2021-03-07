@@ -155,14 +155,16 @@ func prepare_op_table() {
 		// blocks
 		"call":      block_call,
 		"decompile": block_decompile,
+		"compile":   block_compile,
 		"dis":       block_disassemble,
+		"asm":       block_assemble,
 
 		// text
 		"t-to-cv": t_to_cv,
-		"compile": t_to_b,
+		"t-to-b":  t_to_b,
 
-		// tags
-		"?-to-t": tag_to_t,
+		// labels (tags)
+		"l-to-t": tag_to_t,
 		"true":   bl_true,
 		"nil":    bl_nil,
 

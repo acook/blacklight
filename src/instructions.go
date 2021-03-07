@@ -637,7 +637,7 @@ func v_to_q(m *Meta) {
 	NOPE("v-to-q")
 }
 func v_to_b(m *Meta) {
-	m.Current().Push(NewBFromV(m.Current().Pop().(V)))
+	NOPE("v-to-b")
 }
 
 // BLOCK
@@ -652,10 +652,23 @@ func block_decompile(m *Meta) {
 	m.Current().Push(t)
 }
 
+func block_compile(m *Meta) { // expects a Text as input, outputs a Block
+	source := NewSource("<compile>")
+	source.code = []rune(string(m.Current().Pop().(T)))
+	source = parse(source)
+	ops, _ := compile(source)
+	b := B(ops)
+	m.Current().Push(b)
+}
+
 func block_disassemble(m *Meta) {
 	b := m.Current().Pop().(B)
 	v := b.Disassemble()
 	m.Current().Push(v)
+}
+
+func block_assemble(m *Meta) { // expects a Vector as input, outputs a Block
+	m.Current().Push(NewBFromV(m.Current().Pop().(V)))
 }
 
 // TEXT
@@ -670,17 +683,12 @@ func t_to_cv(m *Meta) {
 }
 
 func t_to_b(m *Meta) {
-	source := NewSource("<t-to-b>")
-	source.code = []rune(string(m.Current().Pop().(T)))
-	source = parse(source)
-	ops, _ := compile(source)
-	b := B(ops)
-	m.Current().Push(b)
+	NOPE("t-to-b")
 }
 
 // tags
 func tag_to_t(m *Meta) {
-	NOPE("?-to-t")
+	NOPE("l-to-t")
 }
 
 func bl_true(m *Meta) {
