@@ -1,13 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 	"sync"
 )
 
 type Meta struct {
 	sync.Mutex
-	ID          int
+	ID          uint64
 	Items       []*Stack
 	ObjectStack *ObjectStack
 	SelfFlag    bool
@@ -25,7 +26,7 @@ func (m Meta) Value() interface{} {
 }
 
 func (m Meta) Refl() string {
-	str := "$" + strconv.Itoa(m.ID) + "#" + strconv.Itoa(m.Depth()) + "< "
+	str := "$" + fmt.Sprint(m.ID) + "#" + strconv.Itoa(m.Depth()) + "< "
 
 	for _, i := range m.Items {
 		str += i.Refl() + " "
