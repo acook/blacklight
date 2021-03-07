@@ -13,7 +13,7 @@ func (t T) Print() string {
 }
 
 func (t T) Refl() string {
-	return "\"" + string(t) + "\""
+	return "'" + string(t) + "'"
 }
 
 func (t T) Value() interface{} {
