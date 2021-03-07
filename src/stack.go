@@ -31,17 +31,15 @@ func NewSystemStack() *Stack {
 	return NewStack("system")
 }
 
-func (s Stack) Value() interface{} {
+func (s *Stack) Value() interface{} {
 	return s
 }
 
-func (s Stack) Refl() string {
+func (s *Stack) Refl() string {
 	str := s.ReflHeader()
 
 	for _, i := range s.Items {
 		switch i.(type) {
-		case Meta:
-			str += "$<...> "
 		case *Meta:
 			str += "$*<...> "
 		case *Stack:
@@ -50,8 +48,6 @@ func (s Stack) Refl() string {
 			} else {
 				str += i.Refl() + " "
 			}
-		case Stack:
-			panic("direct Stack reference: " + fmt.Sprint(i.(Stack).ID))
 		case nil:
 			str += "??? "
 		default:
