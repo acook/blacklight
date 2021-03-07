@@ -46,7 +46,7 @@ func (q Queue) Value() interface{} {
 
 func (q Queue) Refl() string {
 	var s Stack
-	str := "{#" + fmt.Sprint(q.ID) + "# "
+	str := "Q" + fmt.Sprint(q.ID) + "| "
 
 PrintLoop:
 	for {
@@ -68,5 +68,5 @@ PrintLoop:
 		str = str[:len(str)-1]
 	}
 
-	return str + "}"
+	return str + " |"
 }
