@@ -1,0 +1,69 @@
+'  -- loading file "' print
+'examples/basic_math.bl'
+dup print '"' say
+'  -- displaying contents:' \\n app say
+
+;; set up to load from the file
+dup q-new swap read
+;; check if we were able to read from file
+[ 'file borked' say 1 exit ] [ not ] if
+
+;; display contents of file for posterity
+;; the contents of the file aren't used here
+q-to-t say
+
+;; this actually loads the file as a block
+bload
+
+'  -- file loaded!' say
+
+'  -- file as bytecode:' \\n app say
+
+;; FIXME: display the bytecodes as a CV
+;; this will work as-is until B.Refl is changed to show the disassembly
+;; a b-to-cv op would be nice here
+;; `dup b-to-cv say`
+dup refl say
+
+'' \\n app '  -- file disassembled from bytecode:' app \\n app say
+
+;; disassemble the bytecode block and display it
+dis dup refl say
+
+'' \\n app '  -- pulling out words to construct a new V' app say
+
+$new pop
+      ;; on @ - the original files worth of operations
+v-new ;; where our selected operations will end up
+0     ;; current operation
+[
+  rot  ;; bring the original V to top
+  swap ;; bring the index to top
+  dup ^ swap push drop ;; stash the index for later
+  ato  ;; get the element at index (dropping this copy of the index)
+  rot  ;; bring new V to top
+  swap ;; bring element to top
+  app  ;; put element into new V
+  ^ pop swap drop  ;; retrieve the index
+  1 add ;; increment index
+] [ dup 7 eq ] until
+
+drop ^ swap push $drop
+
+'  -- displaying new vector:' \\n app say
+
+dup say
+
+'' \\n app '  -- assembling new vector into a block:' app say
+
+asm
+dup say
+
+'' say
+dup dis say
+
+'' \\n app '  -- executing new block:' app say
+
+call
+
+
