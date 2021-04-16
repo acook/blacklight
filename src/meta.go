@@ -89,6 +89,9 @@ func (m *Meta) Drop() {
 	if m.Depth() > 0 {
 		m.Items = m.Items[:m.Depth()-1]
 	}
+	if m.Depth() < 1 {
+		m.Put(NewSystemStack())
+	}
 }
 
 func (m *Meta) Decap() {

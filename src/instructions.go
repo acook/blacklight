@@ -130,9 +130,6 @@ func meta_decap(m *Meta) {
 
 func meta_drop(m *Meta) {
 	m.Drop()
-	if m.Depth() < 1 {
-		m.Put(NewSystemStack())
-	}
 }
 
 func meta_new_system_stack(m *Meta) {
