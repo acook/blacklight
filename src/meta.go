@@ -67,10 +67,21 @@ func (m *Meta) Put(s *Stack) { // equivilent to push but typed
 func (m *Meta) Eject() *Stack { // equivilent to pop but typed, used internally
 	m.Lock()
 	defer m.Unlock()
+	var s1 *Stack
 
-	s := m.Items[m.Depth()-1]
-	m.Items = m.Items[:m.Depth()-1]
-	return s
+	if m.Depth() > 0 {
+		s1 = m.Items[m.Depth()-1]
+		m.Items = m.Items[:m.Depth()-1]
+	} else {
+		s1 = NewSystemStack()
+	}
+
+	if m.Depth() < 1 {
+		s2 := NewSystemStack()
+		m.Items = append(m.Items, s2)
+	}
+
+	return s1
 }
 
 func (m *Meta) Peek() *Stack {
@@ -85,16 +96,7 @@ func (m *Meta) Depth() int {
 }
 
 func (m *Meta) Drop() {
-	m.Lock()
-	defer m.Unlock()
-
-	if m.Depth() > 0 {
-		m.Items = m.Items[:m.Depth()-1]
-	}
-	if m.Depth() < 1 {
-		s := NewSystemStack()
-		m.Items = append(m.Items, s)
-	}
+	m.Eject()
 }
 
 func (m *Meta) Decap() {
