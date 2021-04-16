@@ -92,7 +92,8 @@ func (m *Meta) Drop() {
 		m.Items = m.Items[:m.Depth()-1]
 	}
 	if m.Depth() < 1 {
-		m.Put(NewSystemStack())
+		s := NewSystemStack()
+		m.Items = append(m.Items, s)
 	}
 }
 

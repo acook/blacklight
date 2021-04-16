@@ -44,7 +44,7 @@ func coBC(label string, stack *Stack, bc []byte) {
 	}(label, bc, stack)
 }
 
-func run_vm(vm *VMstate) {
+func run_vm(vm *VMstate) (result bool, err error) {
 	for {
 		vm.b = vm.bc[vm.o]
 
@@ -74,12 +74,12 @@ func run_vm(vm *VMstate) {
 			print(" -- vm: UNKNOWN at offset #" + o + ": ")
 			b := fmt.Sprintf("0%X ", vm.b)
 			print(b, "\n")
-			panic("vm: unrecognized bytecode at offset # " + o + ": " + b)
+			return false, NewErr("vm: unrecognized bytecode at offset # " + o + ": " + b)
 		}
 
 		vm.o++
 		if vm.o >= vm.l {
-			return
+			return true, nil
 		}
 	}
 }
