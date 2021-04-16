@@ -52,7 +52,11 @@ func main() {
 		exitWithError(3, err)
 	}
 
-	doVM(ops)
+	_, err = doVM(ops)
+
+	if err != nil {
+		exitWithError(4, err)
+	}
 }
 
 func loadFile(filename string) []rune {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func doVM(bc []byte) {
+func doVM(bc []byte) (*VMstate, error) {
 	vm := new(VMstate)
 
 	vm.label = "main"
@@ -13,7 +13,7 @@ func doVM(bc []byte) {
 	vm.m = NewMeta()
 	vm.m.Put(NewSystemStack())
 
-	run_vm(vm)
+	return vm, run_vm(vm)
 }
 
 func doBC(meta *Meta, bc []byte) {
@@ -44,7 +44,7 @@ func coBC(label string, stack *Stack, bc []byte) {
 	}(label, bc, stack)
 }
 
-func run_vm(vm *VMstate) (result bool, err error) {
+func run_vm(vm *VMstate) (err error) {
 	for {
 		vm.b = vm.bc[vm.o]
 
@@ -74,12 +74,13 @@ func run_vm(vm *VMstate) (result bool, err error) {
 			print(" -- vm: UNKNOWN at offset #" + o + ": ")
 			b := fmt.Sprintf("0%X ", vm.b)
 			print(b, "\n")
-			return false, NewErr("vm: unrecognized bytecode at offset # " + o + ": " + b)
+			err = NewErr("vm: unrecognized bytecode at offset # "+o+": "+b, T(b))
+			return
 		}
 
 		vm.o++
 		if vm.o >= vm.l {
-			return true, nil
+			return
 		}
 	}
 }
