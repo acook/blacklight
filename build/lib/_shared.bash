@@ -41,7 +41,7 @@ array_contains () {
 # usage: displayname <path>
 # takes a path and generates "last_folder/filename" string
 displayname() {
-  basename -z "$(dirname "$(readlink -m "$1")")"
+  basename -z "$(dirname "$(readlink -m "$1")")" | tr -d '\0'
   echo -ne "/"
   basename "$1"
 }
