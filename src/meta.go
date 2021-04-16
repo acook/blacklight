@@ -36,7 +36,7 @@ func (m *Meta) Refl() string {
 }
 
 // for stack interface compatibility
-
+// will panic if you try to push anything other than a stack
 func (m *Meta) Push(i datatypes) {
 	m.Lock()
 	defer m.Unlock()
@@ -44,7 +44,9 @@ func (m *Meta) Push(i datatypes) {
 	m.Items = append(m.Items, i.(*Stack))
 }
 
-func (m *Meta) Pop() datatypes { // quite dangerous
+// for stack interface compatibility
+// quite dangerous because the stack could be in use
+func (m *Meta) Pop() datatypes {
 	m.Lock()
 	defer m.Unlock()
 
