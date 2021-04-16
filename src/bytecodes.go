@@ -156,6 +156,7 @@ func prepare_op_table() {
 		// blocks
 		"call":      block_call,
 		"decompile": block_decompile,
+		"analyze":   block_analyze,
 		"compile":   block_compile,
 		"dis":       block_disassemble,
 		"asm":       block_assemble,

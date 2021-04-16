@@ -653,6 +653,31 @@ func block_call(m *Meta) {
 
 func block_decompile(m *Meta) {
 	b := m.Current().Pop().(B)
+	v := b.Disassemble()
+
+	//t := v.AsLiteral() // this function would convert a best approximation of how that data structure would look as source
+	// FIXME: fake the above for now, will choke on any nested container types
+	str := ""
+	for _, i := range v {
+		switch i.(type) {
+		case OP:
+			str += i.(OP).Print() + " "
+		case W:
+			str += i.(W).Print() + " "
+		default:
+			str += i.Refl() + " "
+		}
+	}
+	if len(str) > 1 {
+		str = str[:len(str)-1]
+	}
+
+	t := T(str)
+	m.Current().Push(t)
+}
+
+func block_analyze(m *Meta) {
+	b := m.Current().Pop().(B)
 	t := analyze(b)
 	m.Current().Push(t)
 }
