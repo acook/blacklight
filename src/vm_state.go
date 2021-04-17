@@ -35,7 +35,7 @@ func (vm *VMstate) debug() {
 	print("\n")
 
 	print("    all bytes: [")
-	fmt.Printf("0x%0.2X", vm.b)
+	fmt.Printf("0x%0.2X", vm.bc)
 	print("]\n")
 
 	print("    meta stack: ")

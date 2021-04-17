@@ -45,6 +45,8 @@ func coBC(label string, stack *Stack, bc []byte) {
 }
 
 func run_vm(vm *VMstate) (err error) {
+	defer handle(vm)
+
 	for {
 		vm.b = vm.bc[vm.o]
 
@@ -82,5 +84,15 @@ func run_vm(vm *VMstate) (err error) {
 		if vm.o >= vm.l {
 			return
 		}
+	}
+}
+
+func handle(vm *VMstate) {
+	if err := recover(); err != nil {
+		warn("(run_vm) something went terribly wrong: ")
+		print("\n")
+		vm.debug()
+		print("\n")
+		panic(err)
 	}
 }
