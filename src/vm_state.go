@@ -38,8 +38,8 @@ func (vm *VMstate) debug() {
 	print(vm.m.Refl())
 	print("\n")
 
-	print("    disassembly:")
-	print(B(vm.bc).Disassemble().Refl())
+	print("    disassembly: \n")
+	print(B(vm.bc).PP())
 	print("\n")
 }
 

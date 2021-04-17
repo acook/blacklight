@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/binary"
 	"fmt"
+	"strings"
 )
 
 type B []byte
@@ -12,15 +13,42 @@ func (b B) Print() string {
 }
 
 func (b B) Refl() string {
-	str := "[ "
-	for _, x := range b {
-		str += fmt.Sprintf("0x%0.2X", x)
-		str += " "
+	str := b.Disassemble().Refl()
+	str = str[1:(len(str) - 1)]
+	str = strings.ReplaceAll(str, "`", "")
+	return "[ " + str + " ]"
+}
+
+func (b B) PP() string {
+	tab := "  "
+	lb := '['
+	rb := ']'
+	indent := 0
+	skip := false
+	pp := ""
+	for _, r := range b.Refl() {
+		if r == lb {
+			pp += "\n"
+			pp += strings.Repeat(tab, indent)
+			pp += "[\n"
+			indent += 1
+			pp += strings.Repeat(tab, indent)
+			skip = true
+		} else if r == rb {
+			indent -= 1
+			pp += "\n"
+			pp += strings.Repeat(tab, indent)
+			pp += "]\n"
+			pp += strings.Repeat(tab, indent)
+			skip = true
+		} else if skip && r == ' ' {
+			skip = false
+		} else {
+			pp += string(r)
+		}
 	}
-	if str[len(str)-1] == " "[0] {
-		str = str[:len(str)-1]
-	}
-	return str + " ]"
+
+	return pp
 }
 
 func (b B) Value() interface{} {
