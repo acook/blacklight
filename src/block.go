@@ -15,7 +15,7 @@ func (b B) Print() string {
 func (b B) Refl() string {
 	str := b.Disassemble().Refl()
 	str = str[1:(len(str) - 1)]
-	str = strings.ReplaceAll(str, "`", "")
+	str = strings.Replace(str, "`", "", -1)
 	return "[ " + str + " ]"
 }
 
