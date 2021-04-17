@@ -69,13 +69,13 @@ func loadFile(filename string) []rune {
 }
 
 func warn(text ...string) {
-	fmt.Fprint(os.Stderr, "blacklight: ")
+	fmt.Fprint(os.Stderr, "\033[31mblacklight: ")
 
 	for _, line := range text {
 		fmt.Fprint(os.Stderr, line)
 	}
 
-	fmt.Fprintln(os.Stderr, "")
+	fmt.Fprintln(os.Stderr, "\033[0m")
 }
 
 func cleanup() {
