@@ -34,12 +34,12 @@ func (vm *VMstate) debug() {
 	print(vm.infer())
 	print("\n")
 
-	print("    all bytes: [")
-	fmt.Printf("0x%0.2X", vm.bc)
-	print("]\n")
-
 	print("    meta stack: ")
 	print(vm.m.Refl())
+	print("\n")
+
+	print("    disassembly:")
+	print(B(vm.bc).Disassemble().Refl())
 	print("\n")
 }
 
