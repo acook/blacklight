@@ -61,10 +61,15 @@ func (vm *VMstate) debug() {
 			print(lines[len(lines)-1], " ")
 			print("\033[0m")
 
-			str = B(vm.bc[vm.o : len(vm.bc)-1]).PP()
-			word := strings.Split(str, " ")[0]
-			print("\033[1;31m")
-			print(word)
+			leftovers := vm.bc[vm.o : len(vm.bc)-1]
+			if len(leftovers) > 0 {
+				str = B(leftovers).PP()
+				word := strings.Split(str, " ")[0]
+				print("\033[1;31m")
+				print(word)
+			} else {
+				print(" ??? ")
+			}
 
 			print("\033[0m")
 			print("\n")
