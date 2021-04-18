@@ -102,6 +102,10 @@ func (b B) Bytecode() []byte {
 }
 
 func (b B) Disassemble() V {
+	if len(b) == 0 {
+		return V{}
+	}
+
 	vm := new(VMstate)
 
 	vm.label = "disassemble"
