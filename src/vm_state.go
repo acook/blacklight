@@ -31,22 +31,38 @@ func (vm *VMstate) debug() {
 	print("\n")
 
 	print("    current inferred: ")
-	print(vm.infer())
+	print(vm.infer_current())
 	print("\n")
 
-	print("    meta stack: ")
-	print(vm.m.Refl())
+	if vm.o > 0 {
+		print("    previous inferred: ")
+		print(vm.infer(vm.bc[vm.o-1]))
+		print("\n")
+	}
+
+	print("    @ stack: ")
+	print(vm.m.Current().Refl())
 	print("\n")
 
-	print("    disassembly: \n")
-	print(B(vm.bc).PP())
-	print("\n")
+	if vm.m.Depth() > 1 {
+		print("    $ stack: ")
+		print(vm.m.Refl())
+		print("\n")
+	}
+
+	//print("    disassembly: \n")
+	//print(B(vm.bc).PP())
+	//print("\n")
 }
 
-func (vm *VMstate) infer() string {
+func (vm *VMstate) infer_current() string {
+	return vm.infer(vm.b)
+}
+
+func (vm *VMstate) infer(b byte) string {
 	vm.prepare_lookup()
 
-	v, ok := vm.all_map[vm.b]
+	v, ok := vm.all_map[b]
 	if !ok {
 		return "unknown"
 	}

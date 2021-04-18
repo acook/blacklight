@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"runtime"
 )
 
 func doVM(bc []byte) (*VMstate, error) {
@@ -90,6 +91,11 @@ func run_vm(vm *VMstate) (err error) {
 func handle(vm *VMstate) {
 	if err := recover(); err != nil {
 		warn("(run_vm) something went terribly wrong: ")
+		switch err.(type) {
+		case *runtime.TypeAssertionError:
+			warn(err.(*runtime.TypeAssertionError).Error())
+		}
+
 		print("\n")
 		vm.debug()
 		print("\n")
