@@ -52,7 +52,7 @@ func (vm *VMstate) debug() {
 	}
 
 	if vm.label == "main" {
-		if vm.o < vm.l {
+		if vm.o < (vm.l - 1) {
 			str := B(vm.bc[0:vm.o]).PP()
 			lines := strings.Split(str, "\n")
 
