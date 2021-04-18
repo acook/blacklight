@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 )
 
 type VMstate struct {
@@ -50,9 +51,40 @@ func (vm *VMstate) debug() {
 		print("\n")
 	}
 
-	//print("    disassembly: \n")
-	//print(B(vm.bc).PP())
-	//print("\n")
+	if vm.label == "main" {
+		if vm.o < vm.l {
+			str := B(vm.bc[0:vm.o]).PP()
+			lines := strings.Split(str, "\n")
+
+			print("    disassembly: \n")
+			print("\033[2m")
+			print(lines[len(lines)-1], " ")
+			print("\033[0m")
+
+			str = B(vm.bc[vm.o : len(vm.bc)-1]).PP()
+			word := strings.Split(str, " ")[0]
+			print("\033[1;31m")
+			print(word)
+
+			print("\033[0m")
+			print("\n")
+		}
+	} else {
+		str := B(vm.bc[0:vm.o]).PP()
+
+		print("    disassembly (block): \n")
+		print(str, " ")
+
+		str = B(vm.bc[vm.o : len(vm.bc)-1]).PP()
+		words := strings.Split(str, " ")
+		print("\033[1;31m")
+		print(words[0], " ")
+		print("\033[0;2m")
+		print(strings.Join(words[1:len(words)], " "))
+
+		print("\033[0m")
+		print("\n")
+	}
 }
 
 func (vm *VMstate) infer_current() string {
