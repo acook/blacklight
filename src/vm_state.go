@@ -16,7 +16,7 @@ type VMstate struct {
 }
 
 func (vm *VMstate) debug() {
-	print(" -- VM STATE\n")
+	print(" -- VM STATE '", vm.label, "' for $", vm.m.ID, "\n")
 
 	print("    length: ")
 	print(vm.l)
