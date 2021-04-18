@@ -20,13 +20,17 @@ func (b B) Refl() string {
 }
 
 func (b B) PP() string {
+	str := b.Disassemble().Refl()
+	str = str[1:(len(str) - 1)]
+	str = strings.Replace(str, "`", "", -1)
+
 	tab := "  "
 	lb := '['
 	rb := ']'
 	indent := 0
 	skip := false
 	pp := ""
-	for _, r := range b.Refl() {
+	for _, r := range str {
 		if r == lb {
 			pp += "\n"
 			pp += strings.Repeat(tab, indent)
