@@ -2,27 +2,6 @@
 
 set -o nounset
 
-if [[ -z ${_BASH_SHARED_LIB+unset} ]]; then
-  declare -a _BASH_SHARED_LIB
-  _BASH_SHARED_LIB=("$(readlink -e "$BASH_SOURCE")")
-else
-  return 0
-fi
-
-echo " -- ($(basename "$(dirname "$(readlink -m "${BASH_SOURCE[-1]}")")")/$(basename "${BASH_SOURCE[-1]}") @ $(date "+%Y-%m-%d %T")) : setting up..." >&2
-
-export SCRIPT_SHARED_PATH="$(readlink -e "$BASH_SOURCE")"
-export SCRIPT_SHARED_NAME="$(basename "$SCRIPT_SHARED_PATH")"
-export SCRIPT_SHARED_DIR="$(dirname "$SCRIPT_SHARED_PATH")"
-export SCRIPT_ORIG_PWD="$(pwd -P)"
-
-export SCRIPT_MAIN_PATH="$(readlink -e "$0")"
-export SCRIPT_MAIN_NAME="$(basename "$SCRIPT_MAIN_PATH")"
-export SCRIPT_MAIN_DIR="$(dirname "$SCRIPT_MAIN_PATH")"
-export SCRIPT_MAIN_EXE="$(basename "$SCRIPT_MAIN_DIR")/$SCRIPT_MAIN_NAME"
-
-export SCRIPT_CURRENT_PATH=$SCRIPT_SHARED_PATH
-
 # time-related functions
 ts()      { date "+%Y-%m-%d %T"; }              # local timestamp for output
 ts_file() { date --utc "+%Y-%m-%d-%H-%M-%S"; }  # timestamp for filenames, in UTC for consistency
@@ -256,5 +235,58 @@ elapsed() {
     warn "END: $ended_at"
   fi
 }
+
+# COMPATIBILITY FUNCTIONS
+
+# usage: gfix <command> <opts>
+# example: gfix readlink -m .
+# will try to prefix the command with a g
+# newer versions of macOS have broken the ability to reliably modify the path in subshells
+gfix() {
+  if command_exists g$1; then
+    g$1 "${@:2}"
+  else
+    "$1"
+  fi
+}
+
+readlink() {
+  gfix readlink "$@"
+}
+
+basename() {
+  gfix basename "$@"
+}
+
+date() {
+  gfix date "$@"
+}
+
+stat() {
+  gfix stat "$@"
+}
+
+# STARTUP
+
+if [[ -z ${_BASH_SHARED_LIB+unset} ]]; then
+  declare -a _BASH_SHARED_LIB
+  _BASH_SHARED_LIB=("$(readlink -e "$BASH_SOURCE")")
+else
+  return 0
+fi
+
+echo " -- ($(basename "$(dirname "$(readlink -m "${BASH_SOURCE[-1]}")")")/$(basename "${BASH_SOURCE[-1]}") @ $(date "+%Y-%m-%d %T")) : setting up..." >&2
+
+export SCRIPT_SHARED_PATH="$(readlink -e "$BASH_SOURCE")"
+export SCRIPT_SHARED_NAME="$(basename "$SCRIPT_SHARED_PATH")"
+export SCRIPT_SHARED_DIR="$(dirname "$SCRIPT_SHARED_PATH")"
+export SCRIPT_ORIG_PWD="$(pwd -P)"
+
+export SCRIPT_MAIN_PATH="$(readlink -e "$0")"
+export SCRIPT_MAIN_NAME="$(basename "$SCRIPT_MAIN_PATH")"
+export SCRIPT_MAIN_DIR="$(dirname "$SCRIPT_MAIN_PATH")"
+export SCRIPT_MAIN_EXE="$(basename "$SCRIPT_MAIN_DIR")/$SCRIPT_MAIN_NAME"
+
+export SCRIPT_CURRENT_PATH=$SCRIPT_SHARED_PATH
 
 _set_scriptcurrent
