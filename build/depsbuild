@@ -6,6 +6,7 @@ include "bl_env"
 say "obtaining system prerequisites..."
 run "apt install" sudo apt -y install git curl autoconf
 
+if [[ ecc = "$1" ]]; then
 say "obtaining ELLCC..."
 safe_cd "$BL_EXT_PATH"
 ELLCC_FILE=ellcc-x86_64-linux-2017-08-23.bz2
@@ -21,6 +22,7 @@ for elf in *; do
     run_or_die "patch \`$elf\`" patchelf --set-interpreter "$LIBC_SO" $elf
   fi
 done
+fi
 
 say "obtaining jemalloc..."
 safe_cd "$BL_EXT_PATH"

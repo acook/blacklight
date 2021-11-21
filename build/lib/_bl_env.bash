@@ -13,8 +13,19 @@ export BL_BIN_DIR="$(readlink -f "$SCRIPT_SHARED_DIR/../out")"
 export BL_BIN_PATH="$BL_BIN_DIR/$BL_BIN_NAME"
 export BL_TEST_DIR="$BL_ROOT_PATH/test"
 
-# set PATH
-export PATH="$BL_EXT_PATH/ellcc/bin:$BL_LOCAL_PATH/bin:/usr/bin:/usr/local/bin:/bin"
+# tooling
+if command_exists ecc; then
+  export BL_CC="ecc"
+  export BL_CCOPTS="-static $BL_ALLOC"
+  export PATH="$BL_EXT_PATH/ellcc/bin"
+else
+  export BL_CC="clang"
+  export BL_CCOPTS="$BL_ALLOC"
+  export PATH=""
+fi
+
+export PATH="$PATH:$BL_LOCAL_PATH/bin:/usr/bin:/usr/local/bin:/bin"
+export BL_STRIP="strip"
 
 # detect jemalloc and setup
 if command_exists jemalloc-config; then
@@ -23,11 +34,6 @@ else
   warn "(nonfatal error) jemalloc-config not found"
   export BL_ALLOC=""
 fi
-
-# tooling
-export BL_CC="ecc" # FIXME: allow other compilers
-export BL_CCOPTS="-static $BL_ALLOC"
-export BL_STRIP="strip"
 
 # vars used by other commands
 export CC="$BL_CC"
