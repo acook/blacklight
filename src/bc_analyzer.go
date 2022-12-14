@@ -35,7 +35,7 @@ AnalyzeLoop:
 				output += "OP "
 			}
 
-			output += vm.infer()
+			output += vm.infer_current()
 		} else if vm.b == 0xF1 { // Word
 			if d {
 				output += "WORD "

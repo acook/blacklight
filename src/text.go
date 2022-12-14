@@ -13,7 +13,7 @@ func (t T) Print() string {
 }
 
 func (t T) Refl() string {
-	return "\"" + string(t) + "\""
+	return "'" + string(t) + "'"
 }
 
 func (t T) Value() interface{} {
@@ -62,7 +62,7 @@ func (t T) Bytecode() []byte {
 	int_buf := make([]byte, 8)
 	binary.BigEndian.PutUint64(int_buf, uint64(l))
 
-	bc[0] = 0xF7
+	bc[0] = 0xF6
 
 	for o, ib := range int_buf {
 		bc[1+o] = ib

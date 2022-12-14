@@ -1,0 +1,6 @@
+'examples/basic_math.bl' bload
+'decompilation:' say
+decompile dup say
+'' say
+'recompilation and execution:' say
+compile call

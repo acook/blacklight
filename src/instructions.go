@@ -96,6 +96,18 @@ func endvector(vm *VMstate) {
 // opword instructions
 // signature: (m *Meta) void
 
+// PROGRAM
+
+func bl_exit(m *Meta) {
+	code := m.Current().Peek()
+	switch code.(type) {
+	case N:
+		exit(int(code.Value().(int64)))
+	default:
+		exit(0)
+	}
+}
+
 // META OPS
 
 func push_current(m *Meta) {
@@ -118,9 +130,6 @@ func meta_decap(m *Meta) {
 
 func meta_drop(m *Meta) {
 	m.Drop()
-	if m.Depth() < 1 {
-		m.Put(NewSystemStack())
-	}
 }
 
 func meta_new_system_stack(m *Meta) {
@@ -220,6 +229,11 @@ func work(m *Meta) {
 
 func wait(m *Meta) {
 	threads.Wait()
+}
+
+func done(m *Meta) {
+	// exit thread
+	NOPE("done")
 }
 
 // DEBUG
@@ -625,7 +639,7 @@ func v_to_q(m *Meta) {
 	NOPE("v-to-q")
 }
 func v_to_b(m *Meta) {
-	m.Current().Push(NewBFromV(m.Current().Pop().(V)))
+	NOPE("v-to-b")
 }
 
 // BLOCK
@@ -636,14 +650,52 @@ func block_call(m *Meta) {
 
 func block_decompile(m *Meta) {
 	b := m.Current().Pop().(B)
+	v := b.Disassemble()
+
+	//t := v.AsLiteral() // this function would convert a best approximation of how that data structure would look as source
+	// FIXME: fake the above for now, will choke on any nested container types
+	str := ""
+	for _, i := range v {
+		switch i.(type) {
+		case OP:
+			str += i.(OP).Print() + " "
+		case W:
+			str += i.(W).Print() + " "
+		default:
+			str += i.Refl() + " "
+		}
+	}
+	if len(str) > 1 {
+		str = str[:len(str)-1]
+	}
+
+	t := T(str)
+	m.Current().Push(t)
+}
+
+func block_analyze(m *Meta) {
+	b := m.Current().Pop().(B)
 	t := analyze(b)
 	m.Current().Push(t)
+}
+
+func block_compile(m *Meta) { // expects a Text as input, outputs a Block
+	source := NewSource("<compile>")
+	source.code = []rune(string(m.Current().Pop().(T)))
+	source = parse(source)
+	ops, _ := compile(source)
+	b := B(ops)
+	m.Current().Push(b)
 }
 
 func block_disassemble(m *Meta) {
 	b := m.Current().Pop().(B)
 	v := b.Disassemble()
 	m.Current().Push(v)
+}
+
+func block_assemble(m *Meta) { // expects a Vector as input, outputs a Block
+	m.Current().Push(NewBFromV(m.Current().Pop().(V)))
 }
 
 // TEXT
@@ -658,17 +710,12 @@ func t_to_cv(m *Meta) {
 }
 
 func t_to_b(m *Meta) {
-	source := NewSource("<t-to-b>")
-	source.code = []rune(string(m.Current().Pop().(T)))
-	source = parse(source)
-	ops, _ := compile(source)
-	b := B(ops)
-	m.Current().Push(b)
+	NOPE("t-to-b")
 }
 
 // tags
 func tag_to_t(m *Meta) {
-	NOPE("?-to-t")
+	NOPE("l-to-t")
 }
 
 func bl_true(m *Meta) {

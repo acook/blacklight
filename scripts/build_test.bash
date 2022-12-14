@@ -11,6 +11,11 @@ go build -o "$blacklight" "$BLROOT/src/"*.go
 
 if [[ -x $blacklight ]]; then
   warn " -- binary built: $(basename $blacklight)"
+  
+  file "$blacklight" >&2
+  ls -sh "$blacklight" >&2
+  
+  # this filename is captured by ci.bash
   echo "$blacklight"
 else
   warn " -- something went wrong!"

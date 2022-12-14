@@ -1,27 +1,23 @@
 package main
 
 import (
-	//"fmt"
+	"fmt"
 	"strconv"
 	"sync"
+	"sync/atomic"
 )
 
-var Stacks int
-var StacksSync sync.Mutex
+var stacks uint64
 
-func getStackID() int {
-	StacksSync.Lock()
-	defer StacksSync.Unlock()
-	id := Stacks
-	Stacks++
-	return id
+func getStackID() uint64 {
+	return atomic.AddUint64(&stacks, 1)
 }
 
 type Stack struct {
 	sync.Mutex
 	Items []datatypes
 	Type  string
-	ID    int
+	ID    uint64
 }
 
 func NewStack(t string) *Stack {
@@ -35,27 +31,27 @@ func NewSystemStack() *Stack {
 	return NewStack("system")
 }
 
-func (s Stack) Value() interface{} {
+func (s *Stack) Value() interface{} {
 	return s
 }
 
-func (s Stack) Refl() string {
-	str := "<#" + s.Type + "#" + strconv.Itoa(s.ID) + "#" + strconv.Itoa(s.Depth()) + "# "
+func (s *Stack) Refl() string {
+	str := s.ReflHeader()
+
+	if s.Depth() > 0 {
+		str += " "
+	}
 
 	for _, i := range s.Items {
 		switch i.(type) {
-		case Meta:
-			str += "$<...> "
 		case *Meta:
 			str += "$*<...> "
 		case *Stack:
 			if i.(*Stack).ID == s.ID {
-				str += "<...> "
+				str += s.ReflHeader() + "...> "
 			} else {
 				str += i.Refl() + " "
 			}
-		case Stack:
-			panic("direct Stack reference: " + strconv.Itoa(i.(Stack).ID))
 		case nil:
 			str += "??? "
 		default:
@@ -63,11 +59,28 @@ func (s Stack) Refl() string {
 		}
 	}
 
-	if str[len(str)-1] == " "[0] {
-		str = str[:len(str)-1]
+	if str[len(str)-1] != " "[0] && s.Depth() > 0 {
+		str += " "
 	}
 
 	return str + ">"
+}
+
+func (s *Stack) ReflHeader() string {
+	str := ""
+
+	switch s.Type {
+	case "user":
+		str += "S"
+	case "system":
+		str += "@"
+	default:
+		str += s.Type
+	}
+
+	str += fmt.Sprint(s.ID) + "#" + strconv.Itoa(s.Depth()) + "<"
+
+	return str
 }
 
 func (s *Stack) Kind() string {

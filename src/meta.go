@@ -1,13 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 	"sync"
 )
 
 type Meta struct {
 	sync.Mutex
-	ID          int
+	ID          uint64
 	Items       []*Stack
 	ObjectStack *ObjectStack
 	SelfFlag    bool
@@ -20,12 +21,12 @@ func NewMeta() *Meta {
 	return m
 }
 
-func (m Meta) Value() interface{} {
+func (m *Meta) Value() interface{} {
 	return m
 }
 
-func (m Meta) Refl() string {
-	str := "$" + strconv.Itoa(m.ID) + "#" + strconv.Itoa(m.Depth()) + "< "
+func (m *Meta) Refl() string {
+	str := "$" + fmt.Sprint(m.ID) + "#" + strconv.Itoa(m.Depth()) + "< "
 
 	for _, i := range m.Items {
 		str += i.Refl() + " "
@@ -35,7 +36,7 @@ func (m Meta) Refl() string {
 }
 
 // for stack interface compatibility
-
+// will panic if you try to push anything other than a stack
 func (m *Meta) Push(i datatypes) {
 	m.Lock()
 	defer m.Unlock()
@@ -43,7 +44,9 @@ func (m *Meta) Push(i datatypes) {
 	m.Items = append(m.Items, i.(*Stack))
 }
 
-func (m *Meta) Pop() datatypes { // quite dangerous
+// for stack interface compatibility
+// quite dangerous because the stack could be in use
+func (m *Meta) Pop() datatypes {
 	m.Lock()
 	defer m.Unlock()
 
@@ -64,10 +67,21 @@ func (m *Meta) Put(s *Stack) { // equivilent to push but typed
 func (m *Meta) Eject() *Stack { // equivilent to pop but typed, used internally
 	m.Lock()
 	defer m.Unlock()
+	var s1 *Stack
 
-	s := m.Items[m.Depth()-1]
-	m.Items = m.Items[:m.Depth()-1]
-	return s
+	if m.Depth() > 0 {
+		s1 = m.Items[m.Depth()-1]
+		m.Items = m.Items[:m.Depth()-1]
+	} else {
+		s1 = NewSystemStack()
+	}
+
+	if m.Depth() < 1 {
+		s2 := NewSystemStack()
+		m.Items = append(m.Items, s2)
+	}
+
+	return s1
 }
 
 func (m *Meta) Peek() *Stack {
@@ -82,12 +96,7 @@ func (m *Meta) Depth() int {
 }
 
 func (m *Meta) Drop() {
-	m.Lock()
-	defer m.Unlock()
-
-	if m.Depth() > 0 {
-		m.Items = m.Items[:m.Depth()-1]
-	}
+	m.Eject()
 }
 
 func (m *Meta) Decap() {

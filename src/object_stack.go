@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 	"sync"
 )
@@ -8,7 +9,7 @@ import (
 type ObjectStack struct {
 	sync.Mutex
 	Items []*Object
-	ID    int
+	ID    uint64
 }
 
 func NewObjectStack() *ObjectStack {
@@ -22,7 +23,7 @@ func (s *ObjectStack) Value() interface{} {
 }
 
 func (s *ObjectStack) Refl() string {
-	str := "O" + strconv.Itoa(s.ID) + "#" + strconv.Itoa(s.Depth()) + "< "
+	str := "O" + fmt.Sprint(s.ID) + "#" + strconv.Itoa(s.Depth()) + "< "
 
 	for _, i := range s.Items {
 		str += i.Refl() + " "

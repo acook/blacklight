@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/binary"
 	"fmt"
+	"strings"
 )
 
 type B []byte
@@ -12,15 +13,46 @@ func (b B) Print() string {
 }
 
 func (b B) Refl() string {
-	str := "[ "
-	for _, x := range b {
-		str += fmt.Sprintf("0x%0.2X", x)
-		str += " "
+	str := b.Disassemble().Refl()
+	str = str[1:(len(str) - 1)]
+	str = strings.Replace(str, "`", "", -1)
+	return "[ " + str + " ]"
+}
+
+func (b B) PP() string {
+	str := b.Disassemble().Refl()
+	str = str[1:(len(str) - 1)]
+	str = strings.Replace(str, "`", "", -1)
+
+	tab := "  "
+	lb := '['
+	rb := ']'
+	indent := 0
+	skip := false
+	pp := ""
+	for _, r := range str {
+		if r == lb {
+			pp += "\n"
+			pp += strings.Repeat(tab, indent)
+			pp += "[\n"
+			indent += 1
+			pp += strings.Repeat(tab, indent)
+			skip = true
+		} else if r == rb {
+			indent -= 1
+			pp += "\n"
+			pp += strings.Repeat(tab, indent)
+			pp += "]\n"
+			pp += strings.Repeat(tab, indent)
+			skip = true
+		} else if skip && r == ' ' {
+			skip = false
+		} else {
+			pp += string(r)
+		}
 	}
-	if str[len(str)-1] == " "[0] {
-		str = str[:len(str)-1]
-	}
-	return str + " ]"
+
+	return pp
 }
 
 func (b B) Value() interface{} {
@@ -70,6 +102,10 @@ func (b B) Bytecode() []byte {
 }
 
 func (b B) Disassemble() V {
+	if len(b) == 0 {
+		return V{}
+	}
+
 	vm := new(VMstate)
 
 	vm.label = "disassemble"
@@ -82,7 +118,7 @@ func (b B) Disassemble() V {
 		vm.b = vm.bc[vm.o]
 
 		if vm.b == 0x00 { // bare null bytes are always an error
-			vm.m.Current().Push(NewNil("???"))
+			vm.m.Current().Push(NewNil("NULL: null byte in block disassembly"))
 		} else if vm.b < total_ops { // Opwords
 			vm.m.Current().Push(OP(vm.b))
 		} else if vm.b == 0xF1 { // Word

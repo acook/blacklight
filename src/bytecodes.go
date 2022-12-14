@@ -46,6 +46,9 @@ func prepare_op_table() {
 
 	var op_fn_map = map[string]func(*Meta){
 
+		// program
+		"exit": bl_exit,
+
 		// meta
 		"@":      push_current,
 		"^":      push_last,
@@ -70,6 +73,7 @@ func prepare_op_table() {
 		"co":   co,
 		"work": work,
 		"wait": wait,
+		"done": done,
 
 		// debug
 		"say":   bl_say,
@@ -152,14 +156,17 @@ func prepare_op_table() {
 		// blocks
 		"call":      block_call,
 		"decompile": block_decompile,
+		"analyze":   block_analyze,
+		"compile":   block_compile,
 		"dis":       block_disassemble,
+		"asm":       block_assemble,
 
 		// text
 		"t-to-cv": t_to_cv,
-		"compile": t_to_b,
+		"t-to-b":  t_to_b,
 
-		// tags
-		"?-to-t": tag_to_t,
+		// labels (tags)
+		"l-to-t": tag_to_t,
 		"true":   bl_true,
 		"nil":    bl_nil,
 
