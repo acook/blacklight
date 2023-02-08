@@ -205,7 +205,7 @@ run_or_die() {
 # usage: realpath <path>
 # attempts to resolve all symlinks until the origin path is discovered
 # circular symlinks will keep it looping forever
-realpath() {
+resolvepath() {
   p="$1"
   # loop until the file is no longer a symlink (or doesn't exist)
   while [[ -h $p ]]; do
