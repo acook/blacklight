@@ -1,8 +1,10 @@
+#include <stdio.h>
 #include "../src/core/stack.h"
 #include "../src/core/text.h"
 #include "../src/core/debug.h"
+#include "../ext/local/include/criterion/criterion.h"
 
-int main(void) {
+Test(stack, all) {
   puts(" - init");
   // initialize
   stack s = stack_new();
@@ -75,7 +77,9 @@ int main(void) {
   datum_reflect(d3);
   free(u);
 
+  cr_assert(utf8cmp(text_from_datum(d3), "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx") == 0);
+
   utf8 u2 = {'w', 'h', 'a', 't'};
 
-  return 0;
+  //return 0;
 }

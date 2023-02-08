@@ -34,8 +34,8 @@ else
 fi
 
 for testfile in $pattern; do
-  name="$(basename $testfile)"
-  exec="$tmp/$(basename -s "_test.c" $testfile).exe"
+  name="$(basename "$testfile")"
+  exec="$tmp/$(basename -s "_test.c" "$testfile").exe"
 
   say "compiling and running $name..."
 
@@ -44,10 +44,10 @@ for testfile in $pattern; do
   colorreset ; colorbg black ; colorfg orangered ; ansieol
 
   if [[ $single == true ]]; then
-    run "compile $name" $BL_CC $testfile $BL_CCOPTS $ccwarn -o $exec >> $log 2>&1
+    run "compile $name" $BL_CC $testfile $BL_CCOPTS -L "$BL_LOCAL_PATH/lib" -L "$BL_LOCAL_PATH/lib64" -lcriterion $ccwarn -o $exec >> $log 2>&1
     EXITSTATUS=$?
   else
-    run "compile $name" $BL_CC $testfile $BL_CCOPTS $ccwarn -o $exec >> $log
+    run "compile $name" $BL_CC $testfile $BL_CCOPTS -L "$BL_LOCAL_PATH/lib" -L "$BL_LOCAL_PATH/lib64" -lcriterion $ccwarn -o $exec >> $log
     EXITSTATUS=$?
   fi
 
@@ -57,8 +57,14 @@ for testfile in $pattern; do
     echo -n "running $name..." ; ansieol ; echo
     colorreset ; colorbg black ; colorfg orangered ; ansieol
 
-    run "$name" $exec >> $log
-    EXITSTATUS=$?
+
+    {
+      colorbg yellow ; colorfg black
+      echo -n "running $name..." ; colorreset
+      echo ; colorbg black ; colorfg white
+      run "$name" "$exec"
+      EXITSTATUS=$?
+    } >> "$log"
   fi
 
   # when running a single test, output the contents of the log

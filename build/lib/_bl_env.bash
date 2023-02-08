@@ -2,42 +2,62 @@
 
 source "$(dirname "$BASH_SOURCE")/_shared.bash"
 
-export BL_ROOT_PATH="$(readlink -e "$SCRIPT_SHARED_DIR/../..")" || die "unable to set env var"
-export BL_EXT_PATH="$(readlink -e "$BL_ROOT_PATH/ext")" || die "unable to set env var"
-export BL_LOCAL_PATH="$BL_EXT_PATH/local"
+export BL_ROOT_PATH
+export BL_EXT_PATH
+export BL_LOCAL_PATH
 
-export BL_MAIN_PATH="$BL_ROOT_PATH/src/redlight.c"
-export BL_OUT_NAME="a.out"
-export BL_BIN_NAME="redlight"
-export BL_BIN_DIR="$(readlink -f "$SCRIPT_SHARED_DIR/../out")"
-export BL_BIN_PATH="$BL_BIN_DIR/$BL_BIN_NAME"
-export BL_TEST_DIR="$BL_ROOT_PATH/test"
+BL_ROOT_PATH="$(readlink -e "$SCRIPT_SHARED_DIR/../..")" || die "unable to set env var"
+BL_EXT_PATH="$(readlink -e "$BL_ROOT_PATH/ext")" || die "unable to set env var"
+BL_LOCAL_PATH="$BL_EXT_PATH/local"
+
+export BL_MAIN_PATH
+export BL_OUT_NAME
+export BL_BIN_NAME
+export BL_BIN_DIR
+export BL_BIN_PATH
+export BL_TEST_DIR
+
+BL_MAIN_PATH="$BL_ROOT_PATH/src/redlight.c"
+BL_OUT_NAME="a.out"
+BL_BIN_NAME="redlight"
+BL_BIN_DIR="$(readlink -f "$SCRIPT_SHARED_DIR/../out")"
+BL_BIN_PATH="$BL_BIN_DIR/$BL_BIN_NAME"
+BL_TEST_DIR="$BL_ROOT_PATH/test"
+
+PATH="$PATH:$BL_LOCAL_PATH/bin:/usr/bin:/usr/local/bin:/bin"
+PATH="$PATH:$HOME/bin:$HOME/xbin"
 
 # tooling
-if command_exists ecc; then
-  export BL_CC="ecc"
-  export BL_CCOPTS="-static $BL_ALLOC"
-  export PATH="$BL_EXT_PATH/ellcc/bin"
-else
-  export BL_CC="clang"
-  export BL_CCOPTS="$BL_ALLOC"
-  export PATH=""
-fi
 
-export PATH="$PATH:$BL_LOCAL_PATH/bin:/usr/bin:/usr/local/bin:/bin"
+export BL_ALLOC
+export BL_CC
+export BL_CCOPTS
+
+export BL_LINKER="ld.lld"
 export BL_STRIP="strip"
 
 # detect jemalloc and setup
 if command_exists jemalloc-config; then
-  export BL_ALLOC="-L $(jemalloc-config --libdir) -Wl,-rpath,$(jemalloc-config --libdir) -ljemalloc $(jemalloc-config --libs)"
+  BL_ALLOC="-L $(jemalloc-config --libdir) -Wl,-rpath,$(jemalloc-config --libdir) -ljemalloc $(jemalloc-config --libs)"
 else
   warn "(nonfatal error) jemalloc-config not found"
-  export BL_ALLOC=""
+  BL_ALLOC=" "
+fi
+BL_CCOPTS="-std=gnu17 $BL_ALLOC"
+
+if command_exists ecc; then
+  BL_CC="ecc"
+  BL_CCOPTS="-static $BL_CCOPTS"
+  PATH="$PATH:$BL_EXT_PATH/ellcc/bin"
+else
+  BL_CC="clang"
+  #PATH="$PATH"
 fi
 
 # vars used by other commands
 export CC="$BL_CC"
-export CLINKER="$BL_CC"
+export CLINKER="$BL_LINKER"
+export LD_LIBRARY_PATH="$BL_LOCAL_PATH/lib"
 
 # random functions
 bigsay() {

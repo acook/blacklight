@@ -4,9 +4,10 @@ source "$(dirname "$BASH_SOURCE")/lib/_shared.bash"
 include "bl_env"
 
 say "obtaining system prerequisites..."
-run "apt install" sudo apt -y install git curl autoconf
+#run "apt install" sudo apt -y install git curl autoconf
+run "instant install" inin in git curl autoconf
 
-if [[ ecc = "$1" ]]; then
+if [[ ecc = "${1-}" ]]; then
 say "obtaining ELLCC..."
 safe_cd "$BL_EXT_PATH"
 ELLCC_FILE=ellcc-x86_64-linux-2017-08-23.bz2

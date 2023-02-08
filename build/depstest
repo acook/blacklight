@@ -3,14 +3,44 @@
 source "$(dirname "$BASH_SOURCE")/lib/_shared.bash"
 include "bl_env"
 
-safe_cd "$BL_LOCAL_PATH"
-
 say "obtaining criterion test framework..."
-CRITERION_VER="v2.3.2"
-CRITERION_FILE="criterion-$CRITERION_VER-linux-x86_64.tar.bz2"
-run_or_die "download" curl -L -O "https://github.com/Snaipe/Criterion/releases/download/$CRITERION_VER/$CRITERION_FILE"
-run_or_die "extract" tar xvjf "$CRITERION_FILE" --strip 1
-run "cleanup" rm -v "$CRITERION_FILE"
+safe_cd "$BL_EXT_PATH"
+run "clone" git clone --recursive https://github.com/Snaipe/Criterion
+
+say "install dependencies for criterion test framework..."
+run "instant install" inin in meson ninja
+
+say "building citerion test framework..."
+safe_cd Criterion
+run "cleanup" rm -rf build
+
+if [[ ecc = "${1-}" ]]; then
+mkdir -v -p build
+safe_cd build
+
+echo -e 'set(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_PROCESSOR x86_64)
+set(TRIPLE x86_64-pc-linux-gnu)
+set(CMAKE_C_COMPILER_TARGET ${TRIPLE})
+set(CMAKE_CXX_COMPILER_TARGET ${TRIPLE})
+
+set(CMAKE_C_COMPILER ecc)
+set(CMAKE_CXX_COMPILER ecc++)
+set(CMAKE_LINKER ecc)
+set(CMAKE_AR ecc-ar)
+
+set(NN_DISABLE_GETADDRINFO_A ON)
+set(LINKER_HAS_EXCLUDE_LIBS OFF)
+' > ecc.cmake
+run_or_die "configure" cmake -D CMAKE_TOOLCHAIN_FILE="$PWD/ecc.cmake" -D CMAKE_INSTALL_PREFIX:PATH="$BL_LOCAL_PATH" ..
+run_or_die "compile"   cmake -D CMAKE_TOOLCHAIN_FILE="$PWD/ecc.cmake" -D CMAKE_INSTALL_PREFIX:PATH="$BL_LOCAL_PATH" --build .
+run "install" make install
+else
+  meson build --prefix="$BL_LOCAL_PATH" --libdir="lib"
+  meson configure build -Ddefault_library="both"
+  ninja -C build install
+  ldconfig
+fi
 
 if scriptsame; then
   ok "run build/test to run tests!"
