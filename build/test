@@ -44,10 +44,10 @@ for testfile in $pattern; do
   colorreset ; colorbg black ; colorfg orangered ; ansieol
 
   if [[ $single == true ]]; then
-    run "compile $name" $BL_CC $testfile $BL_CCOPTS -L "$BL_LOCAL_PATH/lib" -L "$BL_LOCAL_PATH/lib64" -lcriterion $ccwarn -o $exec >> $log 2>&1
+    run "compile $name" $BL_CC $testfile $BL_CCOPTS -L "$BL_LOCAL_PATH/lib" -lcriterion $ccwarn -o $exec >> $log 2>&1
     EXITSTATUS=$?
   else
-    run "compile $name" $BL_CC $testfile $BL_CCOPTS -L "$BL_LOCAL_PATH/lib" -L "$BL_LOCAL_PATH/lib64" -lcriterion $ccwarn -o $exec >> $log
+    run "compile $name" $BL_CC $testfile $BL_CCOPTS -L "$BL_LOCAL_PATH/lib" -lcriterion $ccwarn -o $exec >> $log
     EXITSTATUS=$?
   fi
 
@@ -56,7 +56,6 @@ for testfile in $pattern; do
     cleanup ; colorbg yellow ; colorfg black
     echo -n "running $name..." ; ansieol ; echo
     colorreset ; colorbg black ; colorfg orangered ; ansieol
-
 
     {
       colorbg yellow ; colorfg black
