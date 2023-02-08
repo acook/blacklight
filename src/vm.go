@@ -97,13 +97,13 @@ func run_vm(vm *VMstate) (err error) {
 
 func handle(vm *VMstate, ex interface{}) error {
 	warn("runtime error encountered in VM:")
+	print("\n")
+	vm.debug()
+	print("\n")
+
 	switch ex.(type) {
 	case *runtime.TypeAssertionError:
 		msg := ex.(*runtime.TypeAssertionError).Error()
-
-		print("\n")
-		vm.debug()
-		print("\n")
 
 		// if a sub-block panics, this might get run, in which case it will return info about the last known bytecode
 		// processed by THIS VM, rather than the original VM that the error actually occured on
