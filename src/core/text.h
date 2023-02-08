@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include "../../ext/utf8.h/utf8.h"
 #include "./stack.h"
 #include "./opcode.h"
 
