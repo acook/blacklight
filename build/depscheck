@@ -7,7 +7,9 @@ mkdir -v -p "$BL_LOCAL_PATH/bin"
 safe_cd "$BL_EXT_PATH"
 
 say "obtaining system prerequisites..."
-run "apt install" sudo apt -y install cppcheck splint python-pip
+#run "apt install" sudo apt -y install cppcheck splint python-pip
+# splint is not available on Solus
+run "instant install" inin in cppcheck python-pip
 
 say "obtaining python prerequisites..."
 run "pip update" sudo pip install --upgrade pip
@@ -19,7 +21,8 @@ say "building infer..."
 warn "TODO"
 
 say "obtaining very important ASCII art files..."
-run "install figlet" sudo apt -y install figlet
+#run "install figlet" sudo apt -y install figlet
+run "install figlet" inin in figlet
 mkdir -v -p figlet
 safe_cd figlet
 run_or_die "download font" curl -L -O "ftp://ftp.figlet.org/pub/figlet/fonts/contributed/chunky.flf"
