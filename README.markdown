@@ -1,55 +1,49 @@
 Redlight
 ========
 
-`redlight` is a next-gen VM for `blacklight` implemented in C11.
+`redlight` is a next-gen VM for `blacklight` implemented in C17.
 
 Supported Platforms
 -------------------
 
 If you run into any issues compiling `redlight` for the following targets, please file a bug:
 
-- Win32/MinGW/Musl x86_64
-- Linux/Musl x86_64
-- Linux/Musl AArch64le (ARM 64bit with LittleEndian support)
+- Win32/MinGW x86_64
+- Linux x86_64
+- Linux AArch64le (ARM 64bit with LittleEndian support)
 
-Support for the following platforms is desired but untested at this time:
-
-- Linux/Musl ppc64le (POWER8+)
-- AIX/Musl ppc64le (POWER8+)
-
-`redlight` is developed on BunsenLabs (a Debian-based distro) and Windows 10 on x86_64 using ELLCC and Musl.
+`redlight` is developed on Solus Linux on x86_64 using Clang.
 
 Building
 --------
 
-The `build/all` script expects all dependencies to be located under `./ext/`.
+## Linux
+If you download `instant install` and have it in one of the standard binary locations you can run `./build/deps` to download and compile all prerequisites automatically.
 
-## Debian / Ubuntu
-If you are on a distro which uses `apt` and Debian-like package names you can run `build/deps` to download and compile all prerequisites.
-
-Then run the `build/all` script.
+Then run the `./build/all` script.
 
 ## Windows
-You can download a build of ELLCC for MinGW from its older versions subdirectory.
 The `build/*` scripts have not been tested on Windows.
+
+I have only done this in the past using an old build of ECC, which was unfortunately abandoned in 2017.
 
 To build, make sure you have `ecc` in your system PATH and run:
 `ecc -static src/redlight.c`
 
 ## Other
-The `build/all` script should work on any system with `bash`, `ecc`, `jemalloc-config`, and the relevant dependencies in `./ext`.
+The `./build/all` script should work on any system with `bash`, `clang`, and the relevant dependencies in `./ext`.
 
-In order to allow for isolated builds, the `build/all` script automatically adds `./ext/ellcc/bin` and `./ext/local/bin` to the PATH.
+In order to allow for isolated builds, the `./build/all` script automatically rebuilds its own PATH environment which looks in `./ect/local` for its dependencies.
 If you are building your own dependencies set their install prefix to `./ext/local` or add symlinks as needed.
 
-## GCC / Clang
-`redlight` has also been tested with `gcc` and LLVM's `clang` with `glibc` but this is not officially supported.
-If you have compilation errors ensure you are compiling in gnu11/C11 mode.
+## GCC
+`redlight` has also been tested with `gcc` and LLVM's `clang` with `glibc`.
+If you have compilation errors ensure you are compiling in gnu17/C17 mode.
 
 Static Analysis
 ---------------
 
-There is a `build/check` script which runs `cppcheck`, `flawfinder`, and `splint`.
+There is a `build/check` script which runs `cppcheck`, `flawfinder`, and `splint`. (splint support paused)
 
 `infer` support is planned but requires a from-source build with OCAML on Debian stable. Pull requests welcome.
 
