@@ -77,9 +77,9 @@ Test(stack, all) {
   datum_reflect(d3);
   free(u);
 
-  utf8 u2 = {'w', 'h', 'a', 't'};
+  cr_assert(utf8cmp(text_from_datum(d3), "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx") == 0);
 
-  cr_assert(0);
+  utf8 u2 = {'w', 'h', 'a', 't'};
 
   //return 0;
 }
