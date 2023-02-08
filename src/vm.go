@@ -5,6 +5,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"reflect"
 )
 
 func doVM(bc []byte) (*VMstate, error) {
@@ -119,8 +120,11 @@ func handle(vm *VMstate, ex interface{}) error {
 			word = strings.Split(str, " ")[0]
 		}
 
+		print("opword #" + strconv.Itoa(foff) + " \"" + word + "\" expected a different item on the @: " + msg)
+
 		return NewErr("VM-ARG", T("opword #"+strconv.Itoa(foff)+" \""+word+"\" expected a different item on the @: "+msg))
 	default:
+		warn("unhandled " + reflect.TypeOf(ex).String())
 		panic(ex)
 	}
 
