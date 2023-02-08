@@ -10,7 +10,7 @@
       "*.c": "c"
     },
     "[c]": {
-      "editor.autoIndent": true
+      "editor.autoIndent": "full"
     },
     "C_Cpp.clang_format_fallbackStyle": "Google",
     "C_Cpp.clang_format_path": "/usr/bin/clang-format-3.8",
