@@ -44,7 +44,7 @@ include() {
   if [[ ! -f $fullpath ]]; then
     die "unable to include \`$fullpath\`: file not found"
   fi
-  if [[ ! " ${_BASH_SHARED_LIB[@]} " == *" ${1} "* ]]; then
+  if [[ ! " ${_BASH_SHARED_LIB[*]} " == *" ${1} "* ]]; then
     _BASH_SHARED_LIB+=("$1")
     _set_scriptcurrent "$fullpath"
     source "$fullpath" || die "error including $fullpath"
@@ -53,6 +53,7 @@ include() {
 }
 # source a script once or more
 load_nonfatal() {
+  local EXITSTATUS
   if [[ ! -f $1 ]]; then
     warn "load: file \`$1\` not found"
     return 255
@@ -69,10 +70,11 @@ load_nonfatal() {
   fi
 }
 load() {
+  local EXITSTATUS
   load_nonfatal "$1"
   EXITSTATUS=$?
   _set_scriptcurrent
-  [[ $EXITSTATUS -eq 0 ]] || die_status $? "error loading \`$1\`"
+  [[ $EXITSTATUS -eq 0 ]] || die_status EXITSTATUS "error loading \`$1\`"
 }
 
 trace() { # for debugging bash functions
@@ -176,12 +178,13 @@ command_exists() { command -v "$1" > /dev/null 2>&1; }
 # usage: run "title" <command> [args]
 # display command to run, confirm it exists, run it, output a warning on failure
 run() {
+  local EXITSTATUS
   say "running $1 command: \`${*:2}\`"
   if command_exists "$2"; then
     "${@:2}"
-    ret=$?
-    [[ $ret ]] || warn "$1 command exited with status code $?"
-    return $ret
+    EXITSTATUS=$?
+    [[ $EXITSTATUS ]] || warn "$1 command exited with status code $EXITSTATUS"
+    return $EXITSTATUS
   else
     warn "command \`$2\` not found"
     return 255
@@ -190,9 +193,11 @@ run() {
 # usage: run_or_die "title" <command> [args]
 # as run, but die if command missing or exits with an error
 run_or_die() {
-  say "running $1 command: \`${*:2}\`"
-  command_exists "$2" || die "command \`$2\` not found"
-  $2 "${@:3}" || die_status $? "$2 command"
+  local EXITSTATUS
+
+  run "$@"
+  EXITSTATUS=$?
+  [[ $EXITSTATUS ]] || die_status $EXITSTATUS "$2 command"
 }
 
 # UTILITY FUNCTIONS
