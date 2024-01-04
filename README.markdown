@@ -25,7 +25,6 @@ blacklight (BLVM) is awesome, here's a few reasons why:
 - UTF-8 native datatypes
 - multi-architecture and cross-platform (currently: x86_64, ARM, macos, linux, windows)
 - (in progress) highly optimized vector operations on supported CPUs
-- (in progress) simple FFI to Rust and C
 - (planned) security contexts and permissions
 
 Documentation
