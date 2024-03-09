@@ -1,3 +1,9 @@
 {
+  "cSpell.words": [
+    "printhex"
+  ],
+  "files.associations": {
+    "*.h": "c"
+  }
   // use the *.code-workspace file in this directory
 }
