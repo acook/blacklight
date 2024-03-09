@@ -1,6 +1,7 @@
 #pragma once
 
 #include "./text.h"
+#include "./debug.h"
 
 static void datum_reflect(datum d) {
   if (d.t == Number) {
