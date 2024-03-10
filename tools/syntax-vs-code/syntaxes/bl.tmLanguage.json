@@ -1,0 +1,97 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "blacklight",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#numerics"
+		},
+		{
+			"include": "#variables"
+		},
+		{
+			"include": "#entities"
+		}
+	],
+	"repository": {
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line.semicolons.bl",
+					"begin": ";;",
+					"end": "\\n"
+				}
+			]
+		},
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.bl",
+					"match": "\\s?(if|either|while|until|loop)\\s"
+				},
+				{
+					"name": "keyword.operator.bl",
+					"match": "\\s?(eq|or|and|is|not|add|sub|div|mul)\\s"
+				},
+				{
+					"name": "keyword.other",
+					"match": "\\s?(swap|drop|rot|decap|depth|dup|over|purge)\\s"
+				}
+			
+			]
+		},
+		"strings": {
+			"name": "string.quoted.single.bl",
+			"begin": "'",
+			"end": "'",
+			"patterns": [
+				{
+					"name": "constant.character.escape.bl",
+					"match": "\\\\."
+				}
+			]
+		},
+		"variables": {
+			"patterns": [
+				{
+					"name": "variable.language.bl",
+					"match": "self|@|\\$|\\^"
+				},
+				{
+					"name": "variable.name.bl",
+					"match": ":[a-zA-Z_]+"
+				},
+				{
+					"name": "entity.name.function.bl",
+					"match": "[a-zA-Z_]+:"
+				}
+			]
+		},
+		"entity": {
+			"patterns": [
+				{
+					"name": "constant.numeric.dec.bl",
+					"match": "([+-]?[0-9]+)"
+				}
+			]
+		},
+		"types": {
+			"patterns": [
+				{
+					"name": "storage.type.other.bl",
+					"match": "[a-zA-Z_]-new"
+				}
+			]
+		}
+	},
+	"scopeName": "source.blacklight",
+	"fileTypes": ["bl"]
+}

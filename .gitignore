@@ -8,3 +8,6 @@ TAGS
 .DS_Store
 examples/_output.txt
 blacklight.exe
+ext
+node_modules
+*.vsix

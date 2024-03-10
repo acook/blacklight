@@ -1,0 +1,30 @@
+{
+  "name": "blacklight-language-support",
+  "displayName": "blacklight Language Support",
+  "description": "Add syntax highlighting for the blacklight programming language.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.87.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "bl",
+      "aliases": ["blacklight", "bl"],
+      "extensions": [".bl"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "bl",
+      "scopeName": "source.blacklight",
+      "path": "./syntaxes/bl.tmLanguage.json"
+    }]
+  },
+  "devDependencies": {
+    "generator-code": "^1.8.4",
+    "vsce": "^2.15.0",
+    "yo": "^5.0.0"
+  }
+}
