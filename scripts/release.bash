@@ -8,6 +8,7 @@ timestamp="$(date --utc "+%Y.%m.%d")"
 shortsha="$(git rev-parse --short HEAD)"
 blacklight="$BLROOT/release/blacklight_$timestamp-$shortsha"
 
+set -e
 
 warn " -- building blacklight binary for macOS..."
 bl_macos="$blacklight-macos"
