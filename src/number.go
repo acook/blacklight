@@ -15,7 +15,7 @@ func (n N) Refl() string {
 	return fmt.Sprint(n)
 }
 
-func (n N) DeepRefl(list V) (V, string) {
+func (n N) DeepRefl(_ N, list V) (V, string) {
 	return list, n.Refl()
 }
 

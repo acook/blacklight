@@ -16,7 +16,7 @@ func (t T) Refl() string {
 	return "'" + string(t) + "'"
 }
 
-func (t T) DeepRefl(list V) (V, string) {
+func (t T) DeepRefl(_ N, list V) (V, string) {
 	return list, t.Refl()
 }
 

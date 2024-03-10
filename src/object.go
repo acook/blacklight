@@ -72,7 +72,7 @@ func (o Object) Refl() string {
 	str := ""
 	
 	list := V{}
-	_, s := o.DeepRefl(list)
+	_, s := o.DeepRefl(0, list)
 	str += s
 
 	return str + ""
@@ -101,32 +101,48 @@ func (o Object) ShallowRefl() string {
 	return str + "}\033[0m"
 }
 
-func (o Object) DeepRefl(list V) (V, string) {
-	str := "\033[32mO{ "
+func (o Object) DeepRefl(depth N, list V) (V, string) {
+	oc := func(n N) string {
+		c := "\033[38;5;"
+		c += cycle([]string{"46", "34", "28", "22"}, n)
+		c += "m"
+		return c
+	}
+
+	str := oc(depth)
+	str += "O{ "
 
 	for k, v := range o.Slots {
 		str += k.Refl() + ":" 
 
 		switch t := v.(type) {
 		case N, C, T, B, OP:
+			str += oc(depth + 1)
 			str += v.Refl()
+			str += oc(depth)
 		default:
 			if list.Contains(v).Kind == "true" {
+				str += oc(depth + 1)
 				str += "..."
 				str += fmt.Sprint(reflect.TypeOf(t))
 				str += "..."
+				str += oc(depth)
 			} else {
 				list = list.App(v).(V)
-				l, s := v.DeepRefl(list)
+				l, s := v.DeepRefl(depth + 1, list)
 				list = l
 				str += s
 			}
 		}
 
-		str += " \033[32m"
+		str += " " + oc(depth)
 	}
 
 	return list, str + "}\033[0m"
+}
+
+func cycle(v []string, n N) string {
+	return v[int(n.Value().(int64)) % len(v)]
 }
 
 func (o Object) SimpleRefl() string {

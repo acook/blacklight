@@ -17,7 +17,7 @@ func (r R) Refl() string {
 	return "\\u" + hex.EncodeToString(buf)
 }
 
-func (r R) DeepRefl(list V) (V, string) {
+func (r R) DeepRefl(_ N, list V) (V, string) {
 	return list, r.Refl()
 }
 

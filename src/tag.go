@@ -24,7 +24,7 @@ func (t Tag) Refl() string {
 	return t.Kind + "#" + t.Label
 }
 
-func (t Tag) DeepRefl(list V) (V, string) {
+func (t Tag) DeepRefl(_ N, list V) (V, string) {
 	return list, t.Refl()
 }
 

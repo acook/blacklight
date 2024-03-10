@@ -66,7 +66,7 @@ func (s *Stack) Refl() string {
 	return str + ">"
 }
 
-func (s *Stack) DeepRefl(list V) (V, string) {
+func (s *Stack) DeepRefl(_ N, list V) (V, string) {
 	return list, s.Refl()
 }
 

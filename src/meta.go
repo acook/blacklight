@@ -35,7 +35,7 @@ func (m *Meta) Refl() string {
 	return str + ">"
 }
 
-func (m *Meta) DeepRefl(list V) (V, string) {
+func (m *Meta) DeepRefl(_ N, list V) (V, string) {
 	return list, m.Refl()
 }
 

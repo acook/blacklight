@@ -10,7 +10,7 @@ func (op OP) Refl() string {
 	return "`" + op.Print()
 }
 
-func (op OP) DeepRefl(list V) (V, string) {
+func (op OP) DeepRefl(_ N, list V) (V, string) {
 	return list, op.Refl()
 }
 

@@ -19,7 +19,7 @@ func (b B) Refl() string {
 	return "[ " + str + " ]"
 }
 
-func (b B) DeepRefl(list V) (V, string) {
+func (b B) DeepRefl(_ N, list V) (V, string) {
 	return list, b.Refl()
 }
 

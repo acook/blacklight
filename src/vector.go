@@ -17,7 +17,7 @@ func (v V) Refl() string {
 	return str + ")"
 }
 
-func (v V) DeepRefl(list V) (V, string) {
+func (v V) DeepRefl(_ N, list V) (V, string) {
 	return list, v.Refl()
 }
 
