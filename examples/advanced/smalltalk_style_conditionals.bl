@@ -1,21 +1,56 @@
 ;; Smalltalk-style Conditionals
 
-o-new      ;; o1 will house our truthy and falsey objects
+;;;;;;;;;;;;;
+;;  setup  ;;
+;;;;;;;;;;;;;
 
-o-new      ;; o2 (truthy object)
-[ swap call ]   ;; evaluate the wv
-if-true:   ;; store function in slot
-[ swap drop ]   ;; do nothing except get rid of the wv
-if-false:  ;; store function in slot
-true:      ;; store o2 in slot in o1
+o-new          ;; o1 will house our truthy and falsey objects
 
-o-new      ;; o3 (falsy object)
-[ swap drop ]   ;; do nothing except get rid of the wv
-if-true:   ;; store function in slot
-[ swap call ]   ;; evaluate the wv
-if-false:  ;; store function in slot
-false:     ;; store o3 in slot in o1
+o-new          ;; o2 (truthy object)
+[ swap call ]  ;; evaluate the wv
+if:            ;; store function in slot
+[ swap drop ]  ;; do nothing except get rid of the wv
+unless:        ;; store function in slot
+[ swap drop swap call ]
+either:        ;; if/else which runs only the 'then' block
+[ :false ]
+not:           ;; negation
+[ swap drop self :false ]
+and:           ;; logical and
+[ self ]
+or:            ;; logical or
+true:          ;; store o2 in slot in o1
 
-:false                      ;; summon reference to falsey o3
-[ 'I am so false.' say ]    ;; a Block to demonstrate the condition
-swap :if-false              ;; call if-false on o3, will display "I am so false."
+o-new          ;; o3 (falsy object)
+[ swap drop ]  ;; do nothing except get rid of the wv
+if:            ;; store function in slot
+[ swap call ]  ;; evaluate the wv
+unless:        ;; store function in slot
+[ rot drop swap call ]
+either:        ;; if/else which runs only the 'else' block
+[ :true ]
+not:           ;; negation
+[ swap drop self ]
+and:
+[ [ self ] [ :true ] rot :either ]
+or:            ;; logical or
+false:         ;; store o3 in slot in o1
+
+;; store references to false in true and true in false so they can get each other easily
+:true swap :false rot swap false:
+:false swap true: drop
+
+;;;;;;;;;;;;;;;;;;;;;
+;;  usage example  ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+:false                    ;; summon reference to falsey o3
+:not                      ;; negate it
+swap :true                ;; summon reference to truth 02
+swap :and                 ;; logical and the two values on the stack
+rot :false                ;; summon reference to o3
+swap :or                  ;; logical or the two
+
+[ 'So true bestie.' say ] ;; 'then' block
+[ 'I am so false.' say ]  ;; 'else' block
+rot :either               ;; call either
