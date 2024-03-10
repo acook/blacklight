@@ -41,6 +41,12 @@ func (vm *VMstate) debug() {
 		print("\n")
 	}
 
+	if vm.m.ObjectStack.Depth() > 0 {
+		print("    top of object stack: ")
+		print(vm.m.ObjectStack.Peek().Refl())
+		print("\n")
+	}
+
 	print("    @ stack: ")
 	print(vm.m.Current().Refl())
 	print("\n")
