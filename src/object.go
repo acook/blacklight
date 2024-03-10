@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"reflect"
+)
+
 type Object struct {
 	Slots  map[W]datatypes
 	Parent *Object
@@ -64,13 +69,72 @@ func (o *Object) DeleGet(meta *Meta, w W) bool {
 }
 
 func (o Object) Refl() string {
+	str := ""
+	
+	list := V{}
+	_, s := o.DeepRefl(list)
+	str += s
+
+	return str + ""
+}
+
+func (o Object) ShallowRefl() string {
 	str := "\033[32mO{ "
 
 	for k, v := range o.Slots {
-		str += k.Refl() + ":" + v.Refl() + " "
+		str += k.Refl() + ":" 
+
+		switch t := v.(type) {
+		case *Object:
+			str += v.(*Object).SimpleRefl()
+		case N, C, T, B, OP:
+			str += v.Refl()
+		default:
+			str += "..."
+			str += fmt.Sprint(reflect.TypeOf(t))
+			str += "..."
+		}
+
+		str += " "
 	}
 
 	return str + "}\033[0m"
+}
+
+func (o Object) DeepRefl(list V) (V, string) {
+	str := "\033[32mO{ "
+
+	for k, v := range o.Slots {
+		str += k.Refl() + ":" 
+
+		switch t := v.(type) {
+		case N, C, T, B, OP:
+			str += v.Refl()
+		default:
+			if list.Contains(v).Kind == "true" {
+				str += "..."
+				str += fmt.Sprint(reflect.TypeOf(t))
+				str += "..."
+			} else {
+				list = list.App(v).(V)
+				l, s := v.DeepRefl(list)
+				list = l
+				str += s
+			}
+		}
+
+		str += " \033[32m"
+	}
+
+	return list, str + "}\033[0m"
+}
+
+func (o Object) SimpleRefl() string {
+	str := "O#"
+
+	str = str + fmt.Sprint(len(o.Slots))
+
+	return str + ""
 }
 
 func (o Object) Value() interface{} {

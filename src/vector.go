@@ -1,5 +1,9 @@
 package main
 
+import (
+	"reflect"
+)
+
 type V []datatypes
 
 func (v V) Refl() string {
@@ -11,6 +15,10 @@ func (v V) Refl() string {
 		str = str[:len(str)-1]
 	}
 	return str + ")"
+}
+
+func (v V) DeepRefl(list V) (V, string) {
+	return list, v.Refl()
 }
 
 func (v V) Value() interface{} {
@@ -34,6 +42,15 @@ func (v V) Rmo(n N) sequence {
 	b := v[n+1:]
 	v = append(a, b...)
 	return v
+}
+
+func (v V) Contains(d datatypes) *Tag {
+	for _, i := range v {
+		if reflect.DeepEqual(i, d) {
+			return NewTrue("contains")
+		}
+	}
+	return NewNil("contains")
 }
 
 func (v V) Len() N {

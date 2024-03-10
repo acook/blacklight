@@ -15,6 +15,10 @@ func (n N) Refl() string {
 	return fmt.Sprint(n)
 }
 
+func (n N) DeepRefl(list V) (V, string) {
+	return list, n.Refl()
+}
+
 func (n N) Value() interface{} {
 	return int64(n)
 }

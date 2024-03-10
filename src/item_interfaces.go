@@ -2,11 +2,13 @@ package main
 
 type datatypes interface {
 	Refl() string
+	DeepRefl(V) (V, string)
 	Value() interface{}
 }
 
 type sequence interface {
 	Refl() string
+	DeepRefl(V) (V, string)
 	Value() interface{}
 	Cat(sequence) sequence
 	App(datatypes) sequence
@@ -25,6 +27,7 @@ type byter interface {
 
 type stackable interface {
 	Refl() string
+	DeepRefl(V) (V, string)
 	Value() interface{}
 	Push(datatypes)
 	Pop() datatypes

@@ -14,6 +14,10 @@ func (c C) Refl() string {
 	return fmt.Sprintf("0x%0.2X", c)
 }
 
+func (c C) DeepRefl(list V) (V, string) {
+	return list, c.Refl()
+}
+
 func (c C) Value() interface{} {
 	return byte(c)
 }

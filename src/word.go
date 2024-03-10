@@ -14,6 +14,10 @@ func (w W) Refl() string {
 	return "~" + w.Print()
 }
 
+func (w W) DeepRefl(list V) (V, string) {
+	return list, w.Refl()
+}
+
 func (w W) Value() interface{} {
 	return uint64(w)
 }

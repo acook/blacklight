@@ -66,6 +66,10 @@ func (s *Stack) Refl() string {
 	return str + ">"
 }
 
+func (s *Stack) DeepRefl(list V) (V, string) {
+	return list, s.Refl()
+}
+
 func (s *Stack) ReflHeader() string {
 	str := ""
 

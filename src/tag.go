@@ -24,6 +24,10 @@ func (t Tag) Refl() string {
 	return t.Kind + "#" + t.Label
 }
 
+func (t Tag) DeepRefl(list V) (V, string) {
+	return list, t.Refl()
+}
+
 func (t Tag) Value() interface{} {
 	return t.Kind
 }

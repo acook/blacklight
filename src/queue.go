@@ -70,3 +70,7 @@ PrintLoop:
 
 	return str + " |"
 }
+
+func (q Queue) DeepRefl(list V) (V, string) {
+	return list, q.Refl()
+}

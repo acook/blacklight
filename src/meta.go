@@ -35,6 +35,10 @@ func (m *Meta) Refl() string {
 	return str + ">"
 }
 
+func (m *Meta) DeepRefl(list V) (V, string) {
+	return list, m.Refl()
+}
+
 // for stack interface compatibility
 // will panic if you try to push anything other than a stack
 func (m *Meta) Push(i datatypes) {

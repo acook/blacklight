@@ -19,6 +19,10 @@ func (b B) Refl() string {
 	return "[ " + str + " ]"
 }
 
+func (b B) DeepRefl(list V) (V, string) {
+	return list, b.Refl()
+}
+
 func (b B) PP() string {
 	str := b.Disassemble().Refl()
 	str = str[1:(len(str) - 1)]

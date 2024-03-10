@@ -17,6 +17,10 @@ func (r R) Refl() string {
 	return "\\u" + hex.EncodeToString(buf)
 }
 
+func (r R) DeepRefl(list V) (V, string) {
+	return list, r.Refl()
+}
+
 func (r R) Value() interface{} {
 	return rune(r)
 }
